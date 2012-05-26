@@ -95,14 +95,6 @@ on boot
   mkdir /data/radio 0770 radio radio
   chmod 2770 /data/radio
 
-# sensors
-  mkdir /data/amit 0777 ami304d ami304d
-  chmod 0666 /data/amit/AMI306_Config.ini
-  chmod 0666 /data/amit/AMI306_Config2.ini
-
-  chown compass system /sys/bus/i2c/drivers/proximity_gp2ap/4-0044/enable
-  chmod 0660 /sys/bus/i2c/drivers/proximity_gp2ap/4-0044/enable
-
 # liblights
   chown system system /sys/class/leds/green/brightness
   chown system system /sys/class/leds/green/blink
@@ -143,8 +135,8 @@ on boot
 
 on fs
 
-    # framebuffer permission for copybit
-      chmod 0666 /dev/graphics/fb0
+# framebuffer permission for copybit
+  chmod 0666 /dev/graphics/fb0
 
 
 service chargerlogo /sbin/chargerlogo
@@ -155,11 +147,6 @@ service qmuxd /system/bin/qmuxd
     class core
     user radio
     group radio audio inet bluetooth
-
-service ami304d /system/bin/ami304d
-    class main
-    user compass
-    group system
 
 service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
     class main
