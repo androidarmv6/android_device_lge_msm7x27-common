@@ -119,4 +119,6 @@ BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
 
 # Command line for charger mode
 BOARD_GLOBAL_CFLAGS += -DCHARGERMODE_CMDLINE_NAME='"lge.reboot"' -DCHARGERMODE_CMDLINE_VALUE='"pwroff"'
+BOARD_USES_RECOVERY_CHARGEMODE := false
+BOARD_CUSTOM_GRAPHICS := ../../../device/lge/msm7x27-common/recovery/graphics.c
 
