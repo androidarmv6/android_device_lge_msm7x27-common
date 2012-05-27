@@ -128,7 +128,6 @@ PRODUCT_PACKAGES += \
     hwaddrs
 
 # Offmode charging
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/recovery/rmt_storage/rmt_storage:root/sbin/rmt_storage
 PRODUCT_PACKAGES += \
     charger \
     charger_res_images

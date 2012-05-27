@@ -230,18 +230,11 @@ service bugreport /system/bin/logwrapper /system/bin/dumpstate -d -v -o /sdcard/
     disabled
     oneshot
 
-# mount mmc
-service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p1 /dev/block/mmcblk0p2
-    class core
-    user root
 
 service chargerlogo /charger
     class charger
     user root
 
-## charger
-on property:init.svc.chargerlogo=running
-   start rmt_storage
 
 ## Stop dhcpcd when wifi was stopped
 on property:init.svc.wpa_supplicant=stopped
