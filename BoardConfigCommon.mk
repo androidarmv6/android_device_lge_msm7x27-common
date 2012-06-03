@@ -15,6 +15,7 @@ BOARD_USE_NASTY_PTHREAD_CREATE_HACK := true
 TARGET_KERNEL_SOURCE := kernel/lge/msm7x27
 # Copy LG Kernel Headers here if necessary, DON'T use Adroid auto-generated headers
 TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include
+BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=qcom no_console_suspend
 
 # Platform
 TARGET_BOARD_PLATFORM := msm7x27
@@ -28,6 +29,7 @@ TARGET_ARCH_VARIANT := armv6-vfp
 
 # Boot loader
 TARGET_NO_BOOTLOADER := true
+TARGET_NO_INITLOGO := true
 
 # QCOM Hardware
 BOARD_USES_QCOM_HARDWARE := true
@@ -54,7 +56,6 @@ BOARD_USE_SKIA_LCDTEXT := true
 
 
 # Fix this up by examining /proc/mtd on a running device
-BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=qcom no_console_suspend
 BOARD_KERNEL_BASE := 0x12800000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00440000

@@ -24,7 +24,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.qcom.usb.rc:root/init.qcom.usb.rc
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/initlogo.rle:root/initlogo.rle \
     $(LOCAL_PATH)/prebuilt/init.qcom.sh:root/init.qcom.sh \
     $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
