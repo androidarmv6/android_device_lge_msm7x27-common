@@ -48,7 +48,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.lockprof.threshold=500 \
     dalvik.vm.dexopt-flags=m=y \
     ro.telephony.call_ring.multiple=false \
-    ro.telephony.call_ring.delay=3000 \
     ro.vold.umsdirtyratio=20
 
 PRODUCT_PROPERTY_OVERRIDES += \
