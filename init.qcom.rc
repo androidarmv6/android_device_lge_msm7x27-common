@@ -148,6 +148,9 @@ service chargerlogo /charger
     class charger
     user root
 
+on property:init.svc.chargerlogo=running
+    setprop sys.usb.config adb
+
 
 service qmuxd /system/bin/qmuxd
     class core
