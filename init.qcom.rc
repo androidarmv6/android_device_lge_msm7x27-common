@@ -150,6 +150,7 @@ service chargerlogo /charger
 
 on property:init.svc.chargerlogo=running
     setprop sys.usb.config adb
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
 
 
 service qmuxd /system/bin/qmuxd
