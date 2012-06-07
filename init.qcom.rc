@@ -160,7 +160,7 @@ service qmuxd /system/bin/qmuxd
 
 service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
     class main
-    user bluetooth
+#   user bluetooth
     group bluetooth net_bt_admin
     disabled
 
