@@ -19,6 +19,9 @@ PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
 
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
+
+PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.qcom.rc:root/init.qcom.rc \
     $(LOCAL_PATH)/ueventd.qcom.rc:root/ueventd.qcom.rc \
     $(LOCAL_PATH)/init.qcom.usb.rc:root/init.qcom.usb.rc
