@@ -97,18 +97,17 @@ BOARD_UMS_LUNFILE := /sys/class/android_usb/android0/f_mass_storage/lun/file
 # Touch screen compatibility for ICS
 BOARD_USE_LEGACY_TOUCHSCREEN := true
 
-# Wireless
-BOARD_WLAN_DEVICE               := bcm4325
-WIFI_DRIVER_FW_STA_PATH         := "/system/etc/wl/rtecdc.bin"
-WIFI_DRIVER_FW_AP_PATH          := "/system/etc/wl/rtecdc-apsta.bin"
-WIFI_DRIVER_MODULE_NAME         := "wireless"
-WIFI_DRIVER_MODULE_PATH         := "/system/lib/modules/wireless.ko"
-WIFI_DRIVER_MODULE_ARG          := "firmware_path=/etc/wl/rtecdc.bin nvram_path=/etc/wl/nvram.txt config_path=/data/misc/wifi/config"
+# Wi-Fi & Wi-Fi HotSpot
 WPA_SUPPLICANT_VERSION          := VER_0_6_X
-HOSTAPD_VERSION                 := VER_0_6_X
-WIFI_DRIVER_HAS_LGE_SOFTAP      := true
+BOARD_WLAN_DEVICE               := bcm4325
 BOARD_WEXT_NO_COMBO_SCAN        := true
 BOARD_WPA_SUPPLICANT_DRIVER     := WEXT
+WIFI_DRIVER_HAS_LGE_SOFTAP      := true
+WIFI_DRIVER_MODULE_PATH         := "/system/lib/modules/wireless.ko"
+WIFI_DRIVER_MODULE_ARG          := "firmware_path=/etc/wl/rtecdc.bin nvram_path=/etc/wl/nvram.txt config_path=/data/misc/wifi/config"
+WIFI_DRIVER_MODULE_NAME         := "wireless"
+WIFI_DRIVER_FW_PATH_STA         := "/system/etc/wl/rtecdc.bin"
+WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
 
 # FM Radio
 BOARD_FM_DEVICE := bcm4325
