@@ -108,14 +108,6 @@ PRODUCT_PACKAGES += \
     camera.msm7x27 \
     lgapversion
 
-# Live wallpapers
-PRODUCT_COPY_FILES += packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml
-PRODUCT_PACKAGES += \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    VisualizationWallpapers \
-    librs_jni
-
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     make_ext4fs \
