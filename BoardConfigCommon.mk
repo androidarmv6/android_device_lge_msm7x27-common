@@ -27,6 +27,14 @@ TARGET_CPU_ABI := armeabi-v6l
 TARGET_CPU_ABI2 := armeabi
 TARGET_ARCH_VARIANT := armv6-vfp
 
+# Browser & WebKit
+JS_ENGINE := v8
+HTTP := chrome
+WITH_JIT := true
+ENABLE_JSC_JIT := true
+ENABLE_WEBGL := true
+TARGET_FORCE_CPU_UPLOAD := true
+
 # Boot loader
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_INITLOGO := true
@@ -46,14 +54,11 @@ TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
 BOARD_NO_ALLOW_DEQUEUE_CURRENT_BUFFER := true
 BOARD_EGL_CFG := device/lge/msm7x27-common/configs/egl.cfg
 BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+BOARD_USE_SKIA_LCDTEXT := true
 
 # http://www.slideshare.net/jserv/design-and-concepts-of-android-graphics
 COMMON_GLOBAL_CFLAGS += -DTARGET_MSM7x27 -DQCOM_HARDWARE
 COMMON_GLOBAL_CFLAGS += -DMISSING_GRALLOC_BUFFERS -DREFRESH_RATE=60
-
-# Skia
-BOARD_USE_SKIA_LCDTEXT := true
-
 
 # Fix this up by examining /proc/mtd on a running device
 BOARD_KERNEL_BASE := 0x12800000
@@ -84,12 +89,6 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 
 TARGET_PROVIDES_LIBLIGHTS := true
 
-# Enable JIT
-JS_ENGINE := v8
-HTTP := chrome
-WITH_JIT := true
-ENABLE_JSC_JIT := true
-
 # Mass Storage for ICS
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/class/android_usb/android0/f_mass_storage/lun/file
 BOARD_UMS_LUNFILE := /sys/class/android_usb/android0/f_mass_storage/lun/file
@@ -112,7 +111,7 @@ WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
 # FM Radio
 BOARD_FM_DEVICE := bcm4325
 BOARD_HAVE_FM_RADIO := true
-BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
+BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO -DFM_RADIO
 
 # Command line for charging mode
 BOARD_CHARGING_CMDLINE_NAME := "lge.reboot"
