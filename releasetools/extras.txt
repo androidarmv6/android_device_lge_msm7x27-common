@@ -15,7 +15,7 @@ app/Galaxy4.apk
 app/PhaseBeam.apk
 
 # Boot animation: 2MB
-media/bootanimation.zip
+# media/bootanimation.zip
 
 # tts/lang_pico (4MB)
 #tts/lang_pico/en-GB_kh0_sg.bin
