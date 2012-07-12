@@ -1,7 +1,7 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
-$(call inherit-product, vendor/qcom/opensource/omx/mm-core/Android.mk)
-$(call inherit-product, vendor/qcom/opensource/omx/mm-video/Android.mk)
+#$(call inherit-product, hardware/qcom/media/mm-core/Android.mk)
+#$(call inherit-product, hardware/qcom/media/mm-video/Android.mk)
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 
 PRODUCT_COPY_FILES += \
