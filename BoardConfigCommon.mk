@@ -20,12 +20,13 @@ BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=q
 # Platform
 TARGET_BOARD_PLATFORM := msm7x27
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
+COMMON_GLOBAL_CFLAGS += -DTARGET_MSM7x27
 
 # CPU
-ARCH_ARM_HAVE_VFP := true
 TARGET_CPU_ABI := armeabi-v6l
 TARGET_CPU_ABI2 := armeabi
 TARGET_ARCH_VARIANT := armv6-vfp
+ARCH_ARM_HAVE_VFP := true
 
 # Browser & WebKit
 JS_ENGINE := v8
@@ -42,27 +43,6 @@ TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 BOARD_HAS_NO_SELECT_BUTTON := true
 
-# QCOM Hardware
-BOARD_USES_QCOM_HARDWARE := true
-BOARD_USES_QCOM_LIBS := true
-
-# Enable OpenGL Hardware Acceleration
-# msm7x27: no support for overlay, bypass, or c2d
-USE_OPENGL_RENDERER := true
-TARGET_USE_OVERLAY := false
-TARGET_HAVE_BYPASS := false
-TARGET_USES_C2D_COMPOSITION := false
-TARGET_USES_GENLOCK := true
-TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
-BOARD_NO_ALLOW_DEQUEUE_CURRENT_BUFFER := true
-BOARD_EGL_CFG := device/lge/msm7x27-common/configs/egl.cfg
-BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
-BOARD_USE_SKIA_LCDTEXT := true
-
-# http://www.slideshare.net/jserv/design-and-concepts-of-android-graphics
-COMMON_GLOBAL_CFLAGS += -DTARGET_MSM7x27 -DQCOM_HARDWARE
-COMMON_GLOBAL_CFLAGS += -DMISSING_GRALLOC_BUFFERS -DREFRESH_RATE=60
-
 # Fix this up by examining /proc/mtd on a running device
 BOARD_KERNEL_BASE := 0x12800000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -72,21 +52,39 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 0x0be00000
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x0c780000
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-# Audio & Bluetooth
-TARGET_PROVIDES_LIBAUDIO := true
-BOARD_USES_AUDIO_LEGACY := false
-BOARD_COMBO_DEVICE_SUPPORTED := true
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_BCM := true
-
-# RIL
-BOARD_PROVIDES_LIBRIL := true
+# Enable OpenGL Hardware Acceleration
+# msm7x27: no support for overlay, bypass, or c2d
+USE_OPENGL_RENDERER := true
+TARGET_USE_OVERLAY := false
+TARGET_HAVE_BYPASS := false
+TARGET_USES_C2D_COMPOSITION := false
+TARGET_USES_GENLOCK := true
+TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
+BOARD_USES_QCOM_HARDWARE := true
+BOARD_USES_QCOM_LIBS := true
+BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+BOARD_USE_SKIA_LCDTEXT := true
+BOARD_EGL_CFG := device/lge/msm7x27-common/configs/egl.cfg
+COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DREFRESH_RATE=60
 
 # Enable the GPS HAL & AMSS version to use for GPS
 BOARD_USES_QCOM_LIBRPC := true
 BOARD_USES_QCOM_GPS := true
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
 BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
+
+# Audio & Bluetooth & FM Radio
+TARGET_PROVIDES_LIBAUDIO := true
+BOARD_USES_AUDIO_LEGACY := false
+BOARD_COMBO_DEVICE_SUPPORTED := true
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_BCM := true
+BOARD_FM_DEVICE := bcm4325
+BOARD_HAVE_FM_RADIO := true
+COMMON_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
+
+# RIL
+BOARD_PROVIDES_LIBRIL := true
 
 # Mass Storage for ICS
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/class/android_usb/android0/f_mass_storage/lun/file
@@ -106,11 +104,6 @@ WIFI_DRIVER_MODULE_ARG          := "firmware_path=/etc/wl/rtecdc.bin nvram_path=
 WIFI_DRIVER_MODULE_NAME         := "wireless"
 WIFI_DRIVER_FW_PATH_STA         := "/system/etc/wl/rtecdc.bin"
 WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
-
-# FM Radio
-BOARD_FM_DEVICE := bcm4325
-BOARD_HAVE_FM_RADIO := true
-BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO -DFM_RADIO
 
 # Command line for charging mode
 BOARD_CHARGING_CMDLINE_NAME := "lge.reboot"
