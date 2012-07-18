@@ -22,12 +22,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init.qcom.rc:root/init.qcom.rc \
-    $(LOCAL_PATH)/ueventd.qcom.rc:root/ueventd.qcom.rc \
-    $(LOCAL_PATH)/init.qcom.usb.rc:root/init.qcom.usb.rc
+    $(LOCAL_PATH)/root/init.qcom.rc:root/init.qcom.rc \
+    $(LOCAL_PATH)/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    $(LOCAL_PATH)/root/init.qcom.sh:root/init.qcom.sh \
+    $(LOCAL_PATH)/root/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/init.qcom.sh:root/init.qcom.sh \
     $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
 PRODUCT_COPY_FILES += \
