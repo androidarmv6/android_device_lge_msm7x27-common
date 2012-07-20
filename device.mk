@@ -1,7 +1,5 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
-#$(call inherit-product, hardware/qcom/media/mm-core/Android.mk)
-#$(call inherit-product, hardware/qcom/media/mm-video/Android.mk)
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 
 PRODUCT_COPY_FILES += \
@@ -93,12 +91,12 @@ PRODUCT_PACKAGES += \
     copybit.msm7x27 \
     hwcomposer.msm7x27
 
-# Media
-PRODUCT_PACKAGES += \
-    libstagefrighthw \
-    libmm-omxcore \
-    libOmxCore \
-    libdivxdrmdecrypt
+# Media (no support for msm7x27 in JB)
+#PRODUCT_PACKAGES += \
+#    libstagefrighthw \
+#    libmm-omxcore \
+#    libOmxCore \
+#    libdivxdrmdecrypt
 
 # Misc
 PRODUCT_PACKAGES += \
