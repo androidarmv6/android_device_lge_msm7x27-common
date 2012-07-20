@@ -86,7 +86,7 @@ PRODUCT_PACKAGES += \
     libgenlock \
     libmemalloc \
     liboverlay \
-    libQcomUI \
+    libqdutils \
     libtilerenderer \
     libopencorehw \
     gralloc.msm7x27 \
