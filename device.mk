@@ -119,11 +119,6 @@ PRODUCT_PACKAGES += \
     hciconfig \
     hwaddrs
 
-# Offmode charging
-PRODUCT_PACKAGES += \
-    charger \
-    charger_res_images
-
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
