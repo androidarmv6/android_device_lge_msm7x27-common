@@ -107,10 +107,5 @@ WIFI_DRIVER_MODULE_NAME         := "wireless"
 WIFI_DRIVER_FW_PATH_STA         := "/system/etc/wl/rtecdc.bin"
 WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
 
-# Command line for charging mode
-BOARD_CHARGING_CMDLINE_NAME := "lge.reboot"
-BOARD_CHARGING_CMDLINE_VALUE := "pwroff"
-BOARD_USES_RECOVERY_CHARGEMODE := false
-
 # OTA script
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/lge/msm7x27-common/releasetools/ota_from_target_files
