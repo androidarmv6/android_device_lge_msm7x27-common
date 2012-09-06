@@ -29,12 +29,12 @@ TARGET_ARCH_VARIANT := armv6-vfp
 ARCH_ARM_HAVE_VFP := true
 
 # Browser & WebKit
-JS_ENGINE := v8
-HTTP := chrome
-WITH_JIT := true
-ENABLE_JSC_JIT := true
-ENABLE_WEBGL := true
-TARGET_FORCE_CPU_UPLOAD := true
+#JS_ENGINE := v8
+#HTTP := chrome
+#WITH_JIT := true
+#ENABLE_JSC_JIT := true
+#ENABLE_WEBGL := true
+#TARGET_FORCE_CPU_UPLOAD := true
 
 # Boot loader & recovery
 TARGET_NO_BOOTLOADER := true
