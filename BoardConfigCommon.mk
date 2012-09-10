@@ -88,17 +88,21 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 #BOARD_FM_DEVICE := bcm4325
 #BOARD_HAVE_FM_RADIO := true
+# Use the second one (QCOM_FM_ENABLED) not the first
+# The first breaks the builds and the second is more
+# recent and is used in the CM code
 #COMMON_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
+#COMMON_GLOBAL_CFLAGS += -DQCOM_FM_ENABLED
 COMMON_GLOBAL_CFLAGS += -DICS_AUDIO_BLOB
 
 # RIL
 BOARD_PROVIDES_LIBRIL := true
 
-# Mass Storage for ICS
+# Mass Storage for Jelly Bean
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/class/android_usb/android0/f_mass_storage/lun/file
 BOARD_UMS_LUNFILE := /sys/class/android_usb/android0/f_mass_storage/lun/file
 
-# Touch screen compatibility for ICS
+# Touch screen compatibility for Jelly Bean
 BOARD_USE_LEGACY_TOUCHSCREEN := true
 
 # Wi-Fi & Wi-Fi HotSpot
