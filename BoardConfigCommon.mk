@@ -9,8 +9,8 @@ BOARD_NEEDS_MEMORYHEAPPMEM := true
 BOARD_USE_NASTY_PTHREAD_CREATE_HACK := true
 COMMON_GLOBAL_CFLAGS += -DBINDER_COMPAT
 COMMON_GLOBAL_CFLAGS += -DQCOM_ICS_COMPAT
-#BOARD_CAMERA_USE_GETBUFFERINFO := true
-#BOARD_USE_CAF_LIBCAMERA := true
+# BOARD_CAMERA_USE_GETBUFFERINFO := true
+# BOARD_USE_CAF_LIBCAMERA := true
 TARGET_NO_HW_VSYNC := true
 
 # Kernel
@@ -51,13 +51,13 @@ BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00440000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00500000
 # Ignore that this is much larger than the 190Mb allowed.
 # It's only for resolving build issues with the system.img
-# being too big. It will still be only about 130MB MAXIMUM.
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 0xDC00000
+# being too big. It will still be only about 100MB MAXIMUM
+# because all the useless trash is now in extras
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 0xE600000
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x0c780000
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 # Enable OpenGL Hardware Acceleration
-# msm7x27: no support for overlay, bypass, or c2d
 USE_OPENGL_RENDERER := true
 # TARGET_NO_HW_VSYNC := true
 TARGET_USES_GENLOCK := true
@@ -80,20 +80,20 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 # Use the custom lights libs
 TARGET_PROVIDES_LIBLIGHTS := true
 
-# Audio & Bluetooth & FM Radio
+# Audio, Bluetooth & FM Radio
 TARGET_PROVIDES_LIBAUDIO := true
 BOARD_USES_ICS_LIBAUDIO := true
 BOARD_USES_AUDIO_LEGACY := false
 BOARD_COMBO_DEVICE_SUPPORTED := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
-#BOARD_FM_DEVICE := bcm4325
-#BOARD_HAVE_FM_RADIO := true
+# BOARD_FM_DEVICE := bcm4325
+# BOARD_HAVE_FM_RADIO := true
 # Use the second one (QCOM_FM_ENABLED) not the first
 # The first breaks the builds and the second is more
 # recent and is used in the CM code
-#COMMON_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
-#COMMON_GLOBAL_CFLAGS += -DQCOM_FM_ENABLED
+# COMMON_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
+# COMMON_GLOBAL_CFLAGS += -DQCOM_FM_ENABLED
 COMMON_GLOBAL_CFLAGS += -DICS_AUDIO_BLOB
 
 # RIL
