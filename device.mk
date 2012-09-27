@@ -121,10 +121,6 @@ PRODUCT_PACKAGES += \
     hciconfig \
     hwaddrs
 
-# Offmode charging
-PRODUCT_PACKAGES += \
-    charger \
-    charger_res_images
 
 
 PRODUCT_TAGS += dalvik.gc.type-precise
