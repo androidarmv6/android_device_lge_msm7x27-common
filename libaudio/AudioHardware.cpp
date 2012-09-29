@@ -18,8 +18,7 @@
 #include <math.h>
 
 //#define LOG_NDEBUG 0
-
-#define LOG_TAG "AudioHardwareMSM72XX"
+#define LOG_TAG "AudioHardware_miroslav_mm"
 #include <utils/Log.h>
 #include <utils/String8.h>
 
@@ -50,7 +49,7 @@ namespace android_audio_legacy {
 static int audpre_index, tx_iir_index;
 static void * acoustic;
 const uint32_t AudioHardware::inputSamplingRates[] = {
-        8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
+        8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000, 96000
 };
 
 static int get_audpp_filter(void);
@@ -74,7 +73,7 @@ static bool adrc_filter_exists[3];
 static bool mbadrc_filter_exists[3];
 static int post_proc_feature_mask = 0;
 static int new_post_proc_feature_mask = 0;
-static bool hpcm_playback_in_progress = false;
+static bool playback_in_progress = false;
 
 //Pre processing parameters
 static struct tx_iir tx_iir_cfg[9];
@@ -93,9 +92,16 @@ static int snd_device = -1;
 static uint32_t SND_DEVICE_CURRENT=-1;
 static uint32_t SND_DEVICE_HANDSET=-1;
 static uint32_t SND_DEVICE_SPEAKER=-1;
+static uint32_t SND_DEVICE_SPEAKER_RING=-1;
+static uint32_t SND_DEVICE_SPEAKER_IN_CALL=-1;
 static uint32_t SND_DEVICE_BT=-1;
+static uint32_t SND_DEVICE_BT_VR=-1;
 static uint32_t SND_DEVICE_BT_EC_OFF=-1;
+static uint32_t SND_DEVICE_BT_A2DP=-1;
+static uint32_t SND_DEVICE_BT_A2DP_HEADPHONES=-1;
+static uint32_t SND_DEVICE_BT_A2DP_SPEAKER=-1;
 static uint32_t SND_DEVICE_HEADSET=-1;
+static uint32_t SND_DEVICE_HEADSET_STEREO=-1;
 static uint32_t SND_DEVICE_HEADSET_AND_SPEAKER=-1;
 static uint32_t SND_DEVICE_IN_S_SADC_OUT_HANDSET=-1;
 static uint32_t SND_DEVICE_IN_S_SADC_OUT_SPEAKER_PHONE=-1;
@@ -106,6 +112,7 @@ static uint32_t SND_DEVICE_CARKIT=-1;
 static uint32_t SND_DEVICE_FM_SPEAKER=-1;
 static uint32_t SND_DEVICE_FM_HEADSET=-1;
 static uint32_t SND_DEVICE_NO_MIC_HEADSET=-1;
+static uint32_t SND_DEVICE_VOICE_RECORDER=-1;
 // ----------------------------------------------------------------------------
 
 AudioHardware::AudioHardware() :
@@ -132,21 +139,31 @@ AudioHardware::AudioHardware() :
                 CHECK_FOR(CURRENT);
                 CHECK_FOR(HANDSET);
                 CHECK_FOR(SPEAKER);
+                CHECK_FOR(SPEAKER_IN_CALL);
+                CHECK_FOR(SPEAKER_RING);
                 CHECK_FOR(BT);
+                CHECK_FOR(BT_VR);
                 CHECK_FOR(BT_EC_OFF);
-                CHECK_FOR(HEADSET);
+				CHECK_FOR(BT_A2DP);
+				CHECK_FOR(BT_A2DP_HEADPHONES);
+				CHECK_FOR(BT_A2DP_SPEAKER);
+				CHECK_FOR(HEADSET);
+                CHECK_FOR(HEADSET_STEREO);
                 CHECK_FOR(HEADSET_AND_SPEAKER);
                 CHECK_FOR(IN_S_SADC_OUT_HANDSET);
                 CHECK_FOR(IN_S_SADC_OUT_SPEAKER_PHONE);
+				CHECK_FOR(VOICE_RECORDER);
                 CHECK_FOR(TTY_HEADSET);
                 CHECK_FOR(TTY_HCO);
                 CHECK_FOR(TTY_VCO);
+				CHECK_FOR(FM_SPEAKER);
+				CHECK_FOR(FM_HEADSET);
 #undef CHECK_FOR
             }
         }
         else ALOGE("Could not retrieve number of MSM SND endpoints.");
 
-        int AUTO_VOLUME_ENABLED = 0; // setting disabled as default
+        int AUTO_VOLUME_ENABLED = 0; // setting enabled as default
 
         static const char *const path = "/system/etc/AutoVolumeControl.txt";
         int txtfd;
@@ -176,18 +193,17 @@ AudioHardware::AudioHardware() :
                 close(txtfd);
             }
 
-            if(read_buf[0] =='1')
-               AUTO_VOLUME_ENABLED = 1;
+            if(read_buf[0] =='0')
+               AUTO_VOLUME_ENABLED = 0;
 
             munmap(read_buf, st.st_size);
             close(txtfd);
         }
 
-        ALOGD("Auto Volume Enabled= %d", AUTO_VOLUME_ENABLED);
         ioctl(m7xsnddriverfd, SND_AVC_CTL, &AUTO_VOLUME_ENABLED);
         ioctl(m7xsnddriverfd, SND_AGC_CTL, &AUTO_VOLUME_ENABLED);
-    }	else 
-          ALOGE("Could not open MSM SND driver.");
+    }
+	else ALOGE("Could not open MSM SND driver.");
 }
 
 AudioHardware::~AudioHardware()
@@ -252,7 +268,7 @@ void AudioHardware::closeOutputStream(AudioStreamOut* out) {
     if (mOutput == 0 || mOutput != out) {
         ALOGW("Attempt to close invalid output stream");
     }
-    else if (mOutput == out) {
+    else {
         delete mOutput;
         mOutput = 0;
     }
@@ -264,6 +280,17 @@ AudioStreamIn* AudioHardware::openInputStream(
 {
     // check for valid input source
     if (!AudioSystem::isInputDevice((AudioSystem::audio_devices)devices)) {
+        return 0;
+    }
+
+    if ( (mMode == AudioSystem::MODE_IN_CALL) &&
+         (getInputSampleRate(*sampleRate) > AUDIO_HW_IN_SAMPLERATE) &&
+         (*format == AUDIO_HW_IN_FORMAT) )
+    {
+        ALOGE("PCM recording, in a voice call, with sample rate more than 8K not supported \
+                re-configure with 8K and try software re-sampler ");
+        *status = BAD_VALUE;
+        *sampleRate = AUDIO_HW_IN_SAMPLERATE;
         return 0;
     }
 
@@ -408,14 +435,10 @@ status_t AudioHardware::setParameters(const String8& keyValuePairs)
         } else {
             mTtyMode = TTY_OFF;
         }
-        if(mMode != AudioSystem::MODE_IN_CALL){
-           return NO_ERROR;
-        }
-        ALOGI("Changed TTY Mode=%s", value.string());
-        if((mMode == AudioSystem::MODE_IN_CALL) &&
-           (mCurSndDevice == SND_DEVICE_HEADSET))
-           doRouting(NULL);
+    } else {
+	mTtyMode = TTY_OFF;
     }
+    doRouting(NULL);
 
     return NO_ERROR;
 }
@@ -432,6 +455,10 @@ String8 AudioHardware::getParameters(const String8& keys)
         param.add(key, value);
     }
 
+    key = String8("tunneled-input-formats");
+    if (param.get(key, value) == NO_ERROR) {
+        param.addInt(String8("AMR"), true);
+    }
     ALOGV("AudioHardware::getParameters() %s", param.toString().string());
     return param.toString();
 }
@@ -581,7 +608,7 @@ int check_and_set_audpp_parameters(char *buf, int size)
             if (!(p = strtok(NULL, seps)))
                 goto token_err;
 
-            eq_cal(eq[i].gain, eq[i].freq, 48000, eq[i].type, eq[i].qf, (int32_t*)numerator, (int32_t *)denominator, shift);
+            eq_cal(eq[i].gain, eq[i].freq, 96000, eq[i].type, eq[i].qf, (int32_t*)numerator, (int32_t *)denominator, shift);
             for (j = 0; j < 6; j++) {
                 equalizer[device_id].params[ ( i * 6) + j] = numerator[j];
             }
@@ -885,6 +912,66 @@ static int get_audpp_filter(void)
     return 0;
 }
 
+static int get_srs_filter(void)
+{
+    struct stat st;
+    char *read_buf;
+    char *next_str, *current_str;
+    int csvfd;
+
+    ALOGI("get_srs_filter");
+    static const char *const path =
+        "/system/etc/SRSAudioFilter.csv";
+    csvfd = open(path, O_RDONLY);
+    if (csvfd < 0) {
+        /* failed to open normal acoustic file ... */
+        ALOGE("failed to open SRS_FX_FILTER %s: %s (%d).",
+             path, strerror(errno), errno);
+        return -1;
+    } else ALOGI("open %s success.", path);
+
+    if (fstat(csvfd, &st) < 0) {
+        ALOGE("failed to stat %s: %s (%d).",
+             path, strerror(errno), errno);
+        close(csvfd);
+        return -1;
+    }
+
+    read_buf = (char *) mmap(0, st.st_size,
+                    PROT_READ | PROT_WRITE,
+                    MAP_PRIVATE,
+                    csvfd, 0);
+
+    if (read_buf == MAP_FAILED) {
+        ALOGE("failed to mmap parameters file: %s (%d)",
+             strerror(errno), errno);
+        close(csvfd);
+        return -1;
+    }
+
+    current_str = read_buf;
+
+    while (1) {
+        int len;
+        next_str = strchr(current_str, '\n');
+        if (!next_str)
+           break;
+        len = next_str - current_str;
+        *next_str++ = '\0';
+        if (check_and_set_audpp_parameters(current_str, len)) {
+            ALOGI("failed to set srs parameters, exiting.");
+            munmap(read_buf, st.st_size);
+            close(csvfd);
+            return -1;
+        }
+        current_str = next_str;
+    }
+
+    munmap(read_buf, st.st_size);
+    close(csvfd);
+    return 0;
+}
+
 static int msm72xx_enable_postproc(bool state)
 {
     int fd;
@@ -900,7 +987,7 @@ static int msm72xx_enable_postproc(bool state)
 
     if (!audpp_filter_inited)
     {
-        ALOGE("Parsing error in AudioFilter.csv.");
+        ALOGV("Parsing error in AudioFilter.csv.");
         return -EINVAL;
     }
     if(snd_device < 0) {
@@ -1018,14 +1105,16 @@ static int msm72xx_enable_postproc(bool state)
             close(fd);
             return -EPERM;
         }
-    } else {
-        if(post_proc_feature_mask & MBADRC_ENABLE) post_proc_feature_mask &= MBADRC_DISABLE;
-        if(post_proc_feature_mask & ADRC_ENABLE) post_proc_feature_mask &= ADRC_DISABLE;
-        if(post_proc_feature_mask & EQ_ENABLE) post_proc_feature_mask &= EQ_DISABLE;
-        if(post_proc_feature_mask & RX_IIR_ENABLE) post_proc_feature_mask &= RX_IIR_DISABLE;
+    } else{
+        int disable_mask = 0;
 
-        ALOGI("disabling post proc features with mask 0x%04x", post_proc_feature_mask);
-        if (ioctl(fd, AUDIO_ENABLE_AUDPP, &post_proc_feature_mask) < 0) {
+        if(post_proc_feature_mask & MBADRC_ENABLE) disable_mask &= MBADRC_DISABLE;
+        if(post_proc_feature_mask & ADRC_ENABLE) disable_mask &= ADRC_DISABLE;
+        if(post_proc_feature_mask & EQ_ENABLE) disable_mask &= EQ_DISABLE;
+        if(post_proc_feature_mask & RX_IIR_ENABLE) disable_mask &= RX_IIR_DISABLE;
+
+        ALOGI("disabling post proc features with mask 0x%04x", disable_mask);
+        if (ioctl(fd, AUDIO_ENABLE_AUDPP, &disable_mask) < 0) {
             ALOGE("enable audpp error");
             close(fd);
             return -EPERM;
@@ -1039,6 +1128,7 @@ static int msm72xx_enable_postproc(bool state)
 static unsigned calculate_audpre_table_index(unsigned index)
 {
     switch (index) {
+        case 96000:    return SAMP_RATE_INDX_96000;
         case 48000:    return SAMP_RATE_INDX_48000;
         case 44100:    return SAMP_RATE_INDX_44100;
         case 32000:    return SAMP_RATE_INDX_32000;
@@ -1054,6 +1144,7 @@ static unsigned calculate_audpre_table_index(unsigned index)
 size_t AudioHardware::getInputBufferSize(uint32_t sampleRate, int format, int channelCount)
 {
     if ( (format != AudioSystem::PCM_16_BIT) &&
+         (format != AudioSystem::AMR_NB)     &&
          (format != AudioSystem::AAC)){
         ALOGW("getInputBufferSize bad format: 0x%x", format);
         return 0;
@@ -1063,8 +1154,10 @@ size_t AudioHardware::getInputBufferSize(uint32_t sampleRate, int format, int ch
         return 0;
     }
 
-   if (format == AudioSystem::AAC)
-       return 2048; 
+    if(format == AudioSystem::AMR_NB)
+       return 320*channelCount;
+    else if (format == AudioSystem::AAC)
+       return 2048;
     else
        return 2048*channelCount;
 }
@@ -1115,10 +1208,22 @@ status_t AudioHardware::setVoiceVolume(float v)
         v = 1.0;
     }
 
-    int vol = lrint(v * 7.0);
+    int vol = 0;
+    if (mCurSndDevice == SND_DEVICE_SPEAKER || mCurSndDevice == SND_DEVICE_SPEAKER_RING || mCurSndDevice == SND_DEVICE_HEADSET_STEREO) {
+        vol = lrint(v * 21);
+    } else if (mCurSndDevice == SND_DEVICE_FM_HEADSET || mCurSndDevice == SND_DEVICE_FM_SPEAKER) {
+        vol = lrint(v * 14.00);
+	}
+	else {
+        vol = lrint(v * 7.0) + 1;
+    }
+
+
+/*
+    int vol = lrint(v * 7.0) + 1;
     ALOGD("setVoiceVolume(%f)\n", v);
     ALOGI("Setting in-call volume to %d (available range is 0 to 7)\n", vol);
-
+*/
     if ((mCurSndDevice != -1) && ((mCurSndDevice == SND_DEVICE_TTY_HEADSET) || (mCurSndDevice == SND_DEVICE_TTY_VCO)))
     {
         vol = 1;
@@ -1135,14 +1240,25 @@ status_t AudioHardware::setMasterVolume(float v)
     Mutex::Autolock lock(mLock);
     int vol = ceil(v * 7.0);
     ALOGI("Set master volume to %d.\n", vol);
+    set_volume_rpc(SND_DEVICE_FM_HEADSET, SND_METHOD_VOICE, lrint(vol * 2), m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_FM_SPEAKER, SND_METHOD_VOICE, lrint(vol * 2), m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_HANDSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
-    set_volume_rpc(SND_DEVICE_SPEAKER, SND_METHOD_VOICE, vol, m7xsnddriverfd);
-    set_volume_rpc(SND_DEVICE_BT,      SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_SPEAKER, SND_METHOD_VOICE, lrint(vol * 3), m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_SPEAKER_IN_CALL, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_SPEAKER_RING, SND_METHOD_VOICE, lrint(vol * 3), m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_BT, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_BT_VR, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+	set_volume_rpc(SND_DEVICE_BT_A2DP, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+	set_volume_rpc(SND_DEVICE_BT_A2DP_HEADPHONES, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+	set_volume_rpc(SND_DEVICE_BT_A2DP_SPEAKER, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_HEADSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_HEADSET_STEREO, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_IN_S_SADC_OUT_HANDSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     set_volume_rpc(SND_DEVICE_IN_S_SADC_OUT_SPEAKER_PHONE, SND_METHOD_VOICE, vol, m7xsnddriverfd);
-    set_volume_rpc(SND_DEVICE_TTY_HEADSET, SND_METHOD_VOICE, 1, m7xsnddriverfd);
-    set_volume_rpc(SND_DEVICE_TTY_VCO, SND_METHOD_VOICE, 1, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_TTY_HEADSET, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_TTY_VCO, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_TTY_HCO, SND_METHOD_VOICE, vol, m7xsnddriverfd);
+    set_volume_rpc(SND_DEVICE_VOICE_RECORDER, SND_METHOD_VOICE, vol, m7xsnddriverfd);
     // We return an error code here to let the audioflinger do in-software
     // volume on top of the maximum volume that we set through the SND API.
     // return error - software mixer will handle it
@@ -1197,15 +1313,21 @@ static status_t do_route_audio_rpc(uint32_t device,
 // always call with mutex held
 status_t AudioHardware::doAudioRouteOrMute(uint32_t device)
 {
-#if 0
+
     if (device == (uint32_t)SND_DEVICE_BT || device == (uint32_t)SND_DEVICE_CARKIT) {
         if (mBluetoothId) {
             device = mBluetoothId;
         } else if (!mBluetoothNrec) {
-            device = SND_DEVICE_BT_EC_OFF;
+            device = SND_DEVICE_BT;
         }
     }
-#endif
+	if (device == (uint32_t)SND_DEVICE_BT_A2DP || device == (uint32_t)SND_DEVICE_BT_A2DP_HEADPHONES || device == (uint32_t)SND_DEVICE_BT_A2DP_SPEAKER) {
+        if (mBluetoothId) {
+            device = mBluetoothId;
+        } else if (!mBluetoothNrec) {
+            device = SND_DEVICE_BT_A2DP;
+        }
+    }
     ALOGV("doAudioRouteOrMute() device %x, mMode %d, mMicMute %d", device, mMode, mMicMute);
     return do_route_audio_rpc(device,
                               mMode != AudioSystem::MODE_IN_CALL, mMicMute, m7xsnddriverfd);
@@ -1219,6 +1341,7 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
     uint32_t outputDevices = mOutput->devices();
     status_t ret = NO_ERROR;
     int new_snd_device = -1;
+    int new_post_proc_feature_mask = 0;
 
     //int (*msm72xx_enable_audpp)(int);
     //msm72xx_enable_audpp = (int (*)(int))::dlsym(acoustic, "msm72xx_enable_audpp");
@@ -1237,7 +1360,11 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
                 new_snd_device = SND_DEVICE_BT;
             } else if (inputDevice & AudioSystem::DEVICE_IN_WIRED_HEADSET) {
                     ALOGI("Routing audio to Wired Headset\n");
-                    new_snd_device = SND_DEVICE_HEADSET;
+                    new_snd_device = SND_DEVICE_HEADSET_STEREO;
+            } else if (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) {
+                ALOGI("Routing audio to VoiceRecorder\n");
+                new_snd_device = SND_DEVICE_VOICE_RECORDER;
+                new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE);
             } else {
                 if (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) {
                     ALOGI("Routing audio to Speakerphone\n");
@@ -1297,12 +1424,21 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
 #endif
         } else if (outputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADSET) {
             ALOGI("Routing audio to Wired Headset\n");
-            new_snd_device = SND_DEVICE_HEADSET;
+            new_snd_device = SND_DEVICE_HEADSET_STEREO;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
         } else if (outputDevices & AudioSystem::DEVICE_OUT_SPEAKER) {
             ALOGI("Routing audio to Speakerphone\n");
             new_snd_device = SND_DEVICE_SPEAKER;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
+        } else if (outputDevices & AUDIO_DEVICE_OUT_SPEAKER_IN_CALL) {
+            ALOGI("Routing audio to In-call Speaker\n");
+            new_snd_device = SND_DEVICE_SPEAKER_IN_CALL;
+            new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
+        } else if (outputDevices & DEVICE_OUT_SPEAKER_RING) {
+            ALOGI("Routing audio to In-call Speaker\n");
+            new_snd_device = SND_DEVICE_SPEAKER_RING;
+            new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
+
         } else {
             ALOGI("Routing audio to Handset\n");
             new_snd_device = SND_DEVICE_HANDSET;
@@ -1324,19 +1460,18 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
         ret = doAudioRouteOrMute(new_snd_device);
 
        //disable post proc first for previous session
-       if(hpcm_playback_in_progress)
+       if(playback_in_progress)
            msm72xx_enable_postproc(false);
 
        //enable post proc for new device
        snd_device = new_snd_device;
        post_proc_feature_mask = new_post_proc_feature_mask;
 
-       if(hpcm_playback_in_progress)
+       if(playback_in_progress)
            msm72xx_enable_postproc(true);
 
        mCurSndDevice = new_snd_device;
     }
-
     return ret;
 }
 
@@ -1518,7 +1653,7 @@ ssize_t AudioHardware::AudioStreamOutMSM72xx::write(const void* buffer, size_t b
     if (mStartCount) {
         if (--mStartCount == 0) {
             ioctl(mFd, AUDIO_START, 0);
-            hpcm_playback_in_progress = true;
+            playback_in_progress = true;
             post_proc_feature_mask = new_post_proc_feature_mask;
             //enable post processing
             msm72xx_enable_postproc(true);
@@ -1542,8 +1677,8 @@ status_t AudioHardware::AudioStreamOutMSM72xx::standby()
     status_t status = NO_ERROR;
     if (!mStandby && mFd >= 0) {
         //disable post processing
-        hpcm_playback_in_progress = false;
         msm72xx_enable_postproc(false);
+        playback_in_progress = false;
         ::close(mFd);
         mFd = -1;
     }
@@ -1596,6 +1731,7 @@ status_t AudioHardware::AudioStreamOutMSM72xx::setParameters(const String8& keyV
     if (param.getInt(key, device) == NO_ERROR) {
         mDevices = device;
         ALOGV("set output routing %x", mDevices);
+		status = mHardware->setParameters(keyValuePairs);
         status = mHardware->doRouting(NULL);
         param.remove(key);
     }
@@ -1650,6 +1786,7 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
 
     if ((pFormat == 0) ||
         ((*pFormat != AUDIO_HW_IN_FORMAT) &&
+         (*pFormat != AudioSystem::AMR_NB) &&
          (*pFormat != AudioSystem::AAC)))
     {
         *pFormat = AUDIO_HW_IN_FORMAT;
@@ -1739,6 +1876,97 @@ status_t AudioHardware::AudioStreamInMSM72xx::set(
     mChannels = *pChannels;
     mSampleRate = config.sample_rate;
     mBufferSize = config.buffer_size;
+    }
+    else if((*pFormat == AudioSystem::AMR_NB))
+           {
+
+      // open vocie memo input device
+      status = ::open(VOICE_MEMO_DEVICE, O_RDWR);
+      if (status < 0) {
+          ALOGE("Cannot open Voice Memo device for read");
+          goto Error;
+      }
+      mFd = status;
+      /* Config param */
+      if(ioctl(mFd, AUDIO_GET_CONFIG, &config))
+      {
+        ALOGE(" Error getting buf config param AUDIO_GET_CONFIG \n");
+        goto  Error;
+      }
+
+      ALOGV("The Config buffer size is %d", config.buffer_size);
+      ALOGV("The Config buffer count is %d", config.buffer_count);
+      ALOGV("The Config Channel count is %d", config.channel_count);
+      ALOGV("The Config Sample rate is %d", config.sample_rate);
+
+      mDevices = devices;
+      mChannels = *pChannels;
+      mSampleRate = config.sample_rate;
+
+      if (mDevices == AudioSystem::DEVICE_IN_VOICE_CALL)
+      {
+        if ((mChannels & AudioSystem::CHANNEL_IN_VOICE_DNLINK) &&
+            (mChannels & AudioSystem::CHANNEL_IN_VOICE_UPLINK)) {
+          ALOGI("Recording Source: Voice Call Both Uplink and Downlink");
+          gcfg.rec_type = RPC_VOC_REC_BOTH;
+        } else if (mChannels & AudioSystem::CHANNEL_IN_VOICE_DNLINK) {
+          ALOGI("Recording Source: Voice Call DownLink");
+          gcfg.rec_type = RPC_VOC_REC_FORWARD;
+        } else if (mChannels & AudioSystem::CHANNEL_IN_VOICE_UPLINK) {
+          ALOGI("Recording Source: Voice Call UpLink");
+          gcfg.rec_type = RPC_VOC_REC_REVERSE;
+        }
+      }
+      else {
+        ALOGI("Recording Source: Mic/Headset");
+        gcfg.rec_type = RPC_VOC_REC_REVERSE;
+      }
+
+      gcfg.rec_interval_ms = 0; // AV sync
+      gcfg.auto_stop_ms = 0;
+
+      switch (*pFormat)
+      {
+        case AudioSystem::AMR_NB:
+        {
+          ALOGI("Recording Format: AMR_NB");
+          gcfg.capability = RPC_VOC_CAP_AMR; // RPC_VOC_CAP_AMR (64)
+          gcfg.max_rate = RPC_VOC_AMR_RATE_1220; // Max rate (Fixed frame)
+          gcfg.min_rate = RPC_VOC_AMR_RATE_1220; // Min rate (Fixed frame length)
+          gcfg.frame_format = RPC_VOC_PB_AMR; // RPC_VOC_PB_AMR
+          mFormat = AudioSystem::AMR_NB;
+          mBufferSize = 320;
+          break;
+        }
+        default:
+        break;
+      }
+
+      gcfg.dtx_enable = 0;
+      gcfg.data_req_ms = 20;
+
+      /* Set Via  config param */
+      if (ioctl(mFd, AUDIO_SET_VOICEMEMO_CONFIG, &gcfg))
+      {
+        ALOGE("Error: AUDIO_SET_VOICEMEMO_CONFIG failed\n");
+        goto  Error;
+      }
+
+      if (ioctl(mFd, AUDIO_GET_VOICEMEMO_CONFIG, &gcfg))
+      {
+        ALOGE("Error: AUDIO_GET_VOICEMEMO_CONFIG failed\n");
+        goto  Error;
+      }
+
+      ALOGV("After set rec_type = 0x%8x\n",gcfg.rec_type);
+      ALOGV("After set rec_interval_ms = 0x%8x\n",gcfg.rec_interval_ms);
+      ALOGV("After set auto_stop_ms = 0x%8x\n",gcfg.auto_stop_ms);
+      ALOGV("After set capability = 0x%8x\n",gcfg.capability);
+      ALOGV("After set max_rate = 0x%8x\n",gcfg.max_rate);
+      ALOGV("After set min_rate = 0x%8x\n",gcfg.min_rate);
+      ALOGV("After set frame_format = 0x%8x\n",gcfg.frame_format);
+      ALOGV("After set dtx_enable = 0x%8x\n",gcfg.dtx_enable);
+      ALOGV("After set data_req_ms = 0x%8x\n",gcfg.data_req_ms);
     }
     else if(*pFormat == AudioSystem::AAC) {
       // open AAC input device
@@ -1894,8 +2122,8 @@ ssize_t AudioHardware::AudioStreamInMSM72xx::read( void* buffer, ssize_t bytes)
     size_t  aac_framesize= bytes;
     uint8_t* p = static_cast<uint8_t*>(buffer);
     uint32_t* recogPtr = (uint32_t *)p;
-    uint16_t* frameCountPtr;
-    uint16_t* frameSizePtr;
+    uint16_t* frameCountPtr = 0;
+    uint16_t* frameSizePtr = 0;
 
     if (mState < AUDIO_INPUT_OPENED) {
         AudioHardware *hw = mHardware;
@@ -1943,9 +2171,11 @@ ssize_t AudioHardware::AudioStreamInMSM72xx::read( void* buffer, ssize_t bytes)
 
         ssize_t bytesRead = ::read(mFd, p, count);
         if (bytesRead > 0) {
+            ALOGV("Number of Bytes read = %d", bytesRead);
             count -= bytesRead;
             p += bytesRead;
             bytes += bytesRead;
+            ALOGV("Total Number of Bytes read = %d", bytes);
 
             if (mFormat == AudioSystem::AAC){
                 *frameSizePtr =  bytesRead;
@@ -2027,7 +2257,7 @@ status_t AudioHardware::AudioStreamInMSM72xx::setParameters(const String8& keyVa
     ALOGV("AudioStreamInMSM72xx::setParameters() %s", keyValuePairs.string());
 
     if (param.getInt(key, device) == NO_ERROR) {
-        ALOGD("set input routing %x", device);
+        ALOGV("set input routing %x", device);
         if (device & (device - 1)) {
             status = BAD_VALUE;
         } else {
