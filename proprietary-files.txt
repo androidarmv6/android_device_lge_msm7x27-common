@@ -9,10 +9,6 @@ lib/libgsl.so
 etc/firmware/yamato_pfp.fw
 etc/firmware/yamato_pm4.fw
 
-## msm7x27 audio (ICS)
-lib/hw/audio.primary.msm7x27.so
-lib/hw/audio_policy.msm7x27.so
-
 ## OMX CORE (ICS)
 lib/libmm-omxcore.so
 lib/libOmxCore.so
