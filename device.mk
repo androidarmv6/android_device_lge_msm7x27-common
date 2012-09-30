@@ -20,6 +20,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
     
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilt/etc/vold.fstab:system/etc/vold.fstab \
     $(LOCAL_PATH)/prebuilt/etc/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml
 
