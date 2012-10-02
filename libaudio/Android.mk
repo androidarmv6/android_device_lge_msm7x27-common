@@ -9,8 +9,6 @@ endif
 
 LOCAL_SRC_FILES := \
     AudioHardware.cpp \
-    audio_hw_hal.cpp
-
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
   LOCAL_CFLAGS += -DWITH_A2DP
@@ -47,7 +45,6 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
     AudioPolicyManager.cpp \
-    audio_policy_hal.cpp
 
 LOCAL_SHARED_LIBRARIES := \
     libcutils \
