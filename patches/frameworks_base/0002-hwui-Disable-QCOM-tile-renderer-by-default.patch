@@ -4,11 +4,12 @@ Date: Thu, 16 Aug 2012 23:43:22 -0700
 Subject: [PATCH 2/3] hwui: Disable QCOM tile renderer by default
 
  * Revert once we have new Adreno drivers
+ * [Rashed]: This also fixes the notification blur. BIG improvment, eh?
 
 Change-Id: Iebf5f1f01a51138c1cd0ff25d1132a6344c9ec35
 ---
- core/java/android/view/HardwareRenderer.java |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ core/java/android/view/HardwareRenderer.java |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/core/java/android/view/HardwareRenderer.java b/core/java/android/view/HardwareRenderer.java
 index dc99561..62544a4 100644
@@ -17,7 +18,8 @@ index dc99561..62544a4 100644
 @@ -623,7 +623,7 @@ public abstract class HardwareRenderer {
          static boolean sTileRendering;
          static {
-             String dirtyProperty = SystemProperties.get(RENDER_DIRTY_REGIONS_PROPERTY, "true");
+-            String dirtyProperty = SystemProperties.get(RENDER_DIRTY_REGIONS_PROPERTY, "true");
++            String dirtyProperty = SystemProperties.get(RENDER_DIRTY_REGIONS_PROPERTY, "false");
 -            String trProperty = SystemProperties.get(TILE_RENDERING_PROPERTY, "true");
 +            String trProperty = SystemProperties.get(TILE_RENDERING_PROPERTY, "false");
              //noinspection PointlessBooleanExpression,ConstantConditions
