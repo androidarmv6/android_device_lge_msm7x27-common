@@ -1,7 +1,7 @@
 From 697926e60af3dca54e2884524d8cfa007c7d39be Mon Sep 17 00:00:00 2001
 From: Adam Farden <adam@farden.cz>
 Date: Wed, 26 Sep 2012 01:55:04 +0200
-Subject: [PATCH 3/3] Fix to manually search networks
+Subject: [PATCH] Fix to manually search networks
 
 Change-Id: I30c57be6015f664846808b5cf1c29a42b4dcccd6
 ---
