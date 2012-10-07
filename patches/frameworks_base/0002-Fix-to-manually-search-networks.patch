@@ -5,12 +5,12 @@ Subject: [PATCH] Fix to manually search networks
 
 Change-Id: I30c57be6015f664846808b5cf1c29a42b4dcccd6
 ---
- .../internal/telephony/CommandsInterface.java      |    2 ++
- .../android/internal/telephony/OperatorInfo.java   |   18 ++++++++++++++----
- .../java/com/android/internal/telephony/RIL.java   |   20 ++++++++++++++++++--
- .../android/internal/telephony/gsm/GSMPhone.java   |    5 ++++-
- .../telephony/sip/SipCommandInterface.java         |    4 ++++
- .../internal/telephony/test/SimulatedCommands.java |    2 ++
+ frameworks/base/telephony/java/com/android/internal/telephony/CommandsInterface.java      |    2 ++
+ frameworks/base/telephony/java/com/android/internal/telephony/OperatorInfo.java   |   18 ++++++++++++++----
+ frameworks/base/telephony/java/com/android/internal/telephony/RIL.java   |   20 ++++++++++++++++++--
+ frameworks/base/telephony/java/com/android/internal/telephony/gsm/GSMPhone.java   |    5 ++++-
+ frameworks/base/telephony/java/com/android/internal/telephony/sip/SipCommandInterface.java         |    4 ++++
+ frameworks/base/telephony/java/com/android/internal/telephony/test/SimulatedCommands.java |    2 ++
  6 files changed, 44 insertions(+), 7 deletions(-)
 
 diff --git a/telephony/java/com/android/internal/telephony/CommandsInterface.java b/telephony/java/com/android/internal/telephony/CommandsInterface.java

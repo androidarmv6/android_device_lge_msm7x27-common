@@ -18,13 +18,13 @@ https://github.com/rapmv78/android_packages_apps_Camera/commit/652e2f0ea6c024129
 
 Change-Id: I1dfb43bc0df484446bd7f3abf9ccf60f1803922a
 ---
- jni/Android.mk                                     |    1 +
- .../src/mosaic_renderer/SurfaceTextureRenderer.cpp |    3 +--
- .../src/mosaic_renderer/WarpRenderer.cpp           |    2 ++
- .../src/mosaic_renderer/YVURenderer.cpp            |   12 ++++++++++-
- jni/feature_mos_jni.cpp                            |   22 ++++++++++++++++++++
- jni/mosaic_renderer_jni.cpp                        |    3 +++
- .../android/camera/panorama/PanoramaActivity.java  |    8 +++++--
+ packages/apps/LegacyCamera/jni/Android.mk                                     |    1 +
+ packages/apps/LegacyCamera/jni/feature_mos/src/mosaic_renderer/SurfaceTextureRenderer.cpp |    3 +--
+ packages/apps/LegacyCamera/jni/feature_mos/src/mosaic_renderer/WarpRenderer.cpp           |    2 ++
+ packages/apps/LegacyCamera/jni/feature_mos/src/mosaic_renderer/YVURenderer.cpp            |   12 ++++++++++-
+ packages/apps/LegacyCamera/jni/feature_mos_jni.cpp                            |   22 ++++++++++++++++++++
+ packages/apps/LegacyCamera/jni/mosaic_renderer_jni.cpp                        |    3 +++
+ packages/apps/LegacyCamera/src/com/android/camera/panorama/PanoramaActivity.java  |    8 +++++--
  7 files changed, 46 insertions(+), 5 deletions(-)
 
 diff --git a/jni/Android.mk b/jni/Android.mk

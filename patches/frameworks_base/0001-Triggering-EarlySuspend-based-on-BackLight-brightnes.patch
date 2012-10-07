@@ -22,7 +22,7 @@ Changes introduced in previous patch were:
 
 Change-Id: Id411fe2c4d4fd219fc198405d6c2f221a87874ff
 ---
- .../com/android/server/PowerManagerService.java    |   11 ++++++++---
+ frameworks/base/services/java/com/android/server/PowerManagerService.java b/services/java/com/android/server/PowerManagerService.java    |   11 ++++++++---
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/services/java/com/android/server/PowerManagerService.java b/services/java/com/android/server/PowerManagerService.java
