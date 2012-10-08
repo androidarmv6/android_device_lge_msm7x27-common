@@ -1,11 +1,29 @@
-cd /Volumes/Android/CM10/device/lge/msm7x27-common/patches
-patch -p1 < frameworks_base/0001-Triggering-EarlySuspend-based-on-BackLight-brightnes.patch
-patch -p1 < frameworks_base/0002-Fix-to-manually-search-networks.patch
-patch -p1 < frameworks_base/0001-Triggering-EarlySuspend-based-on-BackLight-brightnes.patch
-patch -p1 < packages_apps_LegacyCamera/0001-load-correct-library-for-panorama.patch
-patch -p1 < packages_apps_LegacyCamera/0002-mosaic-Hack-renderer-to-support-devices-without-exte.patch
-patch -p1 < packages_apps_LegacyCamera/0003-Add-support-for-Panorama-mode.patch
-patch -p1 < packages_apps_Gallery2/0001-hide-jelly-bean-camera.patch
-patch -p1 < external_libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
-patch -p1 < external_webkit/0001-Hack-shaders-to-work-on-devices-without-OES_external.patch
-cd /Volumes/Android/CM10
+# This script installs automatically all needed patches for the devices supported by lgics. #
+# Concept by Rashed97,reviewed by Bytecode #
+
+echo "Obtaining build directory..."
+rootdirectory="$PWD"
+cd frameworks/base
+echo "Applying frameworks/base patches..."
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/frameworks_base/0001-Triggering-EarlySuspend-based-on-BackLight-brightnes.patch
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/frameworks_base/0002-Fix-to-manually-search-networks.patch
+cd $rootdirectory
+cd packages/apps/LegacyCamera
+echo "Applying LegacyCamera patches..."
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0001-load-correct-library-panorama.patch
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0002-mosaic-Hack-renderer-to-support-devices-without-exte.patch
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0003-Add-panorama-mode-support.patch
+cd $rootdirectory
+cd packages/apps/Gallery2
+echo "Applying Gallery2 patches..."
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_Gallery2/0001-hide-jelly-bean-camera.patch
+cd $rootdirectory
+cd external/libncurses
+echo "Applying libncurses patches..."
+patch -p1 < $rootdirectory/external_libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
+cd $rootdirectory
+cd external/webkit
+echo "Applying webkit patches..."
+patch -p1 < $rootdirectory/external_webkit/0001-Hack-shaders-to-work-on-devices-without-OES_external.patch
+echo "Changing to build directory.."
+cd $rootdirectory
