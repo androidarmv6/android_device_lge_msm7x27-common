@@ -20,10 +20,10 @@ patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_Galle
 cd $rootdirectory
 cd external/libncurses
 echo "Applying libncurses patches..."
-patch -p1 < $rootdirectory/external_libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/external_libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
 cd $rootdirectory
 cd external/webkit
 echo "Applying webkit patches..."
-patch -p1 < $rootdirectory/external_webkit/0001-Hack-shaders-to-work-on-devices-without-OES_external.patch
+patch -p1 < $rootdirectory/device/lge/msm7x27-common/patches/external_webkit/0001-Hack-shaders-to-work-on-devices-without-OES_external.patch
 echo "Changing to build directory.."
 cd $rootdirectory
