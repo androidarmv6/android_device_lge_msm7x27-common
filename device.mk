@@ -20,29 +20,29 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
     
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/etc/vold.fstab:system/etc/vold.fstab \
-    $(LOCAL_PATH)/prebuilt/etc/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
+    $(LOCAL_PATH)/prebuilt/system/etc/AudioVolumeControl.txt:system/etc/AudioVolumeControl.txt \
+    $(LOCAL_PATH)/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
+    $(LOCAL_PATH)/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
+    $(LOCAL_PATH)/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/initlogo.rle:root/initlogo.rle \
-    $(LOCAL_PATH)/root/init.qcom.rc:root/init.qcom.rc \
-    $(LOCAL_PATH)/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
-    $(LOCAL_PATH)/root/init.qcom.sh:root/init.qcom.sh \
-    $(LOCAL_PATH)/root/ueventd.qcom.rc:root/ueventd.qcom.rc
+    $(LOCAL_PATH)/prebuilt/root/initlogo.rle:root/initlogo.rle \
+    $(LOCAL_PATH)/prebuilt/root/init.qcom.rc:root/init.qcom.rc \
+    $(LOCAL_PATH)/prebuilt/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    $(LOCAL_PATH)/prebuilt/root/init.qcom.sh:root/init.qcom.sh \
+    $(LOCAL_PATH)/prebuilt/root/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
+    $(LOCAL_PATH)/prebuilt/system/etc/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
     $(LOCAL_PATH)/configs/adreno_config.txt:system/etc/adreno_config.txt \
-    $(LOCAL_PATH)/configs/AudioFilter.csv:system/etc/AudioFilter.csv \
     $(LOCAL_PATH)/configs/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
-    $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
     $(LOCAL_PATH)/configs/nvram.txt:system/etc/wl/nvram.txt \
-    $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab \
-    $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.camera=msm7x27 \
@@ -118,7 +118,7 @@ PRODUCT_PACKAGES += \
     setup_fs
 
 # BT startup
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/init.qcom.bt.sh:system/bin/init.qcom.bt.sh
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/system/bin/init.qcom.bt.sh:system/bin/init.qcom.bt.sh
 PRODUCT_PACKAGES += \
     hcitool \
     hciconfig \
