@@ -17,32 +17,32 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
+    device/lge/msm7x27-common/releasetools/extras.sh:system/bin/extras.sh
     
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
-    $(LOCAL_PATH)/prebuilt/system/etc/AudioVolumeControl.txt:system/etc/AudioVolumeControl.txt \
-    $(LOCAL_PATH)/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
-    $(LOCAL_PATH)/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
-    $(LOCAL_PATH)/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+    device/lge/msm7x27-common/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
+    device/lge/msm7x27-common/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
+    device/lge/msm7x27-common/prebuilt/system/etc/AudioVolumeControl.txt:system/etc/AudioVolumeControl.txt \
+    device/lge/msm7x27-common/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
+    device/lge/msm7x27-common/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
+    device/lge/msm7x27-common/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
+    device/lge/msm7x27-common/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/root/initlogo.rle:root/initlogo.rle \
-    $(LOCAL_PATH)/prebuilt/root/init.qcom.rc:root/init.qcom.rc \
-    $(LOCAL_PATH)/prebuilt/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
-    $(LOCAL_PATH)/prebuilt/root/init.qcom.sh:root/init.qcom.sh \
-    $(LOCAL_PATH)/prebuilt/root/ueventd.qcom.rc:root/ueventd.qcom.rc
+    device/lge/msm7x27-common/prebuilt/root/initlogo.rle:root/initlogo.rle \
+    device/lge/msm7x27-common/prebuilt/root/init.qcom.rc:root/init.qcom.rc \
+    device/lge/msm7x27-common/prebuilt/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    device/lge/msm7x27-common/prebuilt/root/init.qcom.sh:root/init.qcom.sh \
+    device/lge/msm7x27-common/prebuilt/root/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/system/etc/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
+    device/lge/msm7x27-common/prebuilt/system/etc/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
-    $(LOCAL_PATH)/configs/adreno_config.txt:system/etc/adreno_config.txt \
-    $(LOCAL_PATH)/configs/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
-    $(LOCAL_PATH)/configs/nvram.txt:system/etc/wl/nvram.txt \
+    device/lge/msm7x27-common/configs/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
+    device/lge/msm7x27-common/configs/adreno_config.txt:system/etc/adreno_config.txt \
+    device/lge/msm7x27-common/configs/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
+    device/lge/msm7x27-common/configs/nvram.txt:system/etc/wl/nvram.txt \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.camera=msm7x27 \
