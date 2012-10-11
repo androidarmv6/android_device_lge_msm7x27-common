@@ -51,10 +51,10 @@ PRODUCT_COPY_FILES += \
 
 # Misc
 PRODUCT_COPY_FILES += \
-    device/lge/msm7x27-common/configs/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
-    device/lge/msm7x27-common/configs/adreno_config.txt:system/etc/adreno_config.txt \
-    device/lge/msm7x27-common/configs/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
-    device/lge/msm7x27-common/configs/nvram.txt:system/etc/wl/nvram.txt \
+    device/lge/msm7x27-common/prebuilt/system/usr/keylayout/7k_handset.kl:system/usr/keylayout/7k_handset.kl \
+    device/lge/msm7x27-common/prebuilt/system/etc/adreno_config.txt:system/etc/adreno_config.txt \
+    device/lge/msm7x27-common/prebuilt/system/etc/dhcpcd/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
+    device/lge/msm7x27-common/prebuilt/system/etc/wl/nvram.txt:system/etc/wl/nvram.txt \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.camera=msm7x27 \
