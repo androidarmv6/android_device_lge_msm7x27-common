@@ -20,11 +20,11 @@ PRODUCT_COPY_FILES += \
     device/lge/msm7x27-common/releasetools/extras.sh:system/bin/extras.sh
     
 PRODUCT_COPY_FILES += \
-    device/lge/msm7x27-common/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
-    device/lge/msm7x27-common/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
     device/lge/msm7x27-common/prebuilt/system/etc/AudioVolumeControl.txt:system/etc/AudioVolumeControl.txt \
     device/lge/msm7x27-common/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
     device/lge/msm7x27-common/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
+    device/lge/msm7x27-common/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
+    device/lge/msm7x27-common/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
     device/lge/msm7x27-common/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
     device/lge/msm7x27-common/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
