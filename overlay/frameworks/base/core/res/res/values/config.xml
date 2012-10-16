@@ -75,9 +75,16 @@
     </integer-array>
 
     <bool name="config_sip_wifi_only">false</bool>
-    <string name="config_networkLocationProviderPackageName">com.google.android.location.NetworkLocationProvider</string>
-    <string name="config_geocodeProviderPackageName">com.google.android.location.GeocodeProvider</string>
+
+    <!-- Package name providing network location support. -->
+    <string name="config_networkLocationProviderPackageName" translatable="false">com.google.android.location</string>
+
+    <!-- Package name providing geocoder API support. -->
+    <string name="config_geocodeProviderPackageName" translatable="false">com.google.android.location</string>
+
     <bool name="config_bluetooth_adapter_quick_switch">false</bool>
+
+    <!-- Disable hardware keyboards. -->
     <bool name="config_forceDisableHardwareKeyboard">true</bool>
     <!--<integer name="config_backKillTimeout">1500</integer>-->
 </resources>
