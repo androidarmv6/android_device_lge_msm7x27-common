@@ -23,7 +23,7 @@ PRODUCT_COPY_FILES += \
     
 # Media
 PRODUCT_COPY_FILES += \
-    device/lge/msm7x27-common/prebuilt/system/etc/AutoVolumeControl.txt:system/etc/AudioVolumeControl.txt \
+    device/lge/msm7x27-common/prebuilt/system/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
     device/lge/msm7x27-common/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
     device/lge/msm7x27-common/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
     device/lge/msm7x27-common/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
