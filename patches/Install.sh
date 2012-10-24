@@ -5,18 +5,18 @@ echo "Obtaining build directory..."
 rootdirectory="$PWD"
 cd frameworks/base
 echo "Applying frameworks/base patches..."
-git am $rootdirectory/device/lge/msm7x27-common/patches/frameworks_base/0001-Triggering-EarlySuspend-based-on-BackLight-brightnes.patch
-git am $rootdirectory/device/lge/msm7x27-common/patches/frameworks_base/0002-Fix-to-manually-search-networks.patch
+git am $rootdirectory/device/lge/msm7x27-common/patches/frameworks_base/*.patch
 cd $rootdirectory
 cd packages/apps/LegacyCamera
 echo "Applying LegacyCamera patches..."
-git am $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0001-load-correct-library-panorama.patch
-git am $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0002-mosaic-Hack-renderer-to-support-devices-without-exte.patch
-git am $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0003-Add-panorama-mode-support.patch
+git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/79/24979/2
+git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/80/24980/1
+git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/81/24981/1
+git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/13/25113/2
 cd $rootdirectory
 cd packages/apps/Gallery2
 echo "Applying Gallery2 patches..."
-git am $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_Gallery2/0001-hide-jelly-bean-camera.patch
+git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_Gallery2 refs/changes/15/25115/3
 cd $rootdirectory
 cd external/libncurses
 echo "Applying libncurses patches..."
@@ -25,5 +25,13 @@ cd $rootdirectory
 cd external/webkit
 echo "Applying webkit patches..."
 git am $rootdirectory/device/lge/msm7x27-common/patches/external_webkit/0001-Hack-shaders-to-work-on-devices-without-OES_external.patch
+cd $rootdirectory
+cd frameworks_av
+echo "Applying frameworks/av patches..."
+git pull http://review.cyanogenmod.com/CyanogenMod/android_frameworks_av refs/changes/03/23603/1
+cd $rootdirectory
+cd frameworks_native
+echo "Applying frameworks/native patches..."
+git pull http://review.cyanogenmod.com/CyanogenMod/android_frameworks_native refs/changes/02/23602/1
 echo "Changing to build directory.."
 cd $rootdirectory
