@@ -21,12 +21,6 @@ cd frameworks/native
 echo "Applying frameworks/native patches..."
 git pull http://review.cyanogenmod.com/CyanogenMod/android_frameworks_native refs/changes/02/23602/1
 cd $rootdirectory
-repo start non-patched packages/apps/Calculator
-repo start patched packages/apps/Calculator
-cd packages/apps/Calculator
-echo "Applying Calculator patches..."
-git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_Calculator refs/changes/31/24831/2
-cd $rootdirectory
 repo start non-patched packages/apps/LegacyCamera
 repo start patched packages/apps/LegacyCamera
 cd packages/apps/LegacyCamera
