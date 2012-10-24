@@ -140,6 +140,7 @@ AudioHardware::AudioHardware() :
                 CHECK_FOR(TTY_HEADSET);
                 CHECK_FOR(TTY_HCO);
                 CHECK_FOR(TTY_VCO);
+		CHECK_FOR(NO_MIC_HEADSET);
 #undef CHECK_FOR
             }
         }
