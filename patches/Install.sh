@@ -18,6 +18,10 @@ cd packages/apps/Gallery2
 echo "Applying Gallery2 patches..."
 git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_Gallery2 refs/changes/15/25115/3
 cd $rootdirectory
+cd packages/apps/Settings
+echo "Applying Settings patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_Settings/0001-Add-forum-link-to-device-info.patch
+cd $rootdirectory
 cd external/libncurses
 echo "Applying libncurses patches..."
 git am $rootdirectory/device/lge/msm7x27-common/patches/external_libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
