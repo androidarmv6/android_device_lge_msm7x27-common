@@ -122,6 +122,10 @@ PRODUCT_PACKAGES += \
     lights.msm7x27 \
     lgapversion
     
+# Build sim toolkit
+PRODUCT_PACKAGES += \
+    Stk
+    
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm7x27 \
