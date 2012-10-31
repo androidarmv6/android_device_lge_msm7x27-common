@@ -84,11 +84,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.enable-player=true \
-    media.stagefright.enable-meta=false \
-    media.stagefright.enable-scan=false \
+    media.stagefright.enable-meta=true \
+    media.stagefright.enable-scan=true \
     media.stagefright.enable-http=true \
-    media.stagefright.enable-aac=true \
-    media.stagefright.enable-qcp=true
+    media.stagefright.enable-record=true
 
 # Audio
 PRODUCT_PACKAGES += \
