@@ -56,6 +56,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hdmi_out=false \
     debug.sf.hw=1 \
     debug.enabletr=false \
+    debug.hwui.render_dirty_regions=false \
     debug.composition.type=mdp \
     debug.gr.numframebuffers=2 \
     debug.qctwa.statusbar=1 \
