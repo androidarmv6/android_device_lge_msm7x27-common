@@ -1,0 +1,81 @@
+From 874208e08f90290d93cd81d4a3802e8c9e2e5158 Mon Sep 17 00:00:00 2001
+From: Rashed Abdel-Tawab <rashedabdeltawab@gmail.com>
+Date: Tue, 23 Oct 2012 22:30:09 -0400
+Subject: [PATCH] Add forum link
+
+Based of KonstaT's commit
+
+Change-Id: I574cbb051c078e70c10004339bb865728523e8dd
+---
+ res/values/strings.xml                           |    5 +++++
+ res/xml/device_info_settings.xml                 |    5 +++++
+ src/com/android/settings/DeviceInfoSettings.java |   13 +++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 1202ebd..64d05d7 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -4928,6 +4928,11 @@
+     <string name="sms_security_check_limit_title">SMS message limit</string>
+     <string name="sms_security_check_limit_summary">Display an alert dialog to prevent applications from sending SMS messages too frequently. Current limit: %d messages in 15 minutes</string>
+     <string name="sms_security_check_limit_default">30 (Default)</string>
++    
++    <!-- LGICS forum link -->
++    <string name="lgics_web_title">CyanogenMod 10 - LG MSM7x27</string>
++    <string name="lgics_web_summary">Visit XDA thread</string>
++    <string name="lgics_web_url">http://forum.xda-developers.com/showthread.php?t=1811325</string>
+ 
+     <!-- **** CYANOGENMOD ADDITIONS END **** -->
+ </resources>
+diff --git a/res/xml/device_info_settings.xml b/res/xml/device_info_settings.xml
+index e81cde9..b17111d 100644
+--- a/res/xml/device_info_settings.xml
++++ b/res/xml/device_info_settings.xml
+@@ -174,4 +174,9 @@
+                 android:title="@string/build_number"
+                 android:summary="@string/device_info_default"/>
+ 
++        <!-- LGICS forum link -->
++        <Preference android:key="lgics_web"
++            android:title="@string/lgics_web_title"
++            android:summary="@string/lgics_web_summary"/>
++
+ </PreferenceScreen>
+diff --git a/src/com/android/settings/DeviceInfoSettings.java b/src/com/android/settings/DeviceInfoSettings.java
+index 29b35a5..a9f47fe 100644
+--- a/src/com/android/settings/DeviceInfoSettings.java
++++ b/src/com/android/settings/DeviceInfoSettings.java
+@@ -26,9 +26,11 @@ import android.os.Build;
+ import android.os.Bundle;
+ import android.os.SystemClock;
+ import android.os.SystemProperties;
++import android.net.Uri;
+ import android.preference.Preference;
+ import android.preference.PreferenceGroup;
+ import android.preference.PreferenceScreen;
++import android.preference.Preference.OnPreferenceClickListener;
+ import android.provider.Settings;
+ import android.util.Log;
+ 
+@@ -152,6 +154,17 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment {
+         if (isUpdateSettingAvailable == false) {
+             getPreferenceScreen().removePreference(findPreference(KEY_UPDATE_SETTING));
+         }
++        
++        findPreference("lgics_web").setOnPreferenceClickListener(
++            new OnPreferenceClickListener() {
++                public boolean onPreferenceClick(Preference preference) {
++                    Intent browserIntent = new Intent(
++                        "android.intent.action.VIEW", Uri
++                        .parse(getString(R.string.lgics_web_url)));
++                        startActivity(browserIntent);
++                        return true;
++                }
++            });
+     }
+ 
+     @Override
+-- 
+1.7.7.5 (Apple Git-26)
+
