@@ -1,71 +1,48 @@
-ifneq ($(BOARD_USES_ICS_LIBAUDIO),true)
+
+ifneq ($(BUILD_TINY_ANDROID),true)
 
 LOCAL_PATH := $(call my-dir)
+
 include $(CLEAR_VARS)
 
-ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
-    LOCAL_CFLAGS += -DQCOM_HARDWARE
-endif
-
-LOCAL_SRC_FILES := \
-    AudioHardware.cpp \
-
-ifeq ($(BOARD_HAVE_BLUETOOTH),true)
-  LOCAL_CFLAGS += -DWITH_A2DP
-endif
-
-LOCAL_SHARED_LIBRARIES := \
-    libcutils       \
-    libutils        \
-    libmedia
-
-ifneq ($(TARGET_SIMULATOR),true)
-LOCAL_SHARED_LIBRARIES += libdl
-endif
-
-LOCAL_STATIC_LIBRARIES := \
-    libmedia_helper  \
-    libaudiohw_legacy
-
-LOCAL_MODULE := audio.primary.$(TARGET_BOARD_PLATFORM)
+LOCAL_MODULE := audio_policy.$(TARGET_DEVICE)
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
+LOCAL_STATIC_LIBRARIES := libmedia_helper
+LOCAL_WHOLE_STATIC_LIBRARIES := libaudiopolicy_legacy    
 LOCAL_MODULE_TAGS := optional
-
-LOCAL_CFLAGS += -fno-short-enums
-
-LOCAL_C_INCLUDES += hardware/libhardware/include
-LOCAL_C_INCLUDES += hardware/libhardware_legacy/include
-LOCAL_C_INCLUDES += frameworks/base/include
-LOCAL_C_INCLUDES += system/core/include
-
-include $(BUILD_SHARED_LIBRARY)
-
-# The audio policy is implemented on top of legacy policy code
-include $(CLEAR_VARS)
-
-LOCAL_SRC_FILES := \
-    AudioPolicyManager.cpp \
 
 LOCAL_SHARED_LIBRARIES := \
     libcutils \
     libutils \
     libmedia
 
-LOCAL_STATIC_LIBRARIES := \
-    libaudiopolicy_legacy \
-    libmedia_helper \
-    libaudiohw_legacy
-
-LOCAL_MODULE := audio_policy.$(TARGET_BOARD_PLATFORM)
-LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
-LOCAL_MODULE_TAGS := optional
+LOCAL_SRC_FILES:= AudioPolicyManager.cpp
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
   LOCAL_CFLAGS += -DWITH_A2DP
 endif
 
-LOCAL_C_INCLUDES := hardware/libhardware_legacy/audio
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := audio.primary.$(TARGET_DEVICE)
+LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw	
+LOCAL_STATIC_LIBRARIES += libmedia_helper	
+LOCAL_WHOLE_STATIC_LIBRARIES := libaudiohw_legacy
+LOCAL_MODULE_TAGS := optional
+
+LOCAL_SHARED_LIBRARIES := \
+    libcutils \
+    libutils \
+    libmedia \
+    libhardware_legacy \
+    libdl
+
+LOCAL_SRC_FILES += AudioHardware.cpp
+
+LOCAL_CFLAGS += -fno-short-enums
 
 include $(BUILD_SHARED_LIBRARY)
 
-endif
+endif # not BUILD_TINY_ANDROID
