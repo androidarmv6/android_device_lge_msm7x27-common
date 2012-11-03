@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +15,18 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "AudioPolicyManager"
+#define LOG_TAG "AudioPolicyManager7627"
 //#define LOG_NDEBUG 0
 #include <utils/Log.h>
 #include "AudioPolicyManager.h"
 #include <media/mediarecorder.h>
 #include <fcntl.h>
+#include <cutils/properties.h> // for property_get
 
 namespace android_audio_legacy {
 
-
-
 // ----------------------------------------------------------------------------
-// AudioPolicyManager for msm7k platform
+// AudioPolicyManager for LG MSM7x27 devices
 // Common audio policy manager code is implemented in AudioPolicyManagerBase class
 // ----------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ extern "C" void destroyAudioPolicyManager(AudioPolicyInterface *interface)
 }
 
 audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strategy,
-                                                             bool fromCache)
+                                                            bool fromCache)
 {
     uint32_t device = 0;
 
@@ -64,7 +64,7 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
             // when media is not playing anymore, fall back on the sonification behavior
             device = getDeviceForStrategy(STRATEGY_SONIFICATION, false /*fromCache*/);
         }
-
+            
         break;
 
     case STRATEGY_DTMF:
@@ -145,29 +145,28 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
             device = getDeviceForStrategy(STRATEGY_PHONE, false /*fromCache*/);
             break;
         }
-        // FALL THROUGH
-
-    case STRATEGY_ENFORCED_AUDIBLE:
-        // strategy STRATEGY_ENFORCED_AUDIBLE uses same routing policy as STRATEGY_SONIFICATION
-        // except:
-        //   - when in call where it doesn't default to STRATEGY_PHONE behavior
-        //   - in countries where not enforced in which case it follows STRATEGY_MEDIA
-
-        if (strategy == STRATEGY_SONIFICATION ||
+            // FALL THROUGH
+            
+        case STRATEGY_ENFORCED_AUDIBLE:
+            // strategy STRATEGY_ENFORCED_AUDIBLE uses same routing policy as STRATEGY_SONIFICATION
+            // except:
+            //   - when in call where it doesn't default to STRATEGY_PHONE behavior
+            //   - in countries where not enforced in which case it follows STRATEGY_MEDIA
+            
+            if (strategy == STRATEGY_SONIFICATION ||
                 !mStreams[AUDIO_STREAM_ENFORCED_AUDIBLE].mCanBeMuted) {
-            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
-            if (device == 0) {
-                ALOGE("getDeviceForStrategy() speaker device not found for STRATEGY_SONIFICATION");
+                device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
+                if (device == 0) {
+                    ALOGE("getDeviceForStrategy() speaker device not found for STRATEGY_SONIFICATION");
+                }
             }
-        }
         // The second device used for sonification is the same as the device used by media strategy
         // FALL THROUGH
 
     case STRATEGY_MEDIA: {
         uint32_t device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_AUX_DIGITAL;
 #ifdef WITH_A2DP
-        if (mHasA2dp && (mForceUse[AudioSystem::FOR_MEDIA] != AudioSystem::FORCE_NO_BT_A2DP) &&
-                (getA2dpOutput() != 0) && !mA2dpSuspended) {
+        if (mA2dpOutput != 0) {
             if (strategy == STRATEGY_SONIFICATION && !a2dpUsedForSonification()) {
                 break;
             }
@@ -217,7 +216,7 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
     return (audio_devices_t)device;
 }
 
-status_t AudioPolicyManager::checkAndSetVolume(int stream, int index, audio_io_handle_t output, audio_devices_t device, int delayMs, bool force)
+status_t AudioPolicyManager::checkAndSetVolume(int stream, int index, audio_io_handle_t output, uint32_t device, int delayMs, bool force)
 {
 
     // do not change actual stream volume if the stream is muted
@@ -261,7 +260,7 @@ status_t AudioPolicyManager::checkAndSetVolume(int stream, int index, audio_io_h
         } else {
             voiceVolume = 1.0;
         }
-        if (voiceVolume >= 0 && output == mPrimaryOutput) {
+        if (voiceVolume >= 0 && output == mHardwareOutput) {
             mpClientInterface->setVoiceVolume(voiceVolume, delayMs);
             mLastVoiceVolume = voiceVolume;
         }
