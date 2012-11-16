@@ -13,28 +13,19 @@ repo start non-patched frameworks/av
 repo start patched frameworks/av
 cd frameworks/av
 echo "Applying frameworks/av patches..."
-git pull http://review.cyanogenmod.com/CyanogenMod/android_frameworks_av refs/changes/03/23603/1
+git pull http://review.cyanogenmod.org/CyanogenMod/android_frameworks_av refs/changes/03/23603/1
 cd $rootdirectory
 repo start non-patched frameworks/native
 repo start patched frameworks/native
 cd frameworks/native
 echo "Applying frameworks/native patches..."
-git pull http://review.cyanogenmod.com/CyanogenMod/android_frameworks_native refs/changes/02/23602/1
+git pull http://review.cyanogenmod.org/CyanogenMod/android_frameworks_native refs/changes/02/23602/1
 cd $rootdirectory
 repo start non-patched packages/apps/LegacyCamera
 repo start patched packages/apps/LegacyCamera
 cd packages/apps/LegacyCamera
 echo "Applying LegacyCamera patches..."
-git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/79/24979/2
-git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/80/24980/1
-git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/81/24981/1
-git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/13/25113/2
-cd $rootdirectory
-repo start non-patched packages/apps/Gallery2
-repo start patched packages/apps/Gallery2
-cd packages/apps/Gallery2
-echo "Applying Gallery2 patches..."
-git pull http://review.cyanogenmod.com/CyanogenMod/android_packages_apps_Gallery2 refs/changes/15/25115/3
+git pull http://review.cyanogenmod.org/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/80/24980/1
 cd $rootdirectory
 repo start non-patched packages/apps/Settings
 repo start patched packages/apps/Settings
