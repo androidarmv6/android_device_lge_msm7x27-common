@@ -93,12 +93,6 @@
 
 #define	AUDIO_MAX_COMMON_IOCTL_NUM	100
 
-/* ZTE_Audio_CJ_100302, chenjun, 2010-3-2, start */
-/* ZTE_Audio-LB_CJ_1 chenjun 2009-10-28 start */
-#define SND_SET_AUDIO_LOOPBACK _IOW(SND_IOCTL_MAGIC, 8, unsigned *)
-/* ZTE_Audio-LB_CJ_1 chenjun 2009-10-28 end */
-/* ZTE_Audio_CJ_100302, chenjun, 2010-3-2, end */
-
 
 #define HANDSET_MIC			0x01
 #define HANDSET_SPKR			0x02
