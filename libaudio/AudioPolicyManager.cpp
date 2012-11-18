@@ -15,14 +15,13 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "AudioPolicyManager_miroslav_mm"
+#define LOG_TAG "AudioPolicyManager7627"
 //#define LOG_NDEBUG 0
 #include <utils/Log.h>
 #include "AudioPolicyManager.h"
 #include <media/mediarecorder.h>
 #include <fcntl.h>
 #include <cutils/properties.h> // for property_get
-#include "AudioHardware.h"
 
 namespace android_audio_legacy {
 
@@ -44,8 +43,7 @@ extern "C" void destroyAudioPolicyManager(AudioPolicyInterface *interface)
     delete interface;
 }
 
-audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strategy,
-                                                             bool fromCache)
+audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strategy, bool fromCache)
 {
     uint32_t device = 0;
 
@@ -55,21 +53,8 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
     }
 
     switch (strategy) {
-    case STRATEGY_SONIFICATION_RESPECTFUL:
-         if (isInCall()) {
-             device = getDeviceForStrategy(STRATEGY_SONIFICATION, false /*fromCache*/);
-         } else if (isStreamActive(AudioSystem::MUSIC, SONIFICATION_RESPECTFUL_AFTER_MUSIC_DELAY)) {
-             // while media is playing (or has recently played), use the same device
-             device = getDeviceForStrategy(STRATEGY_MEDIA, false /*fromCache*/);
-         } else {
-             // when media is not playing anymore, fall back on the sonification behavior
-             device = getDeviceForStrategy(STRATEGY_SONIFICATION, false /*fromCache*/);
-         }
-
-        break;
-
     case STRATEGY_DTMF:
-        if (!isInCall()) {
+        if (mPhoneState != AudioSystem::MODE_IN_CALL) {
             // when off call, DTMF strategy follows the same rules as MEDIA strategy
             device = getDeviceForStrategy(STRATEGY_MEDIA, false);
             break;
@@ -82,7 +67,7 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
         // of priority
         switch (mForceUse[AudioSystem::FOR_COMMUNICATION]) {
         case AudioSystem::FORCE_BT_SCO:
-            if (!isInCall() || strategy != STRATEGY_DTMF) {
+            if (mPhoneState != AudioSystem::MODE_IN_CALL || strategy != STRATEGY_DTMF) {
                 device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_CARKIT;
                 if (device) break;
             }
@@ -100,7 +85,7 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
             if (device) break;
 #ifdef WITH_A2DP
             // when not in a phone call, phone strategy should route STREAM_VOICE_CALL to A2DP
-            if (!isInCall()) {
+            if (mPhoneState != AudioSystem::MODE_IN_CALL) {
                 device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_BLUETOOTH_A2DP;
                 if (device) break;
                 device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES;
@@ -118,22 +103,18 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
             break;
 
         case AudioSystem::FORCE_SPEAKER:
-            if (!isInCall() || strategy != STRATEGY_DTMF) {
+            if (mPhoneState != AudioSystem::MODE_IN_CALL || strategy != STRATEGY_DTMF) {
                 device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_CARKIT;
                 if (device) break;
             }
 #ifdef WITH_A2DP
             // when not in a phone call, phone strategy should route STREAM_VOICE_CALL to
             // A2DP speaker when forcing to speaker output
-            if (!isInCall()) {
+            if (mPhoneState != AudioSystem::MODE_IN_CALL) {
                 device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER;
                 if (device) break;
             }
 #endif
-            if (isInCall()) {
-                device = AUDIO_DEVICE_OUT_SPEAKER_IN_CALL;
-                if (device) break;
-	    }
             device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
             if (device == 0) {
                 ALOGE("getDeviceForStrategy() speaker device not found");
@@ -143,26 +124,19 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
     break;
 
     case STRATEGY_SONIFICATION:
+
+        // If incall, just select the STRATEGY_PHONE device: The rest of the behavior is handled by
+        // handleIncallSonification().
+        if (mPhoneState == AudioSystem::MODE_IN_CALL) {
+            device = getDeviceForStrategy(STRATEGY_PHONE, false);
+            break;
+        }
         device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
         if (device == 0) {
             ALOGE("getDeviceForStrategy() speaker device not found");
         }
         // The second device used for sonification is the same as the device used by media strategy
         // FALL THROUGH
-
-    case STRATEGY_ENFORCED_AUDIBLE:
-        // strategy STRATEGY_ENFORCED_AUDIBLE uses same routing policy as STRATEGY_SONIFICATION
-        // except:
-        //   - when in call where it doesn't default to STRATEGY_PHONE behavior
-        //   - in countries where not enforced in which case it follows STRATEGY_MEDIA
-            
-        if (strategy == STRATEGY_SONIFICATION ||
-                    !mStreams[AUDIO_STREAM_ENFORCED_AUDIBLE].mCanBeMuted) {
-            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
-            if (device == 0) {
-                ALOGE("getDeviceForStrategy() speaker device not found for STRATEGY_SONIFICATION");
-            }
-        }
 
     case STRATEGY_MEDIA: {
         uint32_t device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_AUX_DIGITAL;
@@ -199,7 +173,7 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
         device |= device2;
         // Do not play media stream if in call and the requested device would change the hardware
         // output routing
-        if (isInCall() &&
+        if (mPhoneState == AudioSystem::MODE_IN_CALL &&
             !AudioSystem::isA2dpDevice((AudioSystem::audio_devices)device) &&
             device != getDeviceForStrategy(STRATEGY_PHONE)) {
             device = 0;
@@ -216,7 +190,7 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
     return (audio_devices_t)device;
 }
 
-status_t AudioPolicyManager::checkAndSetVolume(int stream, int index, audio_io_handle_t output, audio_devices_t device, int delayMs, bool force)
+status_t AudioPolicyManager::checkAndSetVolume(int stream, int index, audio_io_handle_t output, uint32_t device, int delayMs, bool force)
 {
 
     // do not change actual stream volume if the stream is muted
@@ -260,7 +234,7 @@ status_t AudioPolicyManager::checkAndSetVolume(int stream, int index, audio_io_h
         } else {
             voiceVolume = 1.0;
         }
-        if ((voiceVolume != mLastVoiceVolume && output == mPrimaryOutput)) {
+        if (voiceVolume >= 0 && output == mHardwareOutput) {
             mpClientInterface->setVoiceVolume(voiceVolume, delayMs);
             mLastVoiceVolume = voiceVolume;
         }

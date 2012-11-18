@@ -27,8 +27,8 @@
 #include <hardware_legacy/AudioHardwareBase.h>
 
 extern "C" {
-#include "msm_audio.h"
-#include "msm_audio_voicememo.h"
+#include <linux/msm_audio.h>
+#include <linux/msm_audio_voicememo.h>
 }
 
 namespace android_audio_legacy {
@@ -48,7 +48,6 @@ using android::Mutex;
 #define SAMP_RATE_INDX_32000	6
 #define SAMP_RATE_INDX_44100	7
 #define SAMP_RATE_INDX_48000	8
-#define SAMP_RATE_INDX_96000	9
 
 #define EQ_MAX_BAND_NUM 12
 
@@ -64,10 +63,6 @@ using android::Mutex;
 #define AGC_ENABLE     0x0001
 #define NS_ENABLE      0x0002
 #define TX_IIR_ENABLE  0x0004
-
-//#define DEVICE_OUT_SPEAKER_IN_CALL 0x2000
-#define AUDIO_DEVICE_OUT_SPEAKER_IN_CALL 0x4000
-#define DEVICE_OUT_SPEAKER_RING 0x2000
 
 struct eq_filter_type {
     int16_t gain;
@@ -159,6 +154,7 @@ enum tty_modes {
 #define AUDIO_HW_IN_BUFFERSIZE 2048                 // Default audio input buffer size
 #define AUDIO_HW_IN_FORMAT (AudioSystem::PCM_16_BIT)  // Default audio input sample format
 // ----------------------------------------------------------------------------
+
 using android_audio_legacy::AudioHardwareBase;
 using android_audio_legacy::AudioStreamOut;
 using android_audio_legacy::AudioStreamIn;
@@ -189,7 +185,6 @@ public:
     // create I/O streams
     virtual AudioStreamOut* openOutputStream(
                                 uint32_t devices,
-				audio_output_flags_t flags,
                                 int *format=0,
                                 uint32_t *channels=0,
                                 uint32_t *sampleRate=0,
