@@ -318,9 +318,10 @@ static uint32_t adev_get_supported_devices(const struct audio_hw_device *dev)
             AUDIO_DEVICE_OUT_WIRED_HEADSET |
             AUDIO_DEVICE_OUT_WIRED_HEADPHONE |
             AUDIO_DEVICE_OUT_AUX_DIGITAL |
-            AUDIO_DEVICE_OUT_ALL_SCO |
             AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET |
             AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET |
+            AUDIO_DEVICE_OUT_ALL_SCO |
+            AUDIO_DEVICE_OUT_PROXY |
             AUDIO_DEVICE_OUT_DEFAULT |
             /* IN */
             AUDIO_DEVICE_IN_VOICE_CALL |
@@ -416,11 +417,9 @@ static int adev_open_output_stream(struct audio_hw_device *dev,
     if (!out)
         return -ENOMEM;
 
-    out->qcom_out = qadev->hwif->openOutputStream(devices,
-                                                    (int *)&config->format,
-                                                    &config->channel_mask,
-                                                    &config->sample_rate,
-                                                    &status);
+    out->qcom_out = qadev->hwif->openOutputStream(devices, flags, (int *) &config->format,
+                                                  &config->channel_mask,
+                                                  &config->sample_rate, &status);
     if (!out->qcom_out) {
         ret = status;
         goto err_open;
