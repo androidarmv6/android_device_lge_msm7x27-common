@@ -26,7 +26,9 @@
 namespace android_audio_legacy {
 
 // ----------------------------------------------------------------------------
-// AudioPolicyManager for msm7k platform
+// AudioPolicyManager for LG MSM7x27 series
+// Designed by CodeAurora Forums
+// Implemented in Jelly Bean by Rashed97
 // Common audio policy manager code is implemented in AudioPolicyManagerBase class
 // ----------------------------------------------------------------------------
 
