@@ -52,6 +52,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-flags=m=y \
     ro.telephony.call_ring.multiple=false \
     ro.vold.umsdirtyratio=20
+    # Battery life hacks
+    ro.ril.disable.power.collapse=1
+    pm.sleep_mode=1
+    wifi.supplicant_scan_interval=150
 
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
