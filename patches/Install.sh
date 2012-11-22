@@ -33,12 +33,6 @@ cd hardware/qcom/media
 echo "Applying hardware/qcom/media patches..."
 git pull http://github.com/androidarmv6/android_hardware_qcom_media jellybean
 cd $rootdirectory
-repo start non-patched packages/apps/LegacyCamera
-repo start patched packages/apps/LegacyCamera
-cd packages/apps/LegacyCamera
-echo "Applying LegacyCamera patches..."
-git pull http://review.cyanogenmod.org/CyanogenMod/android_packages_apps_LegacyCamera refs/changes/80/24980/1
-cd $rootdirectory
 repo start non-patched packages/apps/Settings
 repo start patched packages/apps/Settings
 cd packages/apps/Settings
@@ -50,11 +44,5 @@ repo start patched external/libncurses
 cd external/libncurses
 echo "Applying libncurses patches..."
 git am $rootdirectory/device/lge/msm7x27-common/patches/external/libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
-cd $rootdirectory
-repo start non-patched external/webkit
-repo start patched external/webkit
-cd external/webkit
-echo "Applying webkit patches..."
-git am $rootdirectory/device/lge/msm7x27-common/patches/external/webkit/0001-Hack-shaders-to-work-on-devices-without-OES_external.patch
 echo "Changing to build directory..."
 cd $rootdirectory

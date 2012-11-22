@@ -52,7 +52,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-flags=m=y \
     ro.telephony.call_ring.multiple=false \
     ro.vold.umsdirtyratio=20
-    # Battery life hacks
+
+# Battery life hacks
+PRODUCT_PROPERTY_OVERRIDES += \
     ro.ril.disable.power.collapse=1
     pm.sleep_mode=1
     wifi.supplicant_scan_interval=150
@@ -101,10 +103,10 @@ PRODUCT_PACKAGES += \
 
 # Media
 PRODUCT_PACKAGES += \
-#   libdivxdrmdecrypt \
     libstagefrighthw \
     libmm-omxcore \
-    libOmxCore
+    libOmxCore \
+    libdivxdrmdecrypt
 
 # Misc
 PRODUCT_PACKAGES += \
@@ -120,7 +122,6 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm7x27 \
-    LegacyCamera
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
