@@ -18,6 +18,7 @@ TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include
 BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=qcom no_console_suspend
 
 ## CPU & Platform
+TARGET_ARCH := arm
 ARCH_ARM_HAVE_VFP := true
 TARGET_CPU_ABI := armeabi-v6l
 TARGET_CPU_ABI2 := armeabi
