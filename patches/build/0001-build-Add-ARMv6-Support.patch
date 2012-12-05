@@ -1,0 +1,52 @@
+From f68bd879a30b7bb46df83f54098a5a410c2d1eb7 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Fri, 16 Nov 2012 18:33:43 -0500
+Subject: [PATCH] build: Add ARMv6 Support
+
+Change-Id: I806167be83a928f136e82cd74f13641f4cffda70
+---
+ core/combo/arch/arm/armv6-vfp.mk |   22 ++++++----------------
+ 1 files changed, 6 insertions(+), 16 deletions(-)
+
+diff --git a/core/combo/arch/arm/armv6-vfp.mk b/core/combo/arch/arm/armv6-vfp.mk
+index a00a2d1..3bd32b4 100644
+--- a/core/combo/arch/arm/armv6-vfp.mk
++++ b/core/combo/arch/arm/armv6-vfp.mk
+@@ -1,5 +1,5 @@
+ # Configuration for Linux on ARM.
+-# Generating binaries for the ARMv6-VFP architecture and higher
++# Generating binaries for the ARMv6k+VFP architecture and higher
+ #
+ ARCH_ARM_HAVE_THUMB_SUPPORT     := true
+ ARCH_ARM_HAVE_FAST_INTERWORKING := true
+@@ -9,22 +9,12 @@ ARCH_ARM_HAVE_CLZ               := true
+ ARCH_ARM_HAVE_FFS               := true
+ ARCH_ARM_HAVE_VFP               := true
+ 
+-ifeq ($(strip $(TARGET_ARCH_VARIANT_FPU)),)
+-TARGET_ARCH_VARIANT_FPU         := vfp
+-endif
+-ifeq ($(strip $(TARGET_ARCH_VARIANT_CPU)),)
+-TARGET_ARCH_VARIANT_CPU         := arm1136jf-s
+-endif
+-
+ # Note: Hard coding the 'tune' value here is probably not ideal,
+ # and a better solution should be found in the future.
+ #
+ arch_variant_cflags := \
+-    -mcpu=$(TARGET_ARCH_VARIANT_CPU) \
+-    -mfloat-abi=softfp \
+-    -mfpu=$(TARGET_ARCH_VARIANT_FPU) \
+-    -D__ARM_ARCH_5__ \
+-    -D__ARM_ARCH_5T__ \
+-    -D__ARM_ARCH_5E__ \
+-    -D__ARM_ARCH_5TE__
+-
++    -march=armv6k \
++    -mtune=arm1136j-s  \
++    -D__ARM_ARCH_6__ \
++    -D__ARM_ARCH_6J__ \
++    -D__ARM_ARCH_6K__
+-- 
+1.7.7.5 (Apple Git-26)
+

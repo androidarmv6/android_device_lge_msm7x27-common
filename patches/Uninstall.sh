@@ -1,29 +1,50 @@
-# This script installs automatically all needed patches for the devices supported by lgics. #
-# Concept by Rashed97,reviewed by Bytecode #
+# This script uninstalls all needed patches for the devices supported by lgics. #
+# Concept and enhancements by Rashed97, reviewed by Bytecode #
+# Still a WIP. Needs revision #
 
 echo "Obtaining build directory..."
 rootdirectory="$PWD"
+repo start non-patched build
+repo start patched build
+cd build
+echo "Applying build patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/build/*.patch
+cd $rootdirectory
+repo start non-patched frameworks/base
+repo start patched frameworks/base
 cd frameworks/base
-echo "Reversing frameworks/base patches..."
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/frameworks_base/0001-Triggering-EarlySuspend-based-on-BackLight-brightnes.patch
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/frameworks_base/0002-Fix-to-manually-search-networks.patch
+echo "Applying frameworks/base patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/frameworks/base/*.patch
 cd $rootdirectory
-cd packages/apps/LegacyCamera
-echo "Reversing LegacyCamera patches..."
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0001-load-correct-library-panorama.patch
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0002-mosaic-Hack-renderer-to-support-devices-without-exte.patch
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_LegacyCamera/0003-Add-panorama-mode-support.patch
+repo start non-patched frameworks/av
+repo start patched frameworks/av
+cd frameworks/av
+echo "Applying frameworks/av patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/frameworks/av/*.patch
 cd $rootdirectory
-cd packages/apps/Gallery2
-echo "Reversing Gallery2 patches..."
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/packages_apps_Gallery2/0001-hide-jelly-bean-camera.patch
+repo start non-patched frameworks/native
+repo start patched frameworks/native
+cd frameworks/native
+echo "Applying frameworks/native patches..."
+git pull http://Rashed@review.cyanogenmod.org/CyanogenMod/android_frameworks_native refs/changes/02/23602/1
+git pull http://Rashed@review.cyanogenmod.org/CyanogenMod/android_frameworks_native refs/changes/26/26526/1
 cd $rootdirectory
+repo start non-patched hardware/qcom/media
+repo start patched hardware/qcom/media
+cd hardware/qcom/media
+echo "Applying hardware/qcom/media patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/hardware/qcom/media/*.patch
+cd $rootdirectory
+repo start non-patched packages/apps/Settings
+repo start patched packages/apps/Settings
+cd packages/apps/Settings
+echo "Applying Settings patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/packages/apps/Settings/0001-Add-forum-link.patch
+cd $rootdirectory
+repo start non-patched external/libncurses
+repo start patched external/libncurses
 cd external/libncurses
-echo "Reversing libncurses patches..."
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/external_libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
-cd $rootdirectory
-cd external/webkit
-echo "Reversing webkit patches..."
-patch -R < $rootdirectory/device/lge/msm7x27-common/patches/external_webkit/0001-Hack-shaders-to-work-on-devices-without-OES_external.patch
-echo "Changing to build directory.."
+echo "Applying libncurses patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/external/libncurses/0001-Revert-Adding-code-to-copy-terminfo-data-to-system-e.patch
+echo "Changing to build directory..."
 cd $rootdirectory
