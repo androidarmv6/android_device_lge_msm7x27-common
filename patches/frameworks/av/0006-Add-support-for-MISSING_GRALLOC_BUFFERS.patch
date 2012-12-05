@@ -1,0 +1,34 @@
+From 050bf2523281a04506f35c628110ef7b628d84ec Mon Sep 17 00:00:00 2001
+From: Rashed Abdel-Tawab <rashedabdeltawab@gmail.com>
+Date: Mon, 26 Nov 2012 22:18:59 -0500
+Subject: [PATCH 6/6] Add support for MISSING_GRALLOC_BUFFERS
+
+---
+ media/libstagefright/colorconversion/SoftwareRenderer.cpp |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/media/libstagefright/colorconversion/SoftwareRenderer.cpp b/media/libstagefright/colorconversion/SoftwareRenderer.cpp
+index 37c8620..9b5ea9e 100644
+--- a/media/libstagefright/colorconversion/SoftwareRenderer.cpp
++++ b/media/libstagefright/colorconversion/SoftwareRenderer.cpp
+@@ -26,7 +26,7 @@
+ #include <ui/GraphicBufferMapper.h>
+ #include <gui/ISurfaceTexture.h>
+ 
+-#ifdef QCOM_LEGACY_OMX
++#if defined(QCOM_LEGACY_OMX) && !defined(MISSING_GRALLOC_BUFFERS)
+ #include <gralloc_priv.h>
+ #endif
+ 
+@@ -130,7 +130,7 @@ SoftwareRenderer::SoftwareRenderer(
+             mNativeWindow.get(),
+             GRALLOC_USAGE_SW_READ_NEVER | GRALLOC_USAGE_SW_WRITE_OFTEN
+             | GRALLOC_USAGE_HW_TEXTURE | GRALLOC_USAGE_EXTERNAL_DISP
+-#ifdef QCOM_LEGACY_OMX
++#if defined(QCOM_LEGACY_OMX) && !defined(MISSING_GRALLOC_BUFFERS)
+             | GRALLOC_USAGE_PRIVATE_ADSP_HEAP | GRALLOC_USAGE_PRIVATE_UNCACHED
+ #endif
+             ));
+-- 
+1.7.10.4
+
