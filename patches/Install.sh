@@ -7,7 +7,7 @@ repo start non-patched build
 repo start patched build
 cd build
 echo "Applying build patches..."
-git am $rootdirectory/device/lge/msm7x27-common/patches/build/*.patch
+git pull http://github.com/androidarmv6/android_build jellybean
 cd $rootdirectory
 repo start non-patched frameworks/base
 repo start patched frameworks/base
@@ -19,20 +19,19 @@ repo start non-patched frameworks/av
 repo start patched frameworks/av
 cd frameworks/av
 echo "Applying frameworks/av patches..."
-git am $rootdirectory/device/lge/msm7x27-common/patches/frameworks/av/*.patch
+git pull http://github.com/androidarmv6/android_frameworks_av jellybean
 cd $rootdirectory
 repo start non-patched frameworks/native
 repo start patched frameworks/native
 cd frameworks/native
 echo "Applying frameworks/native patches..."
-git pull http://Rashed@review.cyanogenmod.org/CyanogenMod/android_frameworks_native refs/changes/02/23602/1
-git pull http://Rashed@review.cyanogenmod.org/CyanogenMod/android_frameworks_native refs/changes/26/26526/1
+git pull http://github.com/androidarmv6/android_frameworks_native jellybean
 cd $rootdirectory
 repo start non-patched hardware/qcom/media
 repo start patched hardware/qcom/media
 cd hardware/qcom/media
 echo "Applying hardware/qcom/media patches..."
-git am $rootdirectory/device/lge/msm7x27-common/patches/hardware/qcom/media/*.patch
+git pull http://github.com/androidarmv6/android_hardware_qcom_media jellybean
 cd $rootdirectory
 repo start non-patched packages/apps/Settings
 repo start patched packages/apps/Settings
