@@ -12,6 +12,21 @@ Follow http://twitter.com/cmsrc for CM commit-by-commit updates.
 CHANGELOG
 ---------
 
+### Build 7/RC3:
+* Upgarded to CM10 stable source
+* Fixed YouTube HQ video playback lagging
+* Fixed video recording
+* Fixed recorded video playback
+* Upgraded kernel (backported several 3.x features)
+* Played around a tad bit with the battery
+* Fixed microphone issues
+* Fixed occasional headphone issues
+* Used native ARMv6 code (faster and more fluid)
+* Junked the CTS breaking changes
+* Centralized audio system for all 4 devices
+* Re-enabled software acceleration (for battery life)
+* Innitial offline charging bringup (still broken but somewhat works on some devices)
+
 ### Build 6/RC2:
 * Updated to 4.1.2
 * Fixed ALL video playback
