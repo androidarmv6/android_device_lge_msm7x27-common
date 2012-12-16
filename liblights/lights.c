@@ -15,8 +15,8 @@
  */
 
 
-#define LOG_NDEBUG 0
-#define LOG_TAG "lights.msm7x27"
+// #define LOG_NDEBUG 0
+#define LOG_TAG "lights"
 
 #include <cutils/log.h>
 
@@ -36,12 +36,21 @@
 
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
-
-char const*const LCD_FILE = "/sys/class/leds/lcd-backlight/brightness";
-char const*const BUTTON_FILE = "/sys/class/leds/button-backlight/brightness";
-
+static int g_haveTrackballLight = 0;
+static struct light_state_t g_notification;
+static struct light_state_t g_battery;
 static int g_backlight = 255;
 static int g_buttons = 0;
+static int g_attention = 0;
+
+char const*const BLUE_LED_FILE
+        = "/sys/class/leds/blue/brightness";
+
+char const*const LCD_FILE
+        = "/sys/class/leds/lcd-backlight/brightness";
+
+char const*const BUTTON_FILE
+        = "/sys/class/leds/button-backlight/brightness";
 
 /**
  * device methods
@@ -95,10 +104,12 @@ set_light_backlight(struct light_device_t* dev,
 {
     int err = 0;
     int brightness = rgb_to_brightness(state);
-
     pthread_mutex_lock(&g_lock);
     g_backlight = brightness;
     err = write_int(LCD_FILE, brightness);
+    if (g_haveTrackballLight) {
+        handle_trackball_light_locked(dev);
+    }
     pthread_mutex_unlock(&g_lock);
     return err;
 }
@@ -109,20 +120,10 @@ set_light_buttons(struct light_device_t* dev,
 {
     int err = 0;
     int on = is_lit(state);
-	
-	ALOGV("%s on=%d previous_brightness=%d", __func__, on, g_backlight);
-	
-    if (on != g_buttons || !on) {
-        pthread_mutex_lock(&g_lock);
-        g_buttons = on;
-        if (on && !g_backlight) {
-            err = write_int(BUTTON_FILE, 255);
-        } else if (!on) {
-            err = write_int(BUTTON_FILE, 0);
-        }
-        pthread_mutex_unlock(&g_lock);
-    }
-
+    pthretons = on;
+    err =ad_mutex_lock(&g_lock);
+    g_but write_int(BUTTON_FILE, on?255:0);
+    pthread_mutex_unlock(&g_lock);
     return err;
 }
 
@@ -183,12 +184,12 @@ static struct hw_module_methods_t lights_module_methods = {
 /*
  * The lights Module
  */
-const struct hw_module_t HAL_MODULE_INFO_SYM = {
+struct hw_module_t HAL_MODULE_INFO_SYM = {
     .tag = HARDWARE_MODULE_TAG,
     .version_major = 1,
-    .version_minor = 0,
+    .version_minor = 2,
     .id = LIGHTS_HARDWARE_MODULE_ID,
-    .name = "QCT MSM7K lights Module",
-    .author = "Google, Inc.",
+    .name = "LG MSM7x27 Lights Module",
+    .author = "Rashed Abdel-Tawab",
     .methods = &lights_module_methods,
 };
