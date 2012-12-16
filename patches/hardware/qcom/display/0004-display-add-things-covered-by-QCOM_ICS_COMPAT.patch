@@ -1,0 +1,436 @@
+From 208c8cc3e26e5b13bbdc99588df224c8e50c4b13 Mon Sep 17 00:00:00 2001
+From: Pavel Kirpichyov <pavel.kirpichyov@gmail.com>
+Date: Sat, 1 Dec 2012 15:49:02 -0700
+Subject: [PATCH] display: add things covered by QCOM_ICS_COMPAT
+
+Change-Id: I6f27819e68be77c25317183bb25dc1e6db3ac4fd
+---
+ libcopybit/copybit.cpp          |    6 +++-
+ libgralloc/alloc_controller.cpp |   11 +++++-
+ libgralloc/fb_priv.h            |    2 ++
+ libgralloc/framebuffer.cpp      |   67 ++++++++++++++++++++++++++++------
+ libgralloc/gpu.cpp              |   14 ++++++--
+ libgralloc/gralloc_priv.h       |   75 ++++++++++++++++++++++++++++++++-------
+ libgralloc/ionalloc.cpp         |    8 +++--
+ 7 files changed, 154 insertions(+), 29 deletions(-)
+
+diff --git a/libcopybit/copybit.cpp b/libcopybit/copybit.cpp
+index f79c33b..3ac6bc8 100644
+--- a/libcopybit/copybit.cpp
++++ b/libcopybit/copybit.cpp
+@@ -426,7 +426,11 @@ static int stretch_copybit(
+         }
+ 
+         if(src->format ==  HAL_PIXEL_FORMAT_YV12) {
+-            int usage = GRALLOC_USAGE_PRIVATE_MM_HEAP;
++#ifdef QCOM_ICS_COMPAT
++            int usage = GRALLOC_USAGE_PRIVATE_ADSP_HEAP | GRALLOC_USAGE_PRIVATE_MM_HEAP;
++#else
++	    int usage = GRALLOC_USAGE_PRIVATE_MM_HEAP;
++#endif
+             if (0 == alloc_buffer(&yv12_handle,src->w,src->h,
+                                   src->format, usage)){
+                 if(0 == convertYV12toYCrCb420SP(src,yv12_handle)){
+diff --git a/libgralloc/alloc_controller.cpp b/libgralloc/alloc_controller.cpp
+index 74801ce..623726b 100644
+--- a/libgralloc/alloc_controller.cpp
++++ b/libgralloc/alloc_controller.cpp
+@@ -113,11 +113,14 @@ int IonController::allocate(alloc_data& data, int usage,
+ 
+     if(usage & GRALLOC_USAGE_PRIVATE_UI_CONTIG_HEAP)
+         ionFlags |= ION_HEAP(ION_SF_HEAP_ID);
++#ifdef QCOM_ICS_COMPAT
++    if(usage & GRALLOC_USAGE_PRIVATE_WRITEBACK_HEAP)
++        ionFlags |= ION_HEAP(ION_CP_WB_HEAP_ID);
++#endif
+     if(usage & GRALLOC_USAGE_PRIVATE_SYSTEM_HEAP) {
+         ionFlags |= ION_HEAP(ION_SYSTEM_HEAP_ID);
+         noncontig = true;
+     }
+-
+     if(usage & GRALLOC_USAGE_PRIVATE_IOMMU_HEAP)
+         ionFlags |= ION_HEAP(ION_IOMMU_HEAP_ID);
+ 
+@@ -129,6 +132,12 @@ int IonController::allocate(alloc_data& data, int usage,
+ 
+     if(usage & GRALLOC_USAGE_PRIVATE_CP_BUFFER)
+         ionFlags |= ION_SECURE;
++#ifdef QCOM_ICS_COMPAT
++    if(usage & GRALLOC_USAGE_PRIVATE_DO_NOT_MAP)
++        data.allocType  |=  private_handle_t::PRIV_FLAGS_NOT_MAPPED;
++    else
++        data.allocType  &=  ~(private_handle_t::PRIV_FLAGS_NOT_MAPPED);
++#endif
+     // if no flags are set, default to
+     // SF + IOMMU heaps, so that bypass can work
+     // we can fall back to system heap if
+diff --git a/libgralloc/fb_priv.h b/libgralloc/fb_priv.h
+index 8f1a09b..2081e5a 100644
+--- a/libgralloc/fb_priv.h
++++ b/libgralloc/fb_priv.h
+@@ -45,8 +45,10 @@ struct private_module_t {
+     pthread_mutex_t lock;
+     private_handle_t *currentBuffer;
+     struct fb_var_screeninfo info;
++#ifndef QCOM_ICS_COMPAT
+     struct mdp_buf_fence fence;
+     struct mdp_display_commit commit;
++#endif
+     struct fb_fix_screeninfo finfo;
+     float xdpi;
+     float ydpi;
+diff --git a/libgralloc/framebuffer.cpp b/libgralloc/framebuffer.cpp
+index 8e40022..bbb4a47 100644
+--- a/libgralloc/framebuffer.cpp
++++ b/libgralloc/framebuffer.cpp
+@@ -100,7 +100,10 @@ static int fb_setUpdateRect(struct framebuffer_device_t* dev,
+ 
+ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
+ {
+-
++#ifdef QCOM_ICS_COMPAT
++    if (private_handle_t::validate(buffer) < 0)
++        return -EINVAL;
++#endif
+     fb_context_t* ctx = (fb_context_t*) dev;
+ 
+     private_handle_t *hnd = static_cast<private_handle_t*>
+@@ -109,6 +112,39 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
+         reinterpret_cast<private_module_t*>(dev->common.module);
+ 
+     if (hnd && hnd->flags & private_handle_t::PRIV_FLAGS_FRAMEBUFFER) {
++#ifdef QCOM_ICS_COMPAT
++        genlock_lock_buffer(hnd, GENLOCK_READ_LOCK, GENLOCK_MAX_TIMEOUT);
++
++        const size_t offset = hnd->base - m->framebuffer->base;
++        // frame ready to be posted, signal so that hwc can update External
++        // display
++        pthread_mutex_lock(&m->fbPostLock);
++        m->currentOffset = offset;
++        m->fbPostDone = true;
++        pthread_cond_signal(&m->fbPostCond);
++        pthread_mutex_unlock(&m->fbPostLock);
++        m->info.activate = FB_ACTIVATE_VBL;
++        m->info.yoffset = offset / m->finfo.line_length;
++        if (ioctl(m->framebuffer->fd, FBIOPUT_VSCREENINFO, &m->info) == -1) {
++            ALOGE("FBIOPUT_VSCREENINFO failed");
++            genlock_unlock_buffer(hnd);
++            return -errno;
++        }
++
++		//Signals the composition thread to unblock and loop over if necessary
++        pthread_mutex_lock(&m->fbPanLock);
++        m->fbPanDone = true;
++        pthread_cond_signal(&m->fbPanCond);
++        pthread_mutex_unlock(&m->fbPanLock);
++
++        if (m->currentBuffer) {
++            genlock_unlock_buffer(m->currentBuffer);
++            m->currentBuffer = 0;
++        }
++
++        CALC_FPS();
++        m->currentBuffer = hnd;
++#else
+         m->info.activate = FB_ACTIVATE_VBL | FB_ACTIVATE_FORCE;
+         m->info.yoffset = hnd->offset / m->finfo.line_length;
+         m->commit.var = m->info;
+@@ -116,7 +152,8 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
+             ALOGE("%s: MSMFB_DISPLAY_COMMIT ioctl failed, err: %s", __FUNCTION__,
+                     strerror(errno));
+             return -errno;
+-        }
++	}
++#endif
+     }
+     return 0;
+ }
+@@ -124,7 +161,6 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
+ static int fb_compositionComplete(struct framebuffer_device_t* dev)
+ {
+     // TODO: Properly implement composition complete callback
+-
+     return 0;
+ }
+ 
+@@ -152,8 +188,10 @@ int mapFrameBufferLocked(struct private_module_t* module)
+     if (fd < 0)
+         return -errno;
+ 
++#ifndef QCOM_ICS_COMPAT
+     memset(&module->fence, 0, sizeof(struct mdp_buf_fence));
+     memset(&module->commit, 0, sizeof(struct mdp_display_commit));
++#endif
+ 
+     struct fb_fix_screeninfo finfo;
+     if (ioctl(fd, FBIOGET_FSCREENINFO, &finfo) == -1)
+@@ -182,12 +220,19 @@ int mapFrameBufferLocked(struct private_module_t* module)
+         /*
+          * Explicitly request RGBA_8888
+          */
+-        info.bits_per_pixel = 32;
++#ifdef SEMC_RGBA_8888_OFFSET
++        info.red.offset     = 0;
++        info.green.offset   = 8;
++        info.blue.offset    = 16;
++        info.transp.offset  = 24;
++#else
+         info.red.offset     = 24;
+-        info.red.length     = 8;
+         info.green.offset   = 16;
+-        info.green.length   = 8;
+         info.blue.offset    = 8;
++#endif
++        info.bits_per_pixel = 32;
++        info.red.length     = 8;
++        info.green.length   = 8;
+         info.blue.length    = 8;
+         info.transp.offset  = 0;
+         info.transp.length  = 8;
+@@ -245,7 +290,6 @@ int mapFrameBufferLocked(struct private_module_t* module)
+     info.yres_virtual = (size * numberOfBuffers) / line_length;
+ 
+     uint32_t flags = PAGE_FLIP;
+-
+     if (info.yres_virtual < ((size * 2) / line_length) ) {
+         // we need at least 2 for page-flipping
+         info.yres_virtual = size / line_length;
+@@ -321,8 +365,13 @@ int mapFrameBufferLocked(struct private_module_t* module)
+      */
+ 
+     int err;
++#ifdef QCOM_ICS_COMPAT
++    module->numBuffers = info.yres_virtual / info.yres;
++#else
+     module->numBuffers = 2;
++#endif
+     module->bufferMask = 0;
++
+     //adreno needs page aligned offsets. Align the fbsize to pagesize.
+     size_t fbSize = roundUpToPageSize(finfo.line_length * info.yres)*
+                     module->numBuffers;
+@@ -361,9 +410,7 @@ static int fb_close(struct hw_device_t *dev)
+ {
+     fb_context_t* ctx = (fb_context_t*)dev;
+     if (ctx) {
+-        //Hack until fbdev is removed. Framework could close this causing hwc a
+-        //pain.
+-        //free(ctx);
++        free(ctx);
+     }
+     return 0;
+ }
+diff --git a/libgralloc/gpu.cpp b/libgralloc/gpu.cpp
+index 6cd6eda..1d87787 100644
+--- a/libgralloc/gpu.cpp
++++ b/libgralloc/gpu.cpp
+@@ -52,8 +52,13 @@ int gpu_context_t::gralloc_alloc_framebuffer_locked(size_t size, int usage,
+                                                     buffer_handle_t* pHandle)
+ {
+     private_module_t* m = reinterpret_cast<private_module_t*>(common.module);
++#ifdef QCOM_ICS_COMPAT
++    // we don't support allocations with both the FB and PMEM_ADSP flags
++    if (usage & GRALLOC_USAGE_PRIVATE_ADSP_HEAP) {
++#else
+     // we don't support framebuffer allocations with graphics heap flags
+     if (usage & GRALLOC_HEAP_MASK) {
++#endif
+         return -EINVAL;
+     }
+ 
+@@ -183,7 +188,11 @@ void gpu_context_t::getGrallocInformationFromFormat(int inputFormat,
+                                                     int *bufferType)
+ {
+     *bufferType = BUFFER_TYPE_VIDEO;
+-    if (inputFormat < 0x7) {
++    if (inputFormat < 0x7
++#ifdef QCOM_ICS_COMPAT
++        && inputFormat != HAL_PIXEL_FORMAT_RGB_888
++#endif
++    ) {
+         // RGB formats
+         *bufferType = BUFFER_TYPE_UI;
+     } else if ((inputFormat == HAL_PIXEL_FORMAT_R_8) ||
+@@ -203,6 +212,7 @@ int gpu_context_t::alloc_impl(int w, int h, int format, int usage,
+     int grallocFormat = format;
+     int bufferType;
+ 
++#ifndef QCOM_ICS_COMPAT
+     //If input format is HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED then based on
+     //the usage bits, gralloc assigns a format.
+     if(format == HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED) {
+@@ -213,7 +223,7 @@ int gpu_context_t::alloc_impl(int w, int h, int format, int usage,
+         else if(usage & GRALLOC_USAGE_HW_CAMERA_WRITE)
+             grallocFormat = HAL_PIXEL_FORMAT_YCrCb_420_SP; //NV21
+     }
+-
++#endif
+     getGrallocInformationFromFormat(grallocFormat, &bufferType);
+     size = getBufferSizeAndDimensions(w, h, grallocFormat, alignedw, alignedh);
+ 
+diff --git a/libgralloc/gralloc_priv.h b/libgralloc/gralloc_priv.h
+index 59fbd30..6c14f6b 100644
+--- a/libgralloc/gralloc_priv.h
++++ b/libgralloc/gralloc_priv.h
+@@ -33,49 +33,91 @@
+ enum {
+     /* gralloc usage bits indicating the type
+      * of allocation that should be used */
+-
++#ifdef QCOM_ICS_COMPAT
++    /* SYSTEM heap comes from kernel vmalloc,
++     * can never be uncached, is not secured*/
++    GRALLOC_USAGE_PRIVATE_SYSTEM_HEAP     =       GRALLOC_USAGE_PRIVATE_3,
++    /* IOMMU heap comes from manually allocated pages,
++     * can be cached/uncached, is not secured */
++    GRALLOC_USAGE_PRIVATE_IOMMU_HEAP      =       0x01000000,
++    /* MM heap is a carveout heap for video, can be secured*/
++    GRALLOC_USAGE_PRIVATE_MM_HEAP         =       0x02000000,
++    /* Set this for allocating uncached memory (using O_DSYNC)
++     * cannot be used with noncontiguous heaps */
++    GRALLOC_USAGE_PRIVATE_UNCACHED        =       0x00100000,
++    /* CAMERA heap is a carveout heap for camera, is not secured*/
++    GRALLOC_USAGE_PRIVATE_CAMERA_HEAP     =       0x01000000,
++    /* This flag can be set to disable genlock synchronization
++     * for the gralloc buffer. If this flag is set the caller
++     * is required to perform explicit synchronization.
++     * WARNING - flag is outside the standard PRIVATE region
++     * and may need to be moved if the gralloc API changes
++     */
++    GRALLOC_USAGE_PRIVATE_UNSYNCHRONIZED  =       0X00400000,
++    /* Buffer content should be displayed on an external display only */
++    GRALLOC_USAGE_PRIVATE_EXTERNAL_ONLY   =       0x00010000,
++    /* Only this buffer content should be displayed on external, even if
++     * other EXTERNAL_ONLY buffers are available. Used during suspend.
++     */
++    GRALLOC_USAGE_PRIVATE_EXTERNAL_BLOCK  =       0x00020000,
++    /* Close Caption displayed on an external display only */
++    GRALLOC_USAGE_PRIVATE_EXTERNAL_CC     =       0x00040000,
++    /* Use this flag to request content protected buffers. Please note
++     * that this flag is different from the GRALLOC_USAGE_PROTECTED flag
++     * which can be used for buffers that are not secured for DRM
++     * but still need to be protected from screen captures
++     */
++    GRALLOC_USAGE_PRIVATE_CP_BUFFER       =       0x00080000,
++#else
+     /* SYSTEM heap comes from kernel vmalloc,
+      * can never be uncached, is not secured*/
+     GRALLOC_USAGE_PRIVATE_SYSTEM_HEAP     =       GRALLOC_USAGE_PRIVATE_0,
+-    /* SF heap is used for application buffers, is not secured */
+-    GRALLOC_USAGE_PRIVATE_UI_CONTIG_HEAP  =       GRALLOC_USAGE_PRIVATE_1,
+     /* IOMMU heap comes from manually allocated pages,
+      * can be cached/uncached, is not secured */
+     GRALLOC_USAGE_PRIVATE_IOMMU_HEAP      =       GRALLOC_USAGE_PRIVATE_2,
+     /* MM heap is a carveout heap for video, can be secured*/
+     GRALLOC_USAGE_PRIVATE_MM_HEAP         =       GRALLOC_USAGE_PRIVATE_3,
+-    /* CAMERA heap is a carveout heap for camera, is not secured*/
+-    GRALLOC_USAGE_PRIVATE_CAMERA_HEAP     =       0x01000000,
+-
+     /* Set this for allocating uncached memory (using O_DSYNC)
+      * cannot be used with noncontiguous heaps */
+     GRALLOC_USAGE_PRIVATE_UNCACHED        =       0x02000000,
+-
++    /* CAMERA heap is a carveout heap for camera, is not secured*/
++    GRALLOC_USAGE_PRIVATE_CAMERA_HEAP     =       0x08000000,
+     /* This flag can be set to disable genlock synchronization
+      * for the gralloc buffer. If this flag is set the caller
+      * is required to perform explicit synchronization.
+      * WARNING - flag is outside the standard PRIVATE region
+      * and may need to be moved if the gralloc API changes
+      */
+-    GRALLOC_USAGE_PRIVATE_UNSYNCHRONIZED  =       0X04000000,
+-
++    GRALLOC_USAGE_PRIVATE_UNSYNCHRONIZED  =       0x08000000,
+     /* Buffer content should be displayed on an external display only */
+     GRALLOC_USAGE_PRIVATE_EXTERNAL_ONLY   =       0x08000000,
+-
+     /* Only this buffer content should be displayed on external, even if
+      * other EXTERNAL_ONLY buffers are available. Used during suspend.
+      */
+     GRALLOC_USAGE_PRIVATE_EXTERNAL_BLOCK  =       0x00100000,
+-
+     /* Close Caption displayed on an external display only */
+     GRALLOC_USAGE_PRIVATE_EXTERNAL_CC     =       0x00200000,
+-
+     /* Use this flag to request content protected buffers. Please note
+      * that this flag is different from the GRALLOC_USAGE_PROTECTED flag
+      * which can be used for buffers that are not secured for DRM
+      * but still need to be protected from screen captures
+      */
+     GRALLOC_USAGE_PRIVATE_CP_BUFFER       =       0x00400000,
++#endif
++    /* SMI heap is deprecated, use only if using pmem */
++    GRALLOC_USAGE_PRIVATE_SMI_HEAP        =       GRALLOC_USAGE_PRIVATE_2,
++    /* ADSP heap is deprecated, use only if using pmem */
++    GRALLOC_USAGE_PRIVATE_ADSP_HEAP       =       GRALLOC_USAGE_PRIVATE_0,
++    /* Set this flag when you need to avoid mapping the memory in userspace */
++    GRALLOC_USAGE_PRIVATE_DO_NOT_MAP      =       0X00800000,
++    /* SF heap is used for application buffers, is not secured */
++    GRALLOC_USAGE_PRIVATE_UI_CONTIG_HEAP  =       GRALLOC_USAGE_PRIVATE_1,
++    /* WRITEBACK heap is a carveout heap for writeback, can be secured*/
++    GRALLOC_USAGE_PRIVATE_WRITEBACK_HEAP  =       0x04000000,
++    /* This flag needs to be set when using a non-contiguous heap from ION.
++     * If not set, the system heap is assumed to be coming from ashmem
++     */
++    GRALLOC_USAGE_PRIVATE_ION             =       0x00200000
+ };
+ 
+ enum {
+@@ -92,11 +134,18 @@ enum {
+ 
+ #define INTERLACE_MASK 0x80
+ #define S3D_FORMAT_MASK 0xFF000
++#define DEVICE_PMEM "/dev/pmem"
++#define DEVICE_PMEM_ADSP "/dev/pmem_adsp"
++#define DEVICE_PMEM_SMIPOOL "/dev/pmem_smipool"
+ /*****************************************************************************/
+ enum {
+     /* OEM specific HAL formats */
+     HAL_PIXEL_FORMAT_NV12_ENCODEABLE        = 0x102,
++#ifdef QCOM_ICS_COMPAT
++    HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED     = 0x108,
++#else
+     HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED     = 0x7FA30C03,
++#endif
+     HAL_PIXEL_FORMAT_YCbCr_420_SP           = 0x109,
+     HAL_PIXEL_FORMAT_YCrCb_420_SP_ADRENO    = 0x7FA30C01,
+     HAL_PIXEL_FORMAT_YCrCb_422_SP           = 0x10B,
+@@ -193,7 +242,7 @@ struct private_handle_t : public native_handle {
+             fd(fd), genlockHandle(-1), magic(sMagic),
+             flags(flags), size(size), offset(0),
+             bufferType(bufferType), base(0), gpuaddr(0),
+-            pid(0), format(format),
++            pid(getpid()), format(format),
+             width(width), height(height), genlockPrivFd(-1)
+         {
+             version = sizeof(native_handle);
+diff --git a/libgralloc/ionalloc.cpp b/libgralloc/ionalloc.cpp
+index e01e3df..b612c3d 100644
+--- a/libgralloc/ionalloc.cpp
++++ b/libgralloc/ionalloc.cpp
+@@ -26,8 +26,8 @@
+  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+-
+ #define DEBUG 0
++
+ #include <linux/ioctl.h>
+ #include <sys/mman.h>
+ #include <stdlib.h>
+@@ -118,7 +118,11 @@ int IonAlloc::alloc_buffer(alloc_data& data)
+         return err;
+     }
+ 
+-    if(!(data.flags & ION_SECURE)) {
++    if(!(data.flags & ION_SECURE)
++#ifdef QCOM_ICS_COMPAT
++        && !(data.allocType & private_handle_t::PRIV_FLAGS_NOT_MAPPED)
++#endif
++    ) {
+         base = mmap(0, ionAllocData.len, PROT_READ|PROT_WRITE,
+                     MAP_SHARED, fd_data.fd, 0);
+         if(base == MAP_FAILED) {
+-- 
+1.7.10.4
+

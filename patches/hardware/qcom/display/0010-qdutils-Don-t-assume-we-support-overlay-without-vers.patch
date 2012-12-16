@@ -1,0 +1,31 @@
+From 78826e3379b8299613a24df801f706da6af6cf6a Mon Sep 17 00:00:00 2001
+From: Andreas Schneider <asn@cryptomilk.org>
+Date: Fri, 24 Aug 2012 20:20:32 +0200
+Subject: [PATCH] qdutils: Don't assume we support overlay without
+ version info.
+
+If we can't determine the version we shouldn't assume that overlay is
+supported. If it is still needed there should be a config to force
+overlay support.
+
+Change-Id: Ic1000fdcd5ffefc517782eca605fc63b88f47602
+---
+ libqdutils/mdp_version.cpp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libqdutils/mdp_version.cpp b/libqdutils/mdp_version.cpp
+index 05761d9..61025fc 100644
+--- a/libqdutils/mdp_version.cpp
++++ b/libqdutils/mdp_version.cpp
+@@ -71,7 +71,7 @@ MDPVersion::MDPVersion()
+     close(fb_fd);
+     mMDPVersion = mdp_version;
+     mHasOverlay = false;
+-    if((mMDPVersion >= MDP_V4_0) || (mMDPVersion == MDP_V_UNKNOWN))
++    if(mMDPVersion >= MDP_V4_0)
+         mHasOverlay = true;
+     mPanelType = panel_type;
+ }
+-- 
+1.7.10.4
+

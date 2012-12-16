@@ -34,6 +34,12 @@ cd hardware/qcom/media
 echo "Applying hardware/qcom/media patches..."
 git am $rootdirectory/device/lge/msm7x27-common/patches/hardware/qcom/media/*.patch
 cd $rootdirectory
+repo start non-patched hardware/qcom/display
+repo start patched hardware/qcom/display
+cd hardware/qcom/display
+echo "Applying hardware/qcom/display patches..."
+git am $rootdirectory/device/lge/msm7x27-common/patches/hardware/qcom/display/*.patch
+cd $rootdirectory
 repo start non-patched packages/apps/Settings
 repo start patched packages/apps/Settings
 cd packages/apps/Settings

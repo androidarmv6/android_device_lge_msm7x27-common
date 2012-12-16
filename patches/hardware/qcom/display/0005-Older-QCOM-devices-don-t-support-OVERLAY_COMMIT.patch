@@ -1,0 +1,37 @@
+From f84e8364e45ebfcc9df8e6f9edfc54363886a7fd Mon Sep 17 00:00:00 2001
+From: Kevin Bruckert <agrabren@yahoo.com>
+Date: Sat, 8 Dec 2012 08:29:35 -0700
+Subject: [PATCH] Older QCOM devices don't support OVERLAY_COMMIT
+
+Amend: Fix tab conversion
+
+Change-Id: If9052885a0503c4e9ff07151a9aa301882a33751
+---
+ libexternal/external.cpp |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/libexternal/external.cpp b/libexternal/external.cpp
+index f00d551..db7b275 100644
+--- a/libexternal/external.cpp
++++ b/libexternal/external.cpp
+@@ -447,9 +447,15 @@ bool ExternalDisplay::post()
+ {
+     if(mFd == -1) {
+         return false;
++#ifdef MSMFB_OVERLAY_COMMIT
+     } else if(ioctl(mFd, MSMFB_OVERLAY_COMMIT, &mExternalDisplay) == -1) {
+-         ALOGE("%s: MSMFB_OVERLAY_COMMIT failed, str: %s", __FUNCTION__,
+-                                                          strerror(errno));
++         ALOGE("%s: MSMFB_OVERLAY_COMMIT failed errno: %d , str: %s",
++                                       __FUNCTION__, errno, strerror(errno));
++#else
++    } else if(ioctl(mFd, FBIOPUT_VSCREENINFO, &mVInfo) == -1) {
++         ALOGE("%s: FBIOPUT_VSCREENINFO failed, str: %s", __FUNCTION__,
++                                      strerror(errno));
++#endif
+          return false;
+     }
+     return true;
+-- 
+1.7.10.4
+

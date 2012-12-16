@@ -1,0 +1,129 @@
+From e92880da368ba3e86b99daeeaf91579a1f76dc0f Mon Sep 17 00:00:00 2001
+From: OliverG96 <oliverarafo@gmail.com>
+Date: Sat, 8 Dec 2012 17:39:01 +0000
+Subject: [PATCH] display: Add QCOM_MISSING_PIXEL_FORMATS flag
+
+This is required to allow liboverlay to build correctly on some devices with outdated kernels
+---
+ liboverlay/mdpRotator.cpp   |    2 ++
+ liboverlay/overlayMdp.cpp   |    2 ++
+ liboverlay/overlayUtils.cpp |    6 ++++++
+ liboverlay/overlayUtils.h   |   10 ++++++++++
+ 4 files changed, 20 insertions(+)
+
+diff --git a/liboverlay/mdpRotator.cpp b/liboverlay/mdpRotator.cpp
+index cb18dac..8a92d6d 100644
+--- a/liboverlay/mdpRotator.cpp
++++ b/liboverlay/mdpRotator.cpp
+@@ -35,11 +35,13 @@ void MdpRot::setSource(const overlay::utils::Whf& awhf) {
+     utils::Whf whf(awhf);
+ 
+     mRotImgInfo.src.format = whf.format;
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+     if(whf.format == MDP_Y_CRCB_H2V2_TILE ||
+         whf.format == MDP_Y_CBCR_H2V2_TILE) {
+         whf.w =  utils::alignup(awhf.w, 64);
+         whf.h = utils::alignup(awhf.h, 32);
+     }
++#endif
+ 
+     mRotImgInfo.src.width = whf.w;
+     mRotImgInfo.src.height = whf.h;
+diff --git a/liboverlay/overlayMdp.cpp b/liboverlay/overlayMdp.cpp
+index f4e0b51..0f08649 100644
+--- a/liboverlay/overlayMdp.cpp
++++ b/liboverlay/overlayMdp.cpp
+@@ -201,11 +201,13 @@ bool MdpCtrl::get() {
+ void MdpCtrl::adjustSrcWhf(const bool& rotUsed) {
+     if(rotUsed) {
+         utils::Whf whf = getSrcWhf();
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         if(whf.format == MDP_Y_CRCB_H2V2_TILE ||
+                 whf.format == MDP_Y_CBCR_H2V2_TILE) {
+             whf.w = utils::alignup(whf.w, 64);
+             whf.h = utils::alignup(whf.h, 32);
+         }
++#endif
+         //For example: If original format is tiled, rotator outputs non-tiled,
+         //so update mdp's src fmt to that.
+         whf.format = utils::getRotOutFmt(whf.format);
+diff --git a/liboverlay/overlayUtils.cpp b/liboverlay/overlayUtils.cpp
+index eec92db..08bd0a9 100644
+--- a/liboverlay/overlayUtils.cpp
++++ b/liboverlay/overlayUtils.cpp
+@@ -218,24 +218,30 @@ int getMdpFormat(int format) {
+             return MDP_RGB_565;
+         case HAL_PIXEL_FORMAT_BGRA_8888:
+             return MDP_BGRA_8888;
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case HAL_PIXEL_FORMAT_YV12:
+             return MDP_Y_CR_CB_GH2V2;
++#endif
+         case HAL_PIXEL_FORMAT_YCbCr_422_SP:
+             return MDP_Y_CBCR_H2V1;
+         case HAL_PIXEL_FORMAT_YCrCb_420_SP:
+             return MDP_Y_CRCB_H2V2;
+ 
+         //From gralloc_priv.h
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED:
+             return MDP_Y_CBCR_H2V2_TILE;
++#endif
+         case HAL_PIXEL_FORMAT_YCbCr_420_SP:
+             return MDP_Y_CBCR_H2V2;
+         case HAL_PIXEL_FORMAT_YCrCb_422_SP:
+             return MDP_Y_CRCB_H2V1;
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case HAL_PIXEL_FORMAT_YCbCr_444_SP:
+             return MDP_Y_CBCR_H1V1;
+         case HAL_PIXEL_FORMAT_YCrCb_444_SP:
+             return MDP_Y_CRCB_H1V1;
++#endif
+ 
+         default:
+             //Unsupported by MDP
+diff --git a/liboverlay/overlayUtils.h b/liboverlay/overlayUtils.h
+index 2e4b38f..acd6258 100644
+--- a/liboverlay/overlayUtils.h
++++ b/liboverlay/overlayUtils.h
+@@ -558,12 +558,18 @@ inline bool isYuv(uint32_t format) {
+         case MDP_Y_CBCR_H2V1:
+         case MDP_Y_CBCR_H2V2:
+         case MDP_Y_CRCB_H2V2:
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case MDP_Y_CRCB_H1V1:
++#endif
+         case MDP_Y_CRCB_H2V1:
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case MDP_Y_CRCB_H2V2_TILE:
+         case MDP_Y_CBCR_H2V2_TILE:
++#endif
+         case MDP_Y_CR_CB_H2V2:
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case MDP_Y_CR_CB_GH2V2:
++#endif
+             return true;
+         default:
+             return false;
+@@ -705,14 +711,18 @@ inline int getMdpOrient(eTransform rotation) {
+ 
+ inline int getRotOutFmt(uint32_t format) {
+     switch (format) {
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case MDP_Y_CRCB_H2V2_TILE:
+             return MDP_Y_CRCB_H2V2;
+         case MDP_Y_CBCR_H2V2_TILE:
+             return MDP_Y_CBCR_H2V2;
++#endif
+         case MDP_Y_CB_CR_H2V2:
+             return MDP_Y_CBCR_H2V2;
++#ifndef QCOM_MISSING_PIXEL_FORMATS
+         case MDP_Y_CR_CB_GH2V2:
+             return MDP_Y_CRCB_H2V2;
++#endif
+         default:
+             return format;
+     }
+-- 
+1.7.10.4
+
