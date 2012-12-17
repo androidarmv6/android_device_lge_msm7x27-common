@@ -1,0 +1,53 @@
+From fcb45b95d669a110292cd16d758645a6ade07c07 Mon Sep 17 00:00:00 2001
+From: Pavel Kirpichyov <pavel.kirpichyov@gmail.com>
+Date: Wed, 28 Nov 2012 13:35:32 +0400
+Subject: [PATCH] Simplify HWC and FB hal check
+
+Change-Id: I0d005e3bb092b75ba281b89bb4e86d534f7f23de
+---
+ .../surfaceflinger/DisplayHardware/HWComposer.cpp  |   22 +++++++++-----------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
+
+diff --git a/services/surfaceflinger/DisplayHardware/HWComposer.cpp b/services/surfaceflinger/DisplayHardware/HWComposer.cpp
+index 31d731e..5578716 100644
+--- a/services/surfaceflinger/DisplayHardware/HWComposer.cpp
++++ b/services/surfaceflinger/DisplayHardware/HWComposer.cpp
+@@ -113,17 +113,16 @@ HWComposer::HWComposer(
+     loadFbHalModule();
+     loadHwcModule();
+ 
+-    if (mFbDev && mHwc && hwcHasApiVersion(mHwc, HWC_DEVICE_API_VERSION_1_1)) {
+-        // close FB HAL if we don't needed it.
+-        // FIXME: this is temporary until we're not forced to open FB HAL
+-        // before HWC.
+-        framebuffer_close(mFbDev);
+-        mFbDev = NULL;
+-    }
+-
+-    // If we have no HWC, or a pre-1.1 HWC, an FB dev is mandatory.
+-    if ((!mHwc || !hwcHasApiVersion(mHwc, HWC_DEVICE_API_VERSION_1_1))
+-            && !mFbDev) {
++    if (mHwc && hwcHasApiVersion(mHwc, HWC_DEVICE_API_VERSION_1_1)) {
++	if (mFbDev) {
++            // close FB HAL if we don't needed it.
++            // FIXME: this is temporary until we're not forced to open FB HAL
++            // before HWC.
++            framebuffer_close(mFbDev);
++            mFbDev = NULL;
++	}
++    } else if (!mFbDev) {
++	// If we have no HWC, or a pre-1.1 HWC, an FB dev is mandatory.
+         ALOGE("ERROR: failed to open framebuffer, aborting");
+         abort();
+     }
+@@ -232,7 +231,6 @@ void HWComposer::loadHwcModule()
+               HWC_HARDWARE_COMPOSER, strerror(-err));
+         return;
+     }
+-
+     if (!hwcHasApiVersion(mHwc, HWC_DEVICE_API_VERSION_1_0) ||
+             hwcHeaderVersion(mHwc) < MIN_HWC_HEADER_VERSION ||
+             hwcHeaderVersion(mHwc) > HWC_HEADER_VERSION) {
+-- 
+1.7.10.4
+
