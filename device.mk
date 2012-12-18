@@ -75,7 +75,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.qctwa.statusbar=1 \
     debug.qctwa.preservebuf=1 \
     hwui.render_dirty_regions=false \
-    hwui.disable_vsync=true \
     hwui.print_config=choice \
     persist.sys.strictmode.visual=false
 
@@ -103,8 +102,7 @@ PRODUCT_PACKAGES += \
     libtilerenderer \
     libopencorehw \
     gralloc.msm7x27 \
-    copybit.msm7x27 \
-    hwcomposer.msm7x27
+    copybit.msm7x27
 
 # Media
 PRODUCT_PACKAGES += \
