@@ -21,8 +21,8 @@ BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=q
 ## CPU & Platform
 TARGET_ARCH := arm
 ARCH_ARM_HAVE_VFP := true
-TARGET_CPU_ABI := armeabi-v6l
-TARGET_CPU_ABI2 := armeabi
+TARGET_CPU_ABI := armeabi
+TARGET_CPU_ABI2 := armeabi-v6l
 TARGET_ARCH_VARIANT := armv6-vfp
 TARGET_BOARD_PLATFORM := msm7x27
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
