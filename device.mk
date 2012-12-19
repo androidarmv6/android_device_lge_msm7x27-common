@@ -88,8 +88,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio
 PRODUCT_PACKAGES += \
-    audio_policy.msm7x27 \
-    audio.primary.msm7x27 \
     audio.a2dp.default \
     libaudioutils
 
