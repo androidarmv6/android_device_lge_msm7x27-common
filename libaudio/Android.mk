@@ -3,6 +3,8 @@
 #AUDIO_POLICY_TEST := true
 #ENABLE_AUDIO_DUMP := true
 
+LGE_STANDARD := p500 p505 p506 p509
+
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
@@ -34,7 +36,12 @@ LOCAL_STATIC_LIBRARIES := \
     libmedia_helper  \
     libaudiohw_legacy
 
-LOCAL_MODULE := audio.primary.$(TARGET_BOARD_PLATFORM)
+ifneq ($(filter $(LGE_STANDARD),$(TARGET_DEVICE)),)
+LOCAL_MODULE := audio.primary.$(TARGET_DEVICE)
+LOCAL_MODULE := audio.primary.$(TARGET_BOOTLOADER_BOARD_NAME)
+else
+LOCAL_MODULE := audio.primary.$(TARGET_BOOTLOADER_BOARD_NAME)
+endif
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE_TAGS := optional
 
@@ -77,7 +84,12 @@ LOCAL_STATIC_LIBRARIES := \
     libaudiopolicy_legacy \
     libmedia_helper
 
-LOCAL_MODULE := audio_policy.$(TARGET_BOARD_PLATFORM)
+ifneq ($(filter $(LGE_STANDARD),$(TARGET_DEVICE)),)
+LOCAL_MODULE := audio_policy.$(TARGET_DEVICE)
+LOCAL_MODULE := audio_policy.$(TARGET_BOOTLOADER_BOARD_NAME)
+else
+LOCAL_MODULE := audio_policy.$(TARGET_BOOTLOADER_BOARD_NAME)
+endif
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE_TAGS := optional
 
