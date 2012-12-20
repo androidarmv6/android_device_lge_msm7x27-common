@@ -1,6 +1,5 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
-$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
@@ -50,8 +49,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.networklocation=1 \
     ro.com.google.gmsversion=2.3_r6 \
     ro.setupwizard.enable_bypass=1 \
-    dalvik.vm.lockprof.threshold=500 \
-    dalvik.vm.dexopt-flags=m=y \
     ro.telephony.call_ring.multiple=false \
     ro.vold.umsdirtyratio=20
 
