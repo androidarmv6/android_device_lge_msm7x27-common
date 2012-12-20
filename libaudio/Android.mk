@@ -3,7 +3,7 @@
 #AUDIO_POLICY_TEST := true
 #ENABLE_AUDIO_DUMP := true
 
-LGE_STANDARD := p500 p505 p506 p509 p350
+LGE_STANDARD := p500 p505 p506 p509
 
 LOCAL_PATH := $(call my-dir)
 
