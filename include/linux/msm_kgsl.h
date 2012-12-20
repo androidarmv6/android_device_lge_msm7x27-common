@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2007-2011, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2002,2007-2010, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -490,3 +490,4 @@ int kgsl_gem_obj_addr(int drm_fd, int handle, unsigned long *start,
 #endif
 #endif
 #endif /* _MSM_KGSL_H */
+
