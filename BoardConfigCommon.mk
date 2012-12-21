@@ -14,9 +14,9 @@ COMMON_GLOBAL_CFLAGS += -DQCOM_ICS_COMPAT
 
 ## Kernel
 TARGET_KERNEL_SOURCE := kernel/lge/msm7x27
-# Copy LG Kernel Headers here if necessary, DON'T use Adroid auto-generated headers
+# Copy LG Kernel Headers here if necessary, DO NOT use Android auto-generated headers
 TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include
-BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=qcom no_console_suspend
+BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=qcom
 
 ## CPU & Platform
 TARGET_ARCH := arm
@@ -64,12 +64,16 @@ USE_OPENGL_RENDERER := true
 # Force non usage of VSync
 TARGET_NO_HW_VSYNC := true
 TARGET_USES_GENLOCK := true
-TARGET_USES_SF_BYPASS := false
 TARGET_USES_ION := false
 BOARD_HAVE_HDMI_SUPPORT := false
 TARGET_NO_HW_OVERLAY := true
 TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
 BOARD_USE_SKIA_LCDTEXT := true
+TARGET_USES_C2D_COMPOSITION := false
+BOARD_AVOID_DRAW_TEXTURE_EXTENSION := true
+TARGET_USE_OVERLAY := false
+TARGET_HAVE_BYPASS := false
+TARGET_USES_SF_BYPASS := false
 BOARD_EGL_CFG := device/lge/msm7x27-common/configs/egl.cfg
 # Framerate
 COMMON_GLOBAL_CFLAGS += -DREFRESH_RATE=60
@@ -80,6 +84,7 @@ COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
 BOARD_USES_QCOM_HARDWARE := true
 BOARD_USES_QCOM_LIBS := true
 BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+TARGET_QCOM_DISPLAY_VARIANT := true
 COMMON_GLOBAL_CFLAGS += -DMISSING_GRALLOC_BUFFERS
 COMMON_GLOBAL_CFLAGS += -DANCIENT_GL
 # Add support for OMX
