@@ -1,23 +1,3 @@
-## EGL (ICS Adreno Directives)
-lib/egl/libEGL_adreno200.so
-lib/egl/libGLESv1_CM_adreno200.so
-lib/egl/libGLESv2_adreno200.so
-lib/egl/libq3dtools_adreno200.so
-lib/egl/eglsubAndroid.so
-lib/libsc-a2xx.so
-lib/libgsl.so
-etc/firmware/yamato_pfp.fw
-etc/firmware/yamato_pm4.fw
-
-## Audio (Imported from ICS)
-#lib/hw/audio.primary.msm7x27.so
-#lib/hw/audio_policy.msm7x27.so
-
-## OMX Core (Imported from ICS)
-#lib/libmm-omxcore.so
-#lib/libOmxCore.so
-#lib/libstagefrighthw.so
-
 ## OMX Encoders/Decoders (Imported from ICS, uses GB OMX)
 lib/libOmxAacDec.so
 lib/libOmxAacEnc.so
