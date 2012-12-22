@@ -99,7 +99,9 @@ PRODUCT_PACKAGES += \
     libqdutils \
     libtilerenderer \
     libopencorehw \
+    gralloc.default \
     gralloc.msm7x27 \
+    copybit.default \
     copybit.msm7x27
 
 # Media
