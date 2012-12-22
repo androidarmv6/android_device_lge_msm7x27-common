@@ -36,10 +36,6 @@ TARGET_KERNEL_SOURCE := kernel/lge/msm7x27
 TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include
 BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=qcom
 
-## CPU & Platform
-ARCH_ARM_HAVE_VFP := true
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
-
 ## Browser & WebKit
 ENABLE_WEBGL := true
 TARGET_FORCE_CPU_UPLOAD := true
@@ -66,18 +62,11 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 ## Graphics
 # Force non usage of VSync
-TARGET_USE_OVERLAY := false
-TARGET_HAVE_BYPASS := false
-TARGET_USES_SF_BYPASS := false
 BOARD_EGL_NEEDS_LEGACY_FB := true
 TARGET_DISABLE_TRIPLE_BUFFERING := true
 BOARD_EGL_CFG := device/lge/msm7x27-common/configs/egl.cfg
-# Framerate
-COMMON_GLOBAL_CFLAGS += -DREFRESH_RATE=60
 
 ## Qualcomm and Adreno Hardware
-BOARD_USE_ADRENO_200_GPU := true
-TARGET_QCOM_DISPLAY_VARIANT := true
 COMMON_GLOBAL_CFLAGS += -DANCIENT_GL
 
 ## GPS
@@ -92,17 +81,9 @@ TARGET_PROVIDES_LIBLIGHTS := true
 
 ## Audio, Bluetooth & FM Radio
 TARGET_PROVIDES_LIBAUDIO := true
-BOARD_USES_AUDIO_LEGACY := false
 BOARD_COMBO_DEVICE_SUPPORTED := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
-# BOARD_FM_DEVICE := bcm4325
-# BOARD_HAVE_FM_RADIO := true
-# Use the second one (QCOM_FM_ENABLED) not the first
-# The first breaks the builds and the second is more
-# recent and is used in the CM code
-# COMMON_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
-# COMMON_GLOBAL_CFLAGS += -DQCOM_FM_ENABLED
 
 ## RIL
 BOARD_PROVIDES_LIBRIL := true
