@@ -23,8 +23,6 @@ USE_CAMERA_STUB := true
 include device/qcom/msm7x27/BoardConfigCommon.mk
 
 ## Camera
-TARGET_DISABLE_ARM_PIE := true
-BOARD_NEEDS_MEMORYHEAPPMEM := true
 BOARD_USE_NASTY_PTHREAD_CREATE_HACK := true
 COMMON_GLOBAL_CFLAGS += -DBINDER_COMPAT
 #BOARD_USES_LEGACY_CAMERA := true
@@ -38,10 +36,8 @@ BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=q
 
 ## Browser & WebKit
 ENABLE_WEBGL := true
-TARGET_FORCE_CPU_UPLOAD := true
 
 ## Boot loader & recovery
-TARGET_NO_BOOTLOADER := true
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
@@ -82,8 +78,14 @@ TARGET_PROVIDES_LIBLIGHTS := true
 ## Audio, Bluetooth & FM Radio
 TARGET_PROVIDES_LIBAUDIO := true
 BOARD_COMBO_DEVICE_SUPPORTED := true
-BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
+# BOARD_FM_DEVICE := bcm4325
+# BOARD_HAVE_FM_RADIO := true
+# Use the second one (QCOM_FM_ENABLED) not the first
+# The first breaks the builds and the second is more
+# recent and is used in the CM code
+# COMMON_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
+# COMMON_GLOBAL_CFLAGS += -DQCOM_FM_ENABLED
 
 ## RIL
 BOARD_PROVIDES_LIBRIL := true
