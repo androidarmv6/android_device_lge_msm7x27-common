@@ -97,17 +97,18 @@ BOARD_UMS_LUNFILE := /sys/class/android_usb/android0/f_mass_storage/lun/file
 BOARD_USE_LEGACY_TOUCHSCREEN := true
 
 ## Wi-Fi & Wi-Fi HotSpot
-BOARD_WPA_SUPPLICANT_DRIVER := WEXT
-WPA_SUPPLICANT_VERSION := VER_0_8_X
-BOARD_WLAN_DEVICE := ath6kl
-WIFI_AP_DRIVER_MODULE_ARG := "ifname=athap0 fwmode=2"
-WIFI_AP_DRIVER_MODULE_PATH := /system/wifi/ar6000.ko
-WIFI_AP_DRIVER_MODULE_NAME := ar6000
-WIFI_DRIVER_MODULE_ARG := "ifname=wlan0 fwmode=1"
-WIFI_DRIVER_MODULE_PATH := /system/wifi/ar6000.ko
-WIFI_DRIVER_MODULE_NAME := ar6000
-BOARD_HAVE_LEGACY_HOSTAPD := true
-BOARD_HOSTAPD_NO_ENTROPY := true
+WPA_SUPPLICANT_VERSION          := VER_0_8_X
+BOARD_WLAN_DEVICE               := bcm4325
+BOARD_WEXT_NO_COMBO_SCAN        := true
+BOARD_WPA_SUPPLICANT_DRIVER     := WEXT
+WIFI_DRIVER_HAS_LGE_SOFTAP      := true
+WIFI_DRIVER_MODULE_PATH         := "/system/lib/modules/wireless.ko"
+WIFI_DRIVER_MODULE_ARG          := "firmware_path=/etc/wl/rtecdc.bin nvram_path=/etc/wl/nvram.txt config_path=/data/misc/wifi/config"
+WIFI_DRIVER_MODULE_NAME         := "wireless"
+WIFI_DRIVER_FW_PATH_STA         := "/system/etc/wl/rtecdc.bin"
+WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
+BOARD_HAVE_LEGACY_HOSTAPD       := true
+BOARD_HOSTAPD_NO_ENTROPY 	:= true
 
 ## OTA script
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/lge/msm7x27-common/releasetools/ota_from_target_files
