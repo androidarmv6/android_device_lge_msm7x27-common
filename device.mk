@@ -59,7 +59,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hdmi_out=false \
     debug.sf.hw=1 \
     debug.composition.type=mdp \
-    debug.gr.numframebuffers=2
+    debug.gr.numframebuffers=2 \
+    persist.service.adb.enable=1
 
 # Audio
 PRODUCT_PACKAGES += \
