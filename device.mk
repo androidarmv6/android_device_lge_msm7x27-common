@@ -1,6 +1,6 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
-$(call inherit-product, vendor/qcom/msm7x27/qcom-vendor.mk)
+$(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
@@ -45,7 +45,6 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.camera=msm7x27 \
-    debug.camcorder.disablemeta=1 \
     ro.com.google.locationfeatures=1 \
     ro.com.google.networklocation=1 \
     ro.com.google.gmsversion=2.3_r6 \
@@ -63,52 +62,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wifi.supplicant_scan_interval=180
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    com.qc.hardware=true \
     com.qc.hdmi_out=false \
     debug.sf.hw=1 \
-    debug.enabletr=false \
-    debug.hwui.render_dirty_regions=false \
     debug.composition.type=mdp \
-    debug.gr.numframebuffers=2 \
-    debug.qctwa.statusbar=1 \
-    debug.qctwa.preservebuf=1 \
-    hwui.render_dirty_regions=false \
-    hwui.print_config=choice \
-    persist.sys.strictmode.visual=false
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.stagefright.enable-player=true \
-    media.stagefright.enable-meta=false \
-    media.stagefright.enable-scan=false \
-    media.stagefright.enable-http=true \
-    media.stagefright.enable-aac=true \
-    media.stagefright.enable-qcp=true
+    debug.gr.numframebuffers=2
 
 # Audio
 PRODUCT_PACKAGES += \
     audio_policy.msm7x27 \
-    audio.primary.msm7x27 \
-    audio.a2dp.default \
-    libaudioutils
-
-# Display
-PRODUCT_PACKAGES += \
-    libgenlock \
-    libmemalloc \
-    liboverlay \
-    libqdutils \
-    libtilerenderer \
-    libopencorehw \
-    gralloc.default \
-    gralloc.msm7x27 \
-    copybit.default \
-    copybit.msm7x27
+    audio.primary.msm7x27
 
 # Media
-PRODUCT_PACKAGES += \
-    libstagefrighthw \
-    libmm-omxcore \
-    libOmxCore \
+PRODUCT_PACKAGES +=
     libdivxdrmdecrypt
 
 # Misc
