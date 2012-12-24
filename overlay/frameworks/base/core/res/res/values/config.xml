@@ -5,7 +5,7 @@
     <bool name="config_unplugTurnsOnScreen">true</bool>
     <bool name="config_sf_slowBlur">true</bool>
     <bool name="config_sf_limitedAlpha">false</bool>
-
+    <bool name="config_wifiApStartInterface">true</bool>
     <string-array translatable="false" name="config_tether_usb_regexs">
         <item>"rndis\\d"</item>
     </string-array>
@@ -82,6 +82,6 @@
     <!-- Boolean indicating if current platform supports quick switch-on/off of Bluetooth Module
     <bool name="config_bluetooth_adapter_quick_switch">false</bool> -->
     <bool name="config_forceDisableHardwareKeyboard">true</bool>
-    <!--<integer name="config_backKillTimeout">1500</integer>-->
+    <integer name="config_backKillTimeout">1500</integer>
 </resources>
 
