@@ -77,8 +77,7 @@ TARGET_PROVIDES_LIBLIGHTS := true
 
 ## Audio, Bluetooth & FM Radio
 BOARD_HAVE_BLUETOOTH_BCM := true
-BOARD_BLUEDROID_VENDOR_CONF := device/lge/msm7x27/configs/libbt_vndcfg.txt
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/msm7x27-common/configs
+BOARD_BLUEDROID_VENDOR_CONF := device/lge/msm7x27-common/configs/libbt_vndcfg.txt
 BOARD_COMBO_DEVICE_SUPPORTED := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 # BOARD_FM_DEVICE := bcm4325
