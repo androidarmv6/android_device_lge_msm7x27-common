@@ -1,80 +1,22 @@
-CyanogenMod
-===============
+CyanogenMod 10.1 for ARMv6 devices
+==================================
 
-Visit http://github.com/CyanogenMod for full CyanogenMod changelogs and git access.
+Visit http://github.com/androidarmv6 for full CyanogenMod changelogs and git access.
 
-Visit http://github.com/lgics for full LGICS changelogs and git access
+Visit http://changelog.bbqdroid.org/#/cm10.1/ for CyanogenMod changelogs
 
 Visit http://review.cyanogenmod.com for the CM Gerrit instance.
 
-Follow http://twitter.com/cmsrc for CM commit-by-commit updates.
 
-CHANGELOG
----------
+DEVICE CHANGELOG
+----------------
 
-### Build 7/RC3:
-* Upgarded to CM10 stable source
-* Fixed YouTube HQ video playback lagging
-* Fixed video recording
-* Fixed recorded video playback
-* Upgraded kernel (backported several 3.x features)
-* Played around a tad bit with the battery
-* Fixed microphone issues
-* Fixed occasional headphone issues
-* Used native ARMv6 code (faster and more fluid)
-* Junked the CTS breaking changes
-* Centralized audio system for all 4 devices
-* Re-enabled software acceleration (for battery life)
-* Innitial offline charging bringup (still broken but somewhat works on some devices)
+### Build 2 (25 Dec 2012)
+* Fix audio (mic/speaker)
+* Fix wi-fi
+* Fix color banding
+* Reduce Trebuchet size
+* Stock camera app takes pictures, but no preview
 
-### Build 6/RC2:
-* Updated to 4.1.2
-* Fixed ALL video playback
-* Video recording somewhat works
-* Video playback is now smooth
-* HQ video now plays (not smooth, but better than none)
-* Fixed notification bar blur
-* Fixed lockscreen animation
-* Fixed screen off and on animations
-* Camera no longer has green and purple crap
-* Panorama works (not that the panoramas it generates are correct, but at least it works...)
-* Fixed calculator not opening
-* Faster graphics
-* Fixed Wi-Fi tethering
-* Fixed network selection
-* Many other fixes
-* Fixed live wallpapers
-* Fixed camera crashing sometimes
-* Fixed baseband issue on P505
-* Added CM File Manager
-* Added Sim Toolkit for managing network related stuff
-* Somewhat implemented Project Butter
-* Fixed video streaming
-* Fixed Link2SD (/system space)
-* Fixed a few audio glitches
-
-### Build 5:
-* Video enhancements
-* More battery fixes
-* Minor enhancements everywhere
-* Lights now work
-* Now uses Trebuchet instead of Catapult
-
-### Build 4/RC1:
-* Fixed camera
-* Fixed video
-* Fixed battery drain
-* Fixed minor issues
-* Minor changes here and there
-* Anything added to CM from August 8
-* Made a few changes for speed
-* Made changes for responsiveness
-
-### Build 3
-* More little fixes
-
-### Build 2
-* Fixed a few minor issues
-
-### Build 1
-* Initial build and release
+### Build 1 (22 Dec 2012)
+* Boot version by hephappy
