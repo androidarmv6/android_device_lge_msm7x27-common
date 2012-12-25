@@ -33,8 +33,8 @@ else
 LOCAL_SHARED_LIBRARIES+= libdl
 endif
 
-LOCAL_MODULE:= libcamera
-include $(BUILD_SHARED_LIBRARY)
+##LOCAL_MODULE:= libcamera
+####include $(BUILD_SHARED_LIBRARY)
 
 
 ## Make camera wrapper
