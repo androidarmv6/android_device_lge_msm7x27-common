@@ -589,7 +589,7 @@ int
 qcamera_store_meta_data_in_buffers(struct camera_device * device, int enable)
 {
    ALOGV("qcamera_store_meta_data_in_buffers:\n");
-   return NO_ERROR;
+   return -1; // INVALID_OPERATION
 }
 
 int 
