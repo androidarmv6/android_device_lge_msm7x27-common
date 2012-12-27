@@ -1,6 +1,7 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
+$(call inherit-product, device/mdpi-common/mdpi.mk
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
@@ -107,4 +108,5 @@ PRODUCT_PACKAGES += \
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
+# lge msm7x27-common overlays
 DEVICE_PACKAGE_OVERLAYS += device/lge/msm7x27-common/overlay
