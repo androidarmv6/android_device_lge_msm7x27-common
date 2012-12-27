@@ -107,4 +107,5 @@ PRODUCT_PACKAGES += \
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
+# lge msm7x27-common overlays
 DEVICE_PACKAGE_OVERLAYS += device/lge/msm7x27-common/overlay
