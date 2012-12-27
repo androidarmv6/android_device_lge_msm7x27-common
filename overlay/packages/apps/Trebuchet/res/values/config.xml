@@ -1,5 +1,5 @@
 <resources>
-    <bool name="config_cyanogenmod">true</bool>
+    <!-- <bool name="config_cyanogenmod">true</bool> -->
     <!-- Enables hardware acceleration in Trebuchet
     <bool name="config_hardwareAccelerated">true</bool> -->
 </resources>
