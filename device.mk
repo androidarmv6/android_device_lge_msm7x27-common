@@ -96,6 +96,8 @@ PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/init.qcom.bt.sh:system/bin/init.qco
 PRODUCT_PACKAGES += \
     hcitool \
     hciconfig \
+    hciattach \
+    brcm_patchram_plus \
     hwaddrs
 
 # Offmode charging
