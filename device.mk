@@ -92,10 +92,12 @@ PRODUCT_PACKAGES += \
     setup_fs
 
 # BT startup
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/init.qcom.bt.sh:system/bin/init.qcom.bt.sh
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/bluetooth/init.qcom.bt.sh:system/bin/init.qcom.bt.sh
 PRODUCT_PACKAGES += \
     hcitool \
     hciconfig \
+    hciattach \
+    brcm_patchram_plus \
     hwaddrs
 
 # Offmode charging
