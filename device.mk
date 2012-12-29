@@ -14,7 +14,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/initlogo.rle:root/initlogo.rle \
+    $(LOCAL_PATH)/root/initlogo.rle:root/initlogo.rle \
     $(LOCAL_PATH)/root/init.qcom.rc:root/init.qcom.rc \
     $(LOCAL_PATH)/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
     $(LOCAL_PATH)/root/init.qcom.sh:root/init.qcom.sh \
