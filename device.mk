@@ -18,8 +18,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/root/init.qcom.rc:root/init.qcom.rc \
     $(LOCAL_PATH)/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
     $(LOCAL_PATH)/root/init.qcom.sh:root/init.qcom.sh \
-    $(LOCAL_PATH)/root/ueventd.qcom.rc:root/ueventd.qcom.rc
-
+    $(LOCAL_PATH)/root/ueventd.qcom.rc:root/ueventd.qcom.rc \ 
+    $(LOCAL_PATH)/root/default.prop:root/default.prop  
+    
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
