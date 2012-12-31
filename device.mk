@@ -79,10 +79,14 @@ PRODUCT_PACKAGES += \
     lights.msm7x27 \
     lgapversion
     
-# Build sim toolkit
+# Build SIM Toolkit
 PRODUCT_PACKAGES += \
     Stk
     
+# Build LockClock
+PRODUCT_PACKAGES += \
+    LockClock
+
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm7x27 \
