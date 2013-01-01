@@ -1,17 +1,6 @@
+# Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
-$(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
-
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
-    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
-    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
-    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
-    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/root/initlogo.rle:root/initlogo.rle \
@@ -23,6 +12,9 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/releasetools/extras.sh:system/bin/extras.sh
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/CHANGELOG-CM.txt:system/etc/CHANGELOG-CM.txt \
@@ -38,6 +30,15 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab \
     $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
+
+
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.camera=msm7x27 \
     ro.com.google.locationfeatures=1 \
@@ -46,15 +47,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.setupwizard.enable_bypass=1 \
     ro.telephony.call_ring.multiple=false \
     ro.vold.umsdirtyratio=20
-
-# Battery life hacks
-PRODUCT_PROPERTY_OVERRIDES += \
-    # Turn off RIL when not needed
-    ro.ril.disable.power.collapse=1
-    # Better sleep system
-    pm.sleep_mode=1
-    # Scan for WiFi less often to increase batery life
-    wifi.supplicant_scan_interval=180
 
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hdmi_out=false \
@@ -108,6 +100,8 @@ PRODUCT_PACKAGES += \
     charger \
     charger_res_images
 
+# Inherit qcom/msm7x27
+$(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
