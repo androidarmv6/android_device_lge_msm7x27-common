@@ -95,14 +95,13 @@ WPA_SUPPLICANT_VERSION          := VER_0_8_X
 BOARD_WLAN_DEVICE               := bcm4325
 BOARD_WEXT_NO_COMBO_SCAN        := true
 BOARD_WPA_SUPPLICANT_DRIVER     := WEXT
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
 WIFI_DRIVER_HAS_LGE_SOFTAP      := true
 WIFI_DRIVER_MODULE_PATH         := "/system/lib/modules/wireless.ko"
 WIFI_DRIVER_MODULE_ARG          := "firmware_path=/etc/wl/rtecdc.bin nvram_path=/etc/wl/nvram.txt config_path=/data/misc/wifi/config"
 WIFI_DRIVER_MODULE_NAME         := "wireless"
 WIFI_DRIVER_FW_PATH_STA         := "/system/etc/wl/rtecdc.bin"
 WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
-# Use irregular Wi-FI strength detector
-BOARD_HAS_IRREGULAR_WIFI_STRENGTH := true
 
 ## OTA script
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/lge/msm7x27-common/releasetools/ota_from_target_files
