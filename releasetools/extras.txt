@@ -10,7 +10,6 @@ app/RomManager.apk
 app/CMWallpapers.apk
 
 # Live Wallpapers (2.11MB)
-app/LiveWallpapers.apk
 app/MagicSmokeWallpapers.apk
 app/Galaxy4.apk
 app/PhaseBeam.apk
