@@ -6,6 +6,10 @@ lib/libvideoeditorplayer.so
 # RomManager (2.5MB)
 app/RomManager.apk
 
+# Telephony
+app/Phone.apk
+app/TelephonyProvider.apk
+
 # CM Wallpapers (7MB)
 app/CMWallpapers.apk
 

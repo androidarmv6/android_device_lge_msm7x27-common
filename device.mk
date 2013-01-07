@@ -42,7 +42,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.networklocation=1 \
     ro.com.google.gmsversion=2.3_r6 \
     ro.setupwizard.enable_bypass=1 \
-    ro.telephony.call_ring.multiple=false \
     ro.vold.umsdirtyratio=20
 
 PRODUCT_PROPERTY_OVERRIDES += \
