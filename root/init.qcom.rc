@@ -130,10 +130,6 @@ on early-boot
 on boot
 
     mount debugfs /sys/kernel/debug /sys/kernel/debug
-    
-    # radio
-    mkdir /data/radio 0770 radio radio
-    chmod 2770 /data/radio
 
     # liblights
     chown system system /sys/class/leds/green/brightness
@@ -195,11 +191,6 @@ on property:init.svc.chargerlogo=running
 #############################################################################
 ### S E R V I C E S                                                        ##
 #############################################################################
-
-service qmuxd /system/bin/qmuxd
-    class core
-    user radio
-    group radio audio inet bluetooth
 
 service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
     class main
