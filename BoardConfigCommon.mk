@@ -99,5 +99,9 @@ SMALLER_FONT_FOOTPRINT := true
 ## Browser & WebKit
 ENABLE_WEBGL := true
 
+## Offline Charging
+COMMON_GLOBAL_CFLAGS += -DBOARD_CHARGING_CMDLINE_NAME='"chg"'
+COMMON_GLOBAL_CFLAGS += -DBOARD_CHARGING_CMDLINE_VALUE='"65"'
+
 ## OTA script extras file (build/tools/releasetools)
 TARGET_OTA_EXTRAS_FILE := device/lge/msm7x27-common/releasetools/extras.txt
