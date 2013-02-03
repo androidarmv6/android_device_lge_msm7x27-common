@@ -51,6 +51,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.sf.hw=1 \
     debug.composition.type=mdp \
     debug.gr.numframebuffers=2 \
+    persist.sys.purgeable_assets=1 \
     persist.service.adb.enable=1
 
 # Audio
@@ -106,7 +107,6 @@ PRODUCT_PACKAGES += \
 # Inherit qcom/msm7x27
 $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
 
-PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 # lge msm7x27-common overlays
