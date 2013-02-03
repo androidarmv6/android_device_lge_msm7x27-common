@@ -72,7 +72,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     gps.default \
     gps.msm7x27 \
-    librpc \
+    librpc
     
 # Build sim toolkit
 PRODUCT_PACKAGES += \
