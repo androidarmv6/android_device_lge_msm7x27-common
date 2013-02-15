@@ -24,7 +24,7 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 BOARD_HAS_NO_SELECT_BUTTON := true
 
 ## Kernel
-#BUILD_WITH_30X_KERNEL := true
+BUILD_WITH_30X_KERNEL := true
 ifdef BUILD_WITH_30X_KERNEL
 TARGET_KERNEL_SOURCE := kernel/lge/msm7x27-3.0.x
 ## *** Copy LG Kernel Headers here if necessary, DO NOT use Android auto-generated headers ***
