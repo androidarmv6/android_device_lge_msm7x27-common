@@ -13,9 +13,16 @@ BOARD_USES_LEGACY_CAMERA := true
 BOARD_CPU_COLOR_CONVERT := true
 
 ## Kernel
+BUILD_WITH_30X_KERNEL := true
+ifdef BUILD_WITH_30X_KERNEL
+TARGET_KERNEL_SOURCE := kernel/lge/msm7x27-3.0.x
+## *** Copy LG Kernel Headers here if necessary, DO NOT use Android auto-generated headers ***
+TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include3x
+else
 TARGET_KERNEL_SOURCE := kernel/lge/msm7x27
-# Copy LG Kernel Headers here if necessary, DON'T use Adroid auto-generated headers
+## *** Copy LG Kernel Headers here if necessary, DO NOT use Android auto-generated headers ***
 TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include
+endif
 BOARD_KERNEL_CMDLINE := mem=471M console=ttyMSM2,115200n8 androidboot.hardware=qcom no_console_suspend
 
 ## CPU & Platform
