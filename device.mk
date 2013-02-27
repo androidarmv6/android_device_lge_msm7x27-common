@@ -49,7 +49,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hdmi_out=false \
     debug.sf.hw=1 \
     debug.composition.type=mdp \
-    debug.gr.numframebuffers=2 \
+    debug.gr.numframebuffers=3 \
     persist.sys.purgeable_assets=1 \
     persist.service.adb.enable=1
 
@@ -58,8 +58,9 @@ PRODUCT_PACKAGES += \
     audio_policy.msm7x27 \
     audio.primary.msm7x27
 
-# Media
+# Graphics & Media
 PRODUCT_PACKAGES += \
+#   hwcomposer.msm7x27 \
     libdivxdrmdecrypt
 
 # Misc
