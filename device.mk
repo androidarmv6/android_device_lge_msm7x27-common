@@ -60,7 +60,7 @@ PRODUCT_PACKAGES += \
 
 # Graphics & Media
 PRODUCT_PACKAGES += \
-#   hwcomposer.msm7x27 \
+    hwcomposer.msm7x27 \
     libdivxdrmdecrypt
 
 # Misc
