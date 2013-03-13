@@ -29,9 +29,6 @@
 extern "C" {
 #include <linux/msm_audio.h>
 #include <linux/msm_audio_voicememo.h>
-#include <linux/msm_audio_aac.h>
-#include <linux/msm_audio_amrnb.h>
-#include <linux/msm_audio_qcp.h>
 }
 
 namespace android_audio_legacy {
@@ -162,11 +159,6 @@ enum tty_modes {
 #define AUDIO_HW_IN_FORMAT (AudioSystem::PCM_16_BIT)  // Default audio input sample format
 // ----------------------------------------------------------------------------
 
-using android_audio_legacy::AudioHardwareBase;
-using android_audio_legacy::AudioStreamOut;
-using android_audio_legacy::AudioStreamIn;
-using android_audio_legacy::AudioSystem;
-using android_audio_legacy::AudioHardwareInterface;
 class AudioHardware : public  AudioHardwareBase
 {
     class AudioStreamOutMSM72xx;
@@ -194,7 +186,6 @@ public:
     // create I/O streams
     virtual AudioStreamOut* openOutputStream(
                                 uint32_t devices,
-                                audio_output_flags_t flags,
                                 int *format=0,
                                 uint32_t *channels=0,
                                 uint32_t *sampleRate=0,
