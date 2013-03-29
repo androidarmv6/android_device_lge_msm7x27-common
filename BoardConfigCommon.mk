@@ -14,6 +14,12 @@
 # limitations under the License.
 #
 
+## Define BOARD_HAVE_BLUETOOTH_BLUEZ before device/qcom/msm7x27/BoardConfigCommon.mk
+## Bluetooth
+BOARD_HAVE_BLUETOOTH_BLUEZ := true
+BOARD_HAVE_BLUETOOTH_BCM := true
+#BOARD_BLUEDROID_VENDOR_CONF := device/lge/msm7x27-common/bluetooth/libbt_lge.txt
+
 # Use the Qualcomm common folder
 include device/qcom/msm7x27/BoardConfigCommon.mk
 
@@ -76,10 +82,6 @@ WIFI_DRIVER_MODULE_ARG          := "firmware_path=/etc/wl/rtecdc.bin nvram_path=
 WIFI_DRIVER_MODULE_NAME         := "wireless"
 WIFI_DRIVER_FW_PATH_STA         := "/system/etc/wl/rtecdc.bin"
 WIFI_DRIVER_FW_PATH_AP          := "/system/etc/wl/rtecdc-apsta.bin"
-
-## Bluetooth
-BOARD_HAVE_BLUETOOTH_BCM := true
-BOARD_BLUEDROID_VENDOR_CONF := device/lge/msm7x27-common/bluetooth/libbt_lge.txt
 
 ## GPS
 BOARD_USES_QCOM_LIBRPC := true
