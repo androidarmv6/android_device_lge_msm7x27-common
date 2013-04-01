@@ -155,15 +155,16 @@ on boot
     mkdir /data/system 0775 system system
 
     # bluetooth
+    mkdir /data/misc/bluetoothd 0770 bluetooth bluetooth
     chmod 0660 /dev/ttyHS0
-    chown bluetooth net_bt_stack /dev/ttyHS0
-    chown bluetooth net_bt_stack /proc/bluetooth/sleep/proto
+    chown bluetooth bluetooth /dev/ttyHS0
+    chown bluetooth bluetooth /proc/bluetooth/sleep/proto
     chmod 0660 /sys/class/rfkill/rfkill0/state
     chmod 0660 /sys/class/rfkill/rfkill0/type
 
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
-    chown bluetooth net_bt_stack /proc/bluetooth/sleep/proto
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
+    chown bluetooth bluetooth /proc/bluetooth/sleep/proto
     write /sys/class/rfkill/rfkill0/state 0
 
     # allow interfaces to get IPv6 address when tethering is enabled
@@ -188,6 +189,25 @@ service qmuxd /system/bin/qmuxd
     class core
     user radio
     group radio audio inet bluetooth
+
+service dbus /system/bin/dbus-daemon --system --nofork
+    class core
+    socket dbus stream 660 bluetooth bluetooth
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+
+on property:ro.qc.bluetooth.stack=bluez
+    start dbus
+
+service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -n
+    class main
+    socket bluetooth stream 660 bluetooth bluetooth
+    socket dbus_bluetooth stream 660 bluetooth bluetooth
+    # init.rc does not yet support applying capabilities, so run as root and
+    # let bluetoothd drop uid to bluetooth with the right linux capabilities
+    group bluetooth net_bt_admin misc net_bt_stack
+    disabled
 
 service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
     class main
