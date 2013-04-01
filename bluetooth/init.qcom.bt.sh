@@ -39,10 +39,6 @@ kill_hciattach ()
   # this shell doesn't exit now -- wait returns for normal exit
 }
 
-
-logi "Bluetooth stack is bluez"
-setprop ro.qc.bluetooth.stack bluez
-
 /system/bin/brcm_patchram_plus -d --patchram /etc/firmware/BCM4325D1_004.002.004.0218.0248.hcd /dev/ttyHS0
 logi "Setting baudrate..."
 /system/bin/brcm_patchram_plus -d -baudrate 3000000 /dev/ttyHS0 
@@ -57,7 +53,6 @@ esac
 trap "kill_hciattach" TERM INT
 
 start_hciattach
-logi "Bluetooth is turning On with Bluez stack "
 
 # Give hciattach time to settle
 sleep 10
