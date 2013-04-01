@@ -1,5 +1,8 @@
 #!/system/bin/sh
 
+#Read the arguments passed to the script
+config="$1"
+
 BLUETOOTH_SLEEP_PATH=/proc/bluetooth/sleep/proto
 LOG_TAG="qcom-bluetooth"
 LOG_NAME="${0}:"
@@ -22,6 +25,27 @@ failed ()
   exit $2
 }
 
+
+#
+# enable bluetooth profiles dynamically
+#
+config_bt ()
+{
+  setprop ro.qualcomm.bluetooth.opp true
+  setprop ro.qualcomm.bluetooth.hfp true
+  setprop ro.qualcomm.bluetooth.hsp true
+  setprop ro.qualcomm.bluetooth.pbap true
+  setprop ro.qualcomm.bluetooth.ftp true
+  setprop ro.qualcomm.bluetooth.map true
+  setprop ro.qualcomm.bluetooth.nap true
+  setprop ro.qualcomm.bluetooth.sap true
+  setprop ro.qualcomm.bluetooth.dun true
+
+  logi "Bluetooth stack is bluez"
+  setprop ro.qc.bluetooth.stack bluez
+}
+
+
 start_hciattach ()
 {
   echo 1 > $BLUETOOTH_SLEEP_PATH
@@ -38,6 +62,17 @@ kill_hciattach ()
   echo 0 > $BLUETOOTH_SLEEP_PATH
   # this shell doesn't exit now -- wait returns for normal exit
 }
+
+logi "init.qcom.bt.sh config = $config"
+case "$config" in
+    "onboot")
+        config_bt
+        exit 0
+        ;;
+    *)
+        ;;
+esac
+
 
 /system/bin/brcm_patchram_plus -d --patchram /etc/firmware/BCM4325D1_004.002.004.0218.0248.hcd /dev/ttyHS0
 logi "Setting baudrate..."
