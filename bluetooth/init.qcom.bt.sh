@@ -1,5 +1,8 @@
 #!/system/bin/sh
 
+#Read the arguments passed to the script
+config="$1"
+
 BLUETOOTH_SLEEP_PATH=/proc/bluetooth/sleep/proto
 LOG_TAG="qcom-bluetooth"
 LOG_NAME="${0}:"
@@ -22,6 +25,27 @@ failed ()
   exit $2
 }
 
+
+#
+# enable bluetooth profiles dynamically
+#
+config_bt ()
+{
+  setprop ro.qualcomm.bluetooth.opp true
+  setprop ro.qualcomm.bluetooth.hfp true
+  setprop ro.qualcomm.bluetooth.hsp true
+  setprop ro.qualcomm.bluetooth.pbap true
+  setprop ro.qualcomm.bluetooth.ftp true
+  setprop ro.qualcomm.bluetooth.map true
+  setprop ro.qualcomm.bluetooth.nap true
+  setprop ro.qualcomm.bluetooth.sap true
+  setprop ro.qualcomm.bluetooth.dun true
+
+  logi "Bluetooth stack is bluez"
+  setprop ro.qc.bluetooth.stack bluez
+}
+
+
 start_hciattach ()
 {
   echo 1 > $BLUETOOTH_SLEEP_PATH
@@ -39,14 +63,26 @@ kill_hciattach ()
   # this shell doesn't exit now -- wait returns for normal exit
 }
 
-/system/bin/brcm_patchram_plus -d --patchram /etc/firmware/BCM4325D1_004.002.004.0218.0248.hcd /dev/ttyHS0
+logi "init.qcom.bt.sh config = $config"
+case "$config" in
+    "onboot")
+        config_bt
+        exit 0
+        ;;
+    *)
+        ;;
+esac
+
+
+PATCHRAM="/system/bin/brcm_patchram_plus -d --patchram /etc/firmware/BCM4325D1_004.002.004.0218.0248.hcd /dev/ttyHS0"
+eval $($PATCHRAM && echo "exit_code_brcm_patchram_plus_init=0" || echo "exit_code_brcm_patchram_plus_init=1")
+
 logi "Setting baudrate..."
 /system/bin/brcm_patchram_plus -d -baudrate 3000000 /dev/ttyHS0 
-exit_code_hci_qcomm_download=$?
 
-case $exit_code_hci_qcomm_download in
-  0) logi "Bluetooth QSoC firmware download succeeded, $BTS_DEVICE $BTS_TYPE $BTS_BAUD $BTS_ADDRESS";;
-  *) failed "Bluetooth QSoC firmware download failed" $exit_code_hci_qcomm_download;;
+case $exit_code_brcm_patchram_plus_init in
+  0) logi "Bluetooth QSoC firmware download succeeded, $PATCHRAM";;
+  *) failed "Bluetooth QSoC firmware download failed" $exit_code_brcm_patchram_plus_init;;
 esac
 
 # init does SIGTERM on ctl.stop for service
