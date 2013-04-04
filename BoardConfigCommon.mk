@@ -20,8 +20,9 @@ include device/qcom/msm7x27/BoardConfigCommon.mk
 ## Boot loader & recovery
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
-TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
 BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_CUSTOM_GRAPHICS := ../../../device/lge/msm7x27-common/recovery/graphics.c
 
 ## Kernel
 BUILD_WITH_30X_KERNEL := true
