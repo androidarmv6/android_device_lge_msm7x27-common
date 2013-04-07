@@ -245,41 +245,6 @@ service setapversion /system/bin/lgapversion
 on property:gsm.version.baseband=V07u-000-000-MAR-23-2009
    start setapversion
 
-service hfag /system/bin/sdptool add --channel=10 HFAG
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin net_bt_stack
-    disabled
-    oneshot
-
-service hsag /system/bin/sdptool add --channel=11 HSAG
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin net_bt_stack
-    disabled
-    oneshot
-
-service opush /system/bin/sdptool add --channel=12 OPUSH
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin net_bt_stack
-    disabled
-    oneshot
-
-service pbap /system/bin/sdptool add --channel=19 PBAP
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin net_bt_stack
-    disabled
-    oneshot
-
-service map /system/bin/sdptool add --channel=16 MAS
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin net_bt_stack
-    disabled
-    oneshot
-
 service qcom-sh /system/bin/sh /init.qcom.sh
     class core
     user root
