@@ -88,16 +88,11 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
-# BT startup
+# BlueZ support
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bluetooth/init.qcom.bt.sh:system/bin/init.qcom.bt.sh
 
 PRODUCT_PACKAGES += \
-    bluetoothd \
-    libbluetoothd \
-    hcitool \
-    hciconfig \
-    hciattach \
     brcm_patchram_plus \
     hwaddrs
 
