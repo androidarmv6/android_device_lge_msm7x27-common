@@ -5,6 +5,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/root/initlogo.rle:root/initlogo.rle \
     $(LOCAL_PATH)/root/init.qcom.rc:root/init.qcom.rc \
     $(LOCAL_PATH)/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    $(LOCAL_PATH)/root/init.qcom.bluez.rc:root/init.qcom.bluez.rc \
     $(LOCAL_PATH)/root/init.qcom.sh:root/init.qcom.sh \
     $(LOCAL_PATH)/root/ueventd.qcom.rc:root/ueventd.qcom.rc \
     $(LOCAL_PATH)/root/default.prop:root/default.prop
@@ -88,7 +89,7 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
-# BT startup
+# BlueZ support
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bluetooth/init.qcom.bt.sh:system/bin/init.qcom.bt.sh
 
