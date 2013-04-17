@@ -89,10 +89,27 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
-# BlueZ support
+## BlueZ support
+
+# Download BT firmware
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bluetooth/init.qcom.bt.sh:system/bin/init.qcom.bt.sh
 
+# BlueZ configs
+PRODUCT_COPY_FILES += \
+    system/bluetooth/data/audio.conf:system/etc/bluetooth/audio.conf \
+    system/bluetooth/data/auto_pairing.conf:system/etc/bluetooth/auto_pairing.conf \
+    system/bluetooth/data/blacklist.conf:system/etc/bluetooth/blacklist.conf \
+    system/bluetooth/data/input.conf:system/etc/bluetooth/input.conf \
+    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf \
+    system/bluetooth/data/network.conf:system/etc/bluetooth/network.conf \
+    system/bluetooth/data/stack.conf:system/etc/bluetooth/stack.conf
+
+# javax.btobex is required by Bluetooth_msm
+PRODUCT_PACKAGES += \
+    javax.btobex
+
+# BlueZ binaries
 PRODUCT_PACKAGES += \
     bluetoothd \
     libbluetoothd \
