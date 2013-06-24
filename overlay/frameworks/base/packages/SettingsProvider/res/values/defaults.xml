@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- 0 == default, 1 == never while plugged, 2 == never -->
-    <integer name="def_wifi_sleep_policy">0</integer>
-</resources>
-
