@@ -5,18 +5,30 @@ Visit http://github.com/androidarmv6 for full CyanogenMod changelogs and git acc
 
 Visit http://changelog.bbqdroid.org/#/cm10.1/ for CyanogenMod changelogs
 
-Visit http://review.cyanogenmod.com for the CM Gerrit instance.
+Visit http://review.androidarmv6.org for the Gerrit instance.
 
 
-DEVICE CHANGELOG
-----------------
+### FEATURES
 
-### Build 2 (25 Dec 2012)
-* Fix audio (mic/speaker)
-* Fix wi-fi
-* Fix color banding
-* Reduce Trebuchet size
-* Stock camera app takes pictures, but no preview
+* Supports all android 4.2.2 features
+* Fully functional camera (preview, taking photo, recording video, panorama)
+* Full H/W acceleration with new adreno drivers, 3D modelling (yamato)
+* Hardware decoding of videos, Youtube HQ videos
+* Internet sharing (Bluetooth tethering, USB tethering)
+* Calls, SMS, MMS, 3G/2G, Mobile data, Data limit
+* Loudspeaker in call, Manual network search
+* Usb mass storage, Usb debugging
+* Wi-Fi, Bluetooth, Bluetooth headset
+* GPS, Sensors, Lights, Touch screen
+* Funny SIM (128k USIMs)
+* Browser, GMail, GPlay
+* Youtube LQ/MQ/HQ
+* Offmode charging
+* FM Radio
 
-### Build 1 (22 Dec 2012)
-* Boot version by hephappy
+### KNOWN ISSUES
+
+* Wi-Fi wakelock because of the old bcm4325 wireless driver
+* Wi-Fi tethering
+* Routing audio to A2DP (Bluetooth Music)
+* Swipe in stock keyboard because of missing armv6 libs
