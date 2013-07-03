@@ -1,0 +1,6 @@
+<resources>
+    <fraction name="def_window_animation_scale">0%</fraction>
+    <fraction name="def_window_transition_scale">0%</fraction> 
+    <integer name="def_lockscreen_sounds_enabled">0</integer>
+    <bool name="def_sound_effects_enabled">false</bool>
+</resources>
