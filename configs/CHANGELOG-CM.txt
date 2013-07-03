@@ -18,7 +18,7 @@ Visit http://review.androidarmv6.org for the Gerrit instance.
 * Calls, SMS, MMS, 3G/2G, Mobile data, Data limit
 * Loudspeaker in call, Manual network search
 * Usb mass storage, Usb debugging
-* Wi-Fi, Bluetooth, Bluetooth headset
+* Wi-Fi, Bluetooth, Bluetooth headset, A2DP (Bluetooth Music), Car dock w/BT
 * GPS, Sensors, Lights, Touch screen
 * Funny SIM (128k USIMs)
 * Browser, GMail, GPlay
@@ -30,5 +30,4 @@ Visit http://review.androidarmv6.org for the Gerrit instance.
 
 * Wi-Fi wakelock because of the old bcm4325 wireless driver
 * Wi-Fi tethering
-* Routing audio to A2DP (Bluetooth Music)
 * Swipe in stock keyboard because of missing armv6 libs
