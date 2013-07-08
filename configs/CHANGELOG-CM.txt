@@ -14,7 +14,7 @@ Visit http://review.androidarmv6.org for the Gerrit instance.
 * Fully functional camera (preview, taking photo, recording video, panorama)
 * Full H/W acceleration with new adreno drivers, 3D modelling (yamato)
 * Hardware decoding of videos, Youtube HQ videos
-* Internet sharing (Bluetooth tethering, USB tethering)
+* Internet sharing (Bluetooth tethering, USB tethering, Wi-Fi hotspot)
 * Calls, SMS, MMS, 3G/2G, Mobile data, Data limit
 * Loudspeaker in call, Manual network search
 * Usb mass storage, Usb debugging
@@ -29,6 +29,5 @@ Visit http://review.androidarmv6.org for the Gerrit instance.
 ### KNOWN ISSUES
 
 * Wi-Fi wakelock because of the old bcm4325 wireless driver
-* Wi-Fi tethering
 * Routing audio to A2DP (Bluetooth Music)
 * Swipe in stock keyboard because of missing armv6 libs
