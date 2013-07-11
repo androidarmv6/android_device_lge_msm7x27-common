@@ -256,7 +256,7 @@ on boot
 service qmuxd /system/bin/qmuxd
     class core
     user radio
-    group radio audio inet bluetooth
+    group radio audio inet bluetooth gps qcom_diag
 
 # configure BT on boot for BlueZ support
 service config_bluetooth /system/bin/sh /system/bin/init.qcom.bt.sh "onboot"
