@@ -214,6 +214,10 @@ public:
 protected:
     virtual status_t    dump(int fd, const Vector<String16>& args);
 
+    //A2DP variables
+    audio_stream_out   *mA2dpStream;
+    audio_hw_device_t  *mA2dpDevice;
+
 private:
 
     status_t    doAudioRouteOrMute(uint32_t device);

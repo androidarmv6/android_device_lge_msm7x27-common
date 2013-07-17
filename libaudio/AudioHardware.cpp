@@ -209,6 +209,9 @@ AudioHardware::AudioHardware() :
         ioctl(m7xsnddriverfd, SND_AGC_CTL, &AUTO_VOLUME_ENABLED);
     }
 	else ALOGE("Could not open MSM SND driver.");
+
+    mA2dpDevice = NULL;
+    mA2dpStream = NULL;
 }
 
 AudioHardware::~AudioHardware()
@@ -450,14 +453,55 @@ status_t AudioHardware::setParameters(const String8& keyValuePairs)
     int devices;
     if (param.getInt(key, devices) == NO_ERROR) {
        setFmOnOff(true);
+       doRouting(NULL);
     }
     key = String8(FM_OFF_KEY);
     if (param.getInt(key, devices) == NO_ERROR) {
        setFmOnOff(false);
+       doRouting(NULL);
     }
 #endif
+
+    key = String8(AudioParameter::keyRouting);
+    if (param.getInt(key, device) == NO_ERROR) {
+        // Ignore routing if device is 0.
+        if(device) {
+            doRouting(device);
+        }
+        param.remove(key);
+    }
+
+    key = String8("a2dp_connected");
+    if (param.get(key, value) == NO_ERROR) {
+        if (value == "true") {
+            //status_t err = openExtOutput(AudioSystem::DEVICE_OUT_ALL_A2DP);
+        } else {
+            //status_t err = closeExtOutput(AudioSystem::DEVICE_OUT_ALL_A2DP);
+        }
+        param.remove(key);
+    }
+
+    key = String8("A2dpSuspended");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpDevice != NULL) {
+            mA2dpDevice->set_parameters(mA2dpDevice,keyValuePairs);
+            if(value=="true"){
+                 //uint32_t activeUsecase = getExtOutActiveUseCases_l();
+                 //status_t err = suspendPlaybackOnExtOut_l(activeUsecase);
+            }
+        }
+        param.remove(key);
+    }
+
+    key = String8("a2dp_sink_address");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpStream != NULL) {
+            mA2dpStream->common.set_parameters(&mA2dpStream->common,keyValuePairs);
+        }
+        param.remove(key);
+    }
     
-    doRouting(NULL);
+    
 
     return NO_ERROR;
 }
@@ -466,12 +510,34 @@ String8 AudioHardware::getParameters(const String8& keys)
 {
     AudioParameter param = AudioParameter(keys);
     String8 value;
+    int device;
 
     String8 key = String8(DUALMIC_KEY);
 
     if (param.get(key, value) == NO_ERROR) {
         value = String8(mDualMicEnabled ? "true" : "false");
         param.add(key, value);
+    }
+
+    key = String8("A2dpSuspended");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpDevice != NULL) {
+            value = mA2dpDevice->get_parameters(mA2dpDevice,key);
+        }
+        param.add(key, value);
+    }
+
+    key = String8("a2dp_sink_address");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpStream != NULL) {
+            value = mA2dpStream->common.get_parameters(&mA2dpStream->common,key);
+        }
+        param.add(key, value);
+    }
+
+    key = String8(AudioParameter::keyRouting);
+    if (param.getInt(key, device) == NO_ERROR) {
+        param.addInt(key, mCurDevice);
     }
 
     ALOGV("AudioHardware::getParameters() %s", param.toString().string());

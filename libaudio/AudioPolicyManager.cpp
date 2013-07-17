@@ -338,14 +338,15 @@ status_t AudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
     // handle output devices
     if (audio_is_output_device(device)) {
 
-        if (!mHasA2dp && audio_is_a2dp_device(device)) {
+        //Use QCOM's a2dp and usb audio solution, no need to check here
+        /*if (!mHasA2dp && audio_is_a2dp_device(device)) {
             ALOGE("setDeviceConnectionState() invalid A2DP device: %x", device);
             return BAD_VALUE;
         }
         if (!mHasUsb && audio_is_usb_device(device)) {
             ALOGE("setDeviceConnectionState() invalid USB audio device: %x", device);
             return BAD_VALUE;
-        }
+        }*/
 
         // save a copy of the opened output descriptors before any output is opened or closed
         // by checkOutputsForDevice(). This will be needed by checkOutputForAllStrategies()
@@ -368,9 +369,15 @@ status_t AudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
             // register new device as available
             mAvailableOutputDevices = (audio_devices_t)(mAvailableOutputDevices | device);
 
+            if (audio_is_a2dp_device(device)) {
+               AudioParameter param;
+               param.add(String8("a2dp_connected"), String8("true"));
+               mpClientInterface->setParameters(0, param.toString());
+            }
+
             if (!outputs.isEmpty()) {
                 String8 paramStr;
-                if (mHasA2dp && audio_is_a2dp_device(device)) {
+                if (audio_is_a2dp_device(device)) {
                     // handle A2DP device connection
                     AudioParameter param;
                     param.add(String8(AUDIO_PARAMETER_A2DP_SINK_ADDRESS), String8(device_address));
@@ -405,11 +412,16 @@ status_t AudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
             // remove device from available output devices
             mAvailableOutputDevices = (audio_devices_t)(mAvailableOutputDevices & ~device);
 
-            checkOutputsForDevice((audio_devices_t)device, state, outputs);
-            if (mHasA2dp && audio_is_a2dp_device(device)) {
+            checkOutputsForDevice(device, state, outputs);
+            if (audio_is_a2dp_device(device)) {
                 // handle A2DP device disconnection
                 mA2dpDeviceAddress = "";
                 mA2dpSuspended = false;
+
+                AudioParameter param;
+                param.add(String8("a2dp_connected"), String8("false"));
+                mpClientInterface->setParameters(0, param.toString());
+
             } else if (audio_is_bluetooth_sco_device(device)) {
                 // handle SCO device disconnection
                 mScoDeviceAddress = "";
@@ -454,9 +466,23 @@ status_t AudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
         }
 
         updateDevicesAndOutputs();
-        for (size_t i = 0; i < mOutputs.size(); i++) {
-            setOutputDevice(mOutputs.keyAt(i), getNewDevice(mOutputs.keyAt(i), true /*fromCache*/));
+#ifdef QCOM_PROXY_DEVICE_ENABLED
+        if (state == AudioSystem::DEVICE_STATE_AVAILABLE &&
+                audio_is_a2dp_device(device) &&
+                (mAvailableOutputDevices & AUDIO_DEVICE_OUT_PROXY)) {
+            ALOGV("Delay the proxy device open");
+            return NO_ERROR;
         }
+#endif
+
+        for (int i = mOutputs.size() -1; i >= 0; i--) {
+            audio_devices_t newDevice = getNewDevice(mOutputs.keyAt(i), true /*fromCache*/);
+            setOutputDevice(mOutputs.keyAt(i),
+                            getNewDevice(mOutputs.keyAt(i), true /*fromCache*/),
+                            true,
+                            0);
+        }
+
 
         if (device == AUDIO_DEVICE_OUT_WIRED_HEADSET) {
             device = AUDIO_DEVICE_IN_WIRED_HEADSET;
