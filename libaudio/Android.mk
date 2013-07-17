@@ -31,6 +31,8 @@ LOCAL_WHOLE_STATIC_LIBRARIES := libaudiopolicy_legacy
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE_TAGS := optional
 
+LOCAL_C_INCLUDES += hardware/libhardware/include
+LOCAL_C_INCLUDES += hardware/libhardware_legacy/include
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
@@ -54,7 +56,7 @@ LOCAL_SRC_FILES := \
     AudioHardware.cpp \
     audio_hw_hal.cpp
 
-LOCAL_SHARED_LIBRARIES := libcutils libutils libmedia libhardware_legacy
+LOCAL_SHARED_LIBRARIES := libcutils libutils libmedia libhardware libhardware_legacy
 ifneq ($(TARGET_SIMULATOR),true)
     LOCAL_SHARED_LIBRARIES += libdl
 endif
@@ -66,6 +68,8 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS += -fno-short-enums
 
+LOCAL_C_INCLUDES += hardware/libhardware/include
+LOCAL_C_INCLUDES += hardware/libhardware_legacy/include
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 

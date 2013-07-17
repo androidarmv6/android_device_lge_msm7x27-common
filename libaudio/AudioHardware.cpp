@@ -34,9 +34,7 @@
 #include <errno.h>
 
 #include <cutils/properties.h> // for property_get
-
 // hardware specific functions
-
 #include "AudioHardware.h"
 //#include <media/AudioRecord.h>
 
@@ -209,6 +207,10 @@ AudioHardware::AudioHardware() :
         ioctl(m7xsnddriverfd, SND_AGC_CTL, &AUTO_VOLUME_ENABLED);
     }
 	else ALOGE("Could not open MSM SND driver.");
+
+    mA2dpDevice = NULL;
+    mA2dpStream = NULL;
+    mExtOutStream = NULL;
 }
 
 AudioHardware::~AudioHardware()
@@ -379,6 +381,7 @@ status_t AudioHardware::setParameters(const String8& keyValuePairs)
     AudioParameter param = AudioParameter(keyValuePairs);
     String8 value;
     String8 key;
+    int device;
     const char BT_NREC_KEY[] = "bt_headset_nrec";
     const char BT_NAME_KEY[] = "bt_headset_name";
     const char BT_NREC_VALUE_ON[] = "on";
@@ -450,14 +453,55 @@ status_t AudioHardware::setParameters(const String8& keyValuePairs)
     int devices;
     if (param.getInt(key, devices) == NO_ERROR) {
        setFmOnOff(true);
+       doRouting(NULL);
     }
     key = String8(FM_OFF_KEY);
     if (param.getInt(key, devices) == NO_ERROR) {
        setFmOnOff(false);
+       doRouting(NULL);
     }
 #endif
+/**************
+    key = String8(AudioParameter::keyRouting);
+    if (param.getInt(key, device) == NO_ERROR) {
+        // Ignore routing if device is 0.
+        if(device) {
+            doRouting(device);
+        }
+        param.remove(key);
+    }
+***************/
+    key = String8("a2dp_connected");
+    if (param.get(key, value) == NO_ERROR) {
+        if (value == "true") {
+            //status_t err = openExtOutput(AudioSystem::DEVICE_OUT_ALL_A2DP);
+        } else {
+            //status_t err = closeExtOutput(AudioSystem::DEVICE_OUT_ALL_A2DP);
+        }
+        param.remove(key);
+    }
+
+    key = String8("A2dpSuspended");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpDevice != NULL) {
+            mA2dpDevice->set_parameters(mA2dpDevice,keyValuePairs);
+            if(value=="true"){
+                 //uint32_t activeUsecase = getExtOutActiveUseCases_l();
+                 //status_t err = suspendPlaybackOnExtOut_l(activeUsecase);
+            }
+        }
+        param.remove(key);
+    }
+
+    key = String8("a2dp_sink_address");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpStream != NULL) {
+            mA2dpStream->common.set_parameters(&mA2dpStream->common,keyValuePairs);
+        }
+        param.remove(key);
+    }
     
-    doRouting(NULL);
+    
 
     return NO_ERROR;
 }
@@ -466,6 +510,7 @@ String8 AudioHardware::getParameters(const String8& keys)
 {
     AudioParameter param = AudioParameter(keys);
     String8 value;
+    int device;
 
     String8 key = String8(DUALMIC_KEY);
 
@@ -474,9 +519,33 @@ String8 AudioHardware::getParameters(const String8& keys)
         param.add(key, value);
     }
 
+    key = String8("A2dpSuspended");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpDevice != NULL) {
+            value = mA2dpDevice->get_parameters(mA2dpDevice,key);
+        }
+        param.add(key, value);
+    }
+
+    key = String8("a2dp_sink_address");
+    if (param.get(key, value) == NO_ERROR) {
+        if (mA2dpStream != NULL) {
+            value = mA2dpStream->common.get_parameters(&mA2dpStream->common,key);
+        }
+        param.add(key, value);
+    }
+
+    key = String8(AudioParameter::keyRouting);
+    if (param.getInt(key, device) == NO_ERROR) {
+        param.addInt(key, mCurDevice);
+    }
+
     ALOGV("AudioHardware::getParameters() %s", param.toString().string());
     return param.toString();
 }
+
+
+
 
 int check_and_set_audpp_parameters(char *buf, int size)
 {
@@ -1581,6 +1650,94 @@ AudioHardware::AudioStreamInMSM72xx *AudioHardware::getActiveInput_l()
 
     return NULL;
 }
+
+status_t AudioHardware::openExtOutput(int device) {
+
+    ALOGV("openExtOutput");
+    status_t err = NO_ERROR;
+    //Mutex::Autolock autolock1(mExtOutMutex);
+    if (device & AudioSystem::DEVICE_OUT_ALL_A2DP) {
+        err= openA2dpOutput();
+        if(err) {
+            ALOGE("openA2DPOutput failed = %d",err);
+            return err;
+        }
+        if(!mExtOutStream) {
+            mExtOutStream = mA2dpStream;
+        }
+    }
+    return err;
+}
+
+status_t AudioHardware::closeExtOutput(int device) {
+
+    ALOGV("closeExtOutput");
+    status_t err = NO_ERROR;
+    //Mutex::Autolock autolock1(mExtOutMutex);
+    if (device & AudioSystem::DEVICE_OUT_ALL_A2DP) {
+        if(mExtOutStream == mA2dpStream)
+            mExtOutStream = NULL;
+        err= closeA2dpOutput();
+        if(err) {
+            ALOGE("closeA2DPOutput failed = %d",err);
+            return err;
+        }
+    }
+    return err;
+}
+
+status_t AudioHardware::openA2dpOutput()
+{
+    int rc;
+    const hw_module_t *mod;
+    int      format = AUDIO_FORMAT_PCM_16_BIT;
+    uint32_t channels = AUDIO_CHANNEL_OUT_STEREO;
+    uint32_t sampleRate = AFE_PROXY_SAMPLE_RATE;
+    status_t status;
+    ALOGV("openA2dpOutput");
+    struct audio_config config;
+    config.sample_rate = AFE_PROXY_SAMPLE_RATE;
+    config.channel_mask = AUDIO_CHANNEL_OUT_STEREO;
+    config.format = AUDIO_FORMAT_PCM_16_BIT;
+
+    //TODO : Confirm AUDIO_HARDWARE_MODULE_ID_A2DP ???
+    rc = hw_get_module_by_class(AUDIO_HARDWARE_MODULE_ID/*_A2DP*/, (const char*)"a2dp", &mod);
+    if (rc) {
+        ALOGE("Could not get a2dp hardware module");
+        return NO_INIT;
+    }
+
+    rc = audio_hw_device_open(mod, &mA2dpDevice);
+    if(rc) {
+        ALOGE("couldn't open a2dp audio hw device");
+        return NO_INIT;
+    }
+    //TODO: unique id 0?
+    status = mA2dpDevice->open_output_stream(mA2dpDevice, 0,((audio_devices_t)(AudioSystem::DEVICE_OUT_BLUETOOTH_A2DP)),
+                                    (audio_output_flags_t)AUDIO_OUTPUT_FLAG_NONE, &config, &mA2dpStream);
+    if(status != NO_ERROR) {
+        ALOGE("Failed to open output stream for a2dp: status %d", status);
+    }
+    return status;
+}
+
+status_t AudioHardware::closeA2dpOutput()
+{
+    ALOGV("closeA2dpOutput");
+    if(!mA2dpDevice){
+        ALOGE("No Aactive A2dp output found");
+        return NO_ERROR;
+    }
+
+    mA2dpDevice->close_output_stream(mA2dpDevice, mA2dpStream);
+    mA2dpStream = NULL;
+
+    audio_hw_device_close(mA2dpDevice);
+    mA2dpDevice = NULL;
+    return NO_ERROR;
+}
+
+
 // ----------------------------------------------------------------------------
 
 AudioHardware::AudioStreamOutMSM72xx::AudioStreamOutMSM72xx() :

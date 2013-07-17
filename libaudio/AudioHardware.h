@@ -24,6 +24,7 @@
 #include <utils/threads.h>
 #include <utils/SortedVector.h>
 
+#include <hardware/hardware.h>
 #include <hardware_legacy/AudioHardwareBase.h>
 
 extern "C" {
@@ -34,10 +35,10 @@ extern "C" {
 #include <linux/msm_audio_qcp.h>
 }
 
-using namespace android;
-
 namespace android_audio_legacy {
 
+using android::Mutex;
+using android::Condition;
 
 #ifdef P500_SPEAKER_IN_CALL_FIX
 #define AudioSystem_SPEAKER_IN_CALL AudioSystem::DEVICE_OUT_PROXY
@@ -162,6 +163,9 @@ enum tty_modes {
 #define AUDIO_HW_IN_CHANNELS (AudioSystem::CHANNEL_IN_MONO) // Default audio input channel mask
 #define AUDIO_HW_IN_BUFFERSIZE 2048                 // Default audio input buffer size
 #define AUDIO_HW_IN_FORMAT (AudioSystem::PCM_16_BIT)  // Default audio input sample format
+
+
+#define AFE_PROXY_SAMPLE_RATE 48000
 // ----------------------------------------------------------------------------
 
 class AudioHardware : public  AudioHardwareBase
@@ -214,7 +218,17 @@ public:
 protected:
     virtual status_t    dump(int fd, const Vector<String16>& args);
 
+    //A2DP variables
+    audio_stream_out   *mA2dpStream;
+    audio_hw_device_t  *mA2dpDevice;
+    audio_stream_out   *mExtOutStream;
+
 private:
+
+    status_t     openExtOutput(int device);
+    status_t     closeExtOutput(int device);
+    status_t     openA2dpOutput();
+    status_t     closeA2dpOutput();
 
     status_t    doAudioRouteOrMute(uint32_t device);
     status_t    setMicMute_nosync(bool state);
@@ -329,6 +343,7 @@ private:
             int mFmRadioEnabled;
             int mFmPrev;
 #endif
+            int32_t mCurDevice;
 
      friend class AudioStreamInMSM72xx;
             android::Mutex       mLock;
