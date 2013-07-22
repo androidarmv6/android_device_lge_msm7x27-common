@@ -122,9 +122,9 @@ PRODUCT_PACKAGES += \
     hwaddrs
 
 # Offmode charging
-PRODUCT_PACKAGES += \
-    charger \
-    charger_res_images
+#PRODUCT_PACKAGES += \
+#    charger \
+#    charger_res_images
 
 # Inherit qcom/msm7x27
 $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
