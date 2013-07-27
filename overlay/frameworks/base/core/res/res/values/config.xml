@@ -101,7 +101,7 @@
     <string name="config_geocodeProviderPackageName" translatable="false">com.google.android.location</string> -->
 
     <!-- Boolean indicating if current platform supports quick switch-on/off of Bluetooth Module -->
-    <bool name="config_bluetooth_adapter_quick_switch">false</bool>
+    <!--<bool name="config_bluetooth_adapter_quick_switch">false</bool>-->
     
     <bool name="config_forceDisableHardwareKeyboard">true</bool>
     
