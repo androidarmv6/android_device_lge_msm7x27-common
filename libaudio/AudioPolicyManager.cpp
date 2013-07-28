@@ -199,7 +199,7 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
             device2 = mAvailableOutputDevices & AUDIO_DEVICE_OUT_AUX_DIGITAL;
         }
 #else
-        uint32_t device2 = mAvailableOutputDevices & AUDIO_DEVICE_OUT_AUX_DIGITAL;
+        device2 = mAvailableOutputDevices & AUDIO_DEVICE_OUT_AUX_DIGITAL;
 #endif
 
 #ifdef WITH_A2DP
@@ -528,19 +528,14 @@ bool AudioPolicyManager::isStreamActive(int stream, uint32_t inPastMs) const
         }
     }
 
+#ifdef QCOM_FM_ENABLED
     if (stream == AudioSystem::MUSIC && (mAvailableOutputDevices & AUDIO_DEVICE_OUT_FM)) {
         return true;
     }
+#endif
 
     return false;
 }
-
-
-
-
-
-
-
 
 }; // namespace android_audio_legacy
 
