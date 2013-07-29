@@ -92,6 +92,8 @@ PRODUCT_PACKAGES += \
     setup_fs
 
 ## BlueZ support
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/bluetooth/stack.conf:system/bluetooth/data/stack.conf
 
 # Download BT firmware
 PRODUCT_COPY_FILES += \
