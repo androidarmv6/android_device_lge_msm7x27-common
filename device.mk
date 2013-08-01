@@ -104,8 +104,7 @@ PRODUCT_COPY_FILES += \
     system/bluetooth/data/blacklist.conf:system/etc/bluetooth/blacklist.conf \
     system/bluetooth/data/input.conf:system/etc/bluetooth/input.conf \
     system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf \
-    system/bluetooth/data/network.conf:system/etc/bluetooth/network.conf \
-    system/bluetooth/data/stack.conf:system/etc/bluetooth/stack.conf
+    system/bluetooth/data/network.conf:system/etc/bluetooth/network.conf
 
 # javax.btobex is required by Bluetooth_msm
 PRODUCT_PACKAGES += \
