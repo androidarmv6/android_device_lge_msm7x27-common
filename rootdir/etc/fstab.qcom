@@ -1,0 +1,33 @@
+# Android fstab file.
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+ 
+#TODO: Add 'check' as fs_mgr_flags with data partition.
+# Currently we dont have e2fsck compiled. So fs check would failed.
+
+#<src> 							<mnt_point>		<type>	<mnt_flags and options>							<fs_mgr_flags>
+/dev/block/mtdblock0					/boot			mtd	defaults								defaults
+/dev/block/mtdblock8					/cache			ext4	nosuid,nodev,barrier=1							wait,check
+/dev/block/mtdblock9					/data			ext4	nosuid,nodev,noatime,noauto_da_alloc,journal_async_commit,errors=panic	wait,check,encryptable=footer
+/dev/block/mtdblock7					/misc			mtd	defaults								defaults
+/dev/block/mtdblock2					/recovery		mtd	defaults								defaults
+/dev/block/mtdblock1					/system			ext4	ro,errors=panic								wait
+/devices/platform/msm_sdcc.1/mmc_host/mmc0		/storage/sdcard0	vfat	defaults								voldmanaged=sdcard:auto
+/dev/block/mmcblk0p1					/sdcard			vfat	defaults								recoveryonly
+
+# Old recovery.fstab
+# /boot		mtd		boot			/dev/block/mtdblock0
+# /cache	yaffs2		cache			/dev/block/mtdblock8
+# /data		yaffs2		userdata		/dev/block/mtdblock9
+# /misc		mtd		misc			/dev/block/mtdblock7
+# /recovery	mtd		recovery		/dev/block/mtdblock2
+# /sdcard	vfat		/dev/block/mmcblk0p1	/dev/block/mmcblk0
+# /system	yaffs2		system			/dev/block/mtdblock1
+# /sd-ext	ext4		/dev/block/mmcblk0p2
+# 				lgdrm			/dev/block/mtdblock3
+#				splash			/dev/block/mtdblock4
+#				FOTABIN			/dev/block/mtdblock5
+#				FOTA			/dev/block/mtdblock6
+#
+# Old vold.fstab file
+# dev_mount sdcard /storage/sdcard0 auto /devices/platform/msm_sdcc.1/mmc_host/mmc0
