@@ -2,15 +2,6 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/root/initlogo.rle:root/initlogo.rle \
-    $(LOCAL_PATH)/root/init.qcom.rc:root/init.qcom.rc \
-    $(LOCAL_PATH)/root/init.qcom.usb.rc:root/init.qcom.usb.rc \
-    $(LOCAL_PATH)/root/init.qcom.bluez.rc:root/init.qcom.bluez.rc \
-    $(LOCAL_PATH)/root/init.qcom.sh:root/init.qcom.sh \
-    $(LOCAL_PATH)/root/ueventd.qcom.rc:root/ueventd.qcom.rc \
-    $(LOCAL_PATH)/root/default.prop:root/default.prop
-
-PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
 PRODUCT_COPY_FILES += \
@@ -25,8 +16,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/configs/nvram.txt:system/etc/wl/nvram.txt \
-    $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab \
-    $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+    $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+    $(LOCAL_PATH)/configs/default.prop:root/default.prop
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
@@ -55,6 +46,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.gr.numframebuffers=3 \
     persist.sys.purgeable_assets=1 \
     persist.service.adb.enable=1
+    
+# Ramdisk
+PRODUCT_PACKAGES += \
+    fstab.qcom \
+    initlogo.rle \
+    init.qcom.bluez.rc \
+    init.qcom.rc \
+    init.qcom.usb.rc \
+    ueventd.qcom.rc
 
 # Audio
 PRODUCT_PACKAGES += \

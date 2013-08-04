@@ -77,6 +77,9 @@ on fs
     # framebuffer permission for copybit
     chmod 0666 /dev/graphics/fb0
 
+    # mount file system
+    mount_all /fstab.qcom
+
 
 ################
 ## 6: POST-FS ##
