@@ -20,6 +20,15 @@ app/NoiseField.apk
 app/PhaseBeam.apk
 app/VisualizationWallpapers.apk
 
+# Some extra apps
+app/Apollo.apk
+app/CellBroadcastReceiver.apk
+app/DeskClock.apk
+app/Development.apk
+app/Exchange2.apk
+app/Gallery2.apk
+app/LockClock.apk
+
 # Pico TTS Language Files (5MB)
 tts/lang_pico/en-GB_kh0_sg.bin
 tts/lang_pico/en-GB_ta.bin
@@ -72,6 +81,22 @@ media/audio/ringtones/Vespa.ogg
 media/audio/ringtones/Whisperer.ogg
 media/audio/ringtones/WobblyRinger.ogg
 media/audio/ringtones/Zeta.ogg
+#---
+media/audio/ringtones/Ring_Classic_02.ogg
+media/audio/ringtones/Ring_Classic_03.ogg
+media/audio/ringtones/Ring_Classic_04.ogg
+media/audio/ringtones/Ring_Classic_05.ogg
+media/audio/ringtones/Ring_Digital_01.ogg
+media/audio/ringtones/Ring_Digital_02.ogg
+media/audio/ringtones/Ring_Digital_03.ogg
+media/audio/ringtones/Ring_Digital_04.ogg
+media/audio/ringtones/Ring_Digital_05.ogg
+media/audio/ringtones/Ring_Synth_01.ogg
+media/audio/ringtones/Ring_Synth_02.ogg
+media/audio/ringtones/Ring_Synth_03.ogg
+media/audio/ringtones/Ring_Synth_04.ogg
+media/audio/ringtones/Ring_Synth_05.ogg
+
 
 # Alarms (678KB)
 media/audio/alarms/Barium.ogg
@@ -137,6 +162,27 @@ media/audio/notifications/Upsilon.ogg
 media/audio/notifications/Vega.ogg
 media/audio/notifications/Xenon.ogg
 media/audio/notifications/Zirconium.ogg
+#---
+media/audio/notifications/Bees_Knees.ogg
+media/audio/notifications/Cheeper.ogg
+media/audio/notifications/Cricket.ogg
+media/audio/notifications/Doink.ogg
+media/audio/notifications/Drip.ogg
+media/audio/notifications/F1_MissedCall.ogg
+media/audio/notifications/F1_New_MMS.ogg
+media/audio/notifications/F1_New_SMS.ogg
+media/audio/notifications/Heaven.ogg
+media/audio/notifications/IM_Me.ogg
+media/audio/notifications/Moonbeam.ogg
+media/audio/notifications/Pixiedust.ogg
+media/audio/notifications/Pizzicato.ogg
+media/audio/notifications/Plastic_Pipe.ogg
+media/audio/notifications/ShortCircuit.ogg
+media/audio/notifications/SpaceSeed.ogg
+media/audio/notifications/Star_Struck.ogg
+media/audio/notifications/TaDa.ogg
+media/audio/notifications/Tinkerbell.ogg
+media/audio/notifications/Tweeters.ogg
 
 # from VideoPackage2
 media/video/AndroidInSpace.240p.mp4
