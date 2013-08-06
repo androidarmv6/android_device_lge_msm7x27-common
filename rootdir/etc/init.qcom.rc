@@ -51,12 +51,6 @@ on init
     write /sys/module/lowmemorykiller/parameters/minfile 0,0,0,5120,5632,6144
     write /sys/module/lowmemorykiller/parameters/check_filepages 1
 
-    # fix for enropy service and some other that failed
-    chmod 0755 /data/system/appwidgets.xml
-    chmod 0755 /data/system/entropy.dat
-    chmod 0755 /data/system/wallpaper_info.xml
-
-
 #################
 ## 3: EARLY-FS ##
 #################
@@ -176,8 +170,11 @@ on early-boot
 #############
 on boot
 
-    mount debugfs /sys/kernel/debug /sys/kernel/debug
-    
+    #mount debugfs /sys/kernel/debug /sys/kernel/debug
+
+    # allow reading kernel command line
+    chmod 0644 /proc/cmdline
+
     # radio
     mkdir /data/radio 0770 radio radio
     chmod 2770 /data/radio
