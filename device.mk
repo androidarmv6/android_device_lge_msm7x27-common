@@ -56,6 +56,10 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.rc \
     ueventd.qcom.rc
 
+# USBMS for recovery
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/init.qcom.usb.rc:root/init.recovery.$(TARGET_DEVICE).rc
+
 # Audio
 PRODUCT_PACKAGES += \
     audio_policy.msm7x27 \
