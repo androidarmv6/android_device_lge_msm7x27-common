@@ -41,11 +41,16 @@ BOARD_KERNEL_BASE := 0x12800000
 BOARD_KERNEL_PAGESIZE := 2048
 
 ## SELinux
-BOARD_SEPOLICY_DIRS += device/lge/msm7x27-common/sepolicy
+BOARD_SEPOLICY_DIRS += \
+    device/lge/msm7x27-common/sepolicy
+
 BOARD_SEPOLICY_UNION += \
-    genfs_contexts \
     file_contexts \
-    sepolicy.te
+    init.te \
+    surfaceflinger.te \
+    sepolicy.te \
+    ueventd.te \
+    wpa_supplicant.te
 
 ## Partition Sizes: Fix this up by examining /proc/mtd on a running device
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00440000
