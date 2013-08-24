@@ -49,7 +49,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     
 # Ramdisk
 PRODUCT_PACKAGES += \
-    fstab.qcom \
     initlogo.rle \
     init.qcom.bluez.rc \
     init.qcom.rc \
@@ -58,7 +57,7 @@ PRODUCT_PACKAGES += \
 
 # USBMS for recovery
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/init.qcom.usb.rc:root/init.recovery.$(TARGET_DEVICE).rc
+    $(LOCAL_PATH)/rootdir/etc/init.qcom.usb.rc:root/init.recovery.$(TARGET_BOOTLOADER_BOARD_NAME).rc
 
 # Audio
 PRODUCT_PACKAGES += \

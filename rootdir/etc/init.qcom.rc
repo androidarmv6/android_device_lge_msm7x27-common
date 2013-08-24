@@ -71,11 +71,6 @@ on fs
     # framebuffer permission for copybit
     chmod 0666 /dev/graphics/fb0
 
-    # Don't mount all
-    # init.rc mounts all mtd partitions
-    # mount_all /fstab.qcom
-
-
 ################
 ## 6: POST-FS ##
 ################
