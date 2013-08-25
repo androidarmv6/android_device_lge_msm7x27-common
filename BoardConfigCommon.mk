@@ -44,15 +44,16 @@ BOARD_SEPOLICY_DIRS += \
 
 BOARD_SEPOLICY_UNION += \
     dhcp.te \
-#   domain.te is commented out on purpose. Do not uncomment until it is fixed.
-#   domain.te \
     file_contexts \
     init.te \
     mediaserver.te \
     surfaceflinger.te \
     sepolicy.te \
     ueventd.te \
-    wpa_supplicant.te
+    wpa_supplicant.te \
+#   domain.te \
+#   domain.te is commented out on purpose. Do not uncomment until it is fixed.
+
 
 ## Partition Sizes: Fix this up by examining /proc/mtd on a running device
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00440000
