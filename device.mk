@@ -8,10 +8,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/root/init.qcom.bluez.rc:root/init.qcom.bluez.rc \
     $(LOCAL_PATH)/root/init.qcom.sh:root/init.qcom.sh \
     $(LOCAL_PATH)/root/ueventd.qcom.rc:root/ueventd.qcom.rc \
-    $(LOCAL_PATH)/root/default.prop:root/default.prop
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
+    $(LOCAL_PATH)/root/default.prop:root/default.prop \
+    $(LOCAL_PATH)/root/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/CHANGELOG-CM.txt:system/etc/CHANGELOG-CM.txt \
@@ -27,6 +25,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/nvram.txt:system/etc/wl/nvram.txt \
     $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab \
     $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilts/bin/sysinit:system/bin/sysinit
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
