@@ -188,6 +188,12 @@ on boot
     chown system system /sys/class/leds/flashlight/brightness
     chown system system /sys/class/leds/lcd-backlight/brightness
     chown system system /sys/class/leds/keyboard-backlight/brightness
+    
+    # Run init.d
+    exec /system/bin/sysinit
+
+    class_start core 
+    class_start main
 
     # wifi
     mkdir /data/misc 01771 system misc
