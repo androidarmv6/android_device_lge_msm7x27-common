@@ -1,5 +1,5 @@
 import /init.qcom.usb.rc
-import /init.qcom.bluez.rc
+import /init.qcom.bluetooth.rc
 
 ###################
 ## 1: EARLY-INIT ##
@@ -12,7 +12,7 @@ on early-init
     mkdir /cache 0771 system cache
     mkdir /sd-ext 0771 system system
 
-    mkdir /storage 0775 system sdcard_r
+    mkdir /storage 0050 system sdcard_r
     mkdir /storage/sdcard0 0000 system system
     symlink /storage/sdcard0 /mnt/sdcard
     symlink /storage/sdcard0 /sdcard
@@ -50,11 +50,6 @@ on init
     # Enable low memory killer to check file pages
     write /sys/module/lowmemorykiller/parameters/minfile 0,0,0,5120,5632,6144
     write /sys/module/lowmemorykiller/parameters/check_filepages 1
-
-    # fix for enropy service and some other that failed
-    chmod 0755 /data/system/appwidgets.xml
-    chmod 0755 /data/system/entropy.dat
-    chmod 0755 /data/system/wallpaper_info.xml
 
 
 #################
@@ -198,11 +193,6 @@ on boot
     chown dhcp dhcp /data/misc/dhcp
     mkdir /data/system 0775 system system
 
-    # allow interfaces to get IPv6 address when tethering is enabled
-    write /proc/sys/net/ipv6/conf/rmnet0/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet1/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet2/accept_ra 2
-
     # Fast dormancy
     setprop ro.ril.fast.dormancy.rule 1
     setprop ro.ril.fd.scron.timeout 4
@@ -230,16 +220,10 @@ on boot
     write /proc/sys/net/ipv6/conf/rmnet0/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet1/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet2/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet3/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet4/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet5/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet6/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet7/accept_ra 2
 
     write /proc/sys/net/ipv6/conf/rmnet_usb0/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_usb1/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_usb2/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_usb3/accept_ra 2
 
     # To prevent out of order acknowledgements from making
     # connection tracking to treat them as not belonging to
@@ -275,7 +259,7 @@ service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
 on property:service.brcm.bt.mac=*
     exec /system/bin/hwaddrs
 
-service wpa_supplicant /system/bin/logwrapper /system/bin/wpa_supplicant -Dwext -iwlan0 -W -c/data/misc/wifi/wpa_supplicant.conf
+service wpa_supplicant /system/bin/wpa_supplicant -Dwext -iwlan0 -W -c/data/misc/wifi/wpa_supplicant.conf
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
