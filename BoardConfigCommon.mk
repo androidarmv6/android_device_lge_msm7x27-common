@@ -14,14 +14,18 @@
 # limitations under the License.
 #
 
-## Define BOARD_HAVE_BLUETOOTH_BLUEZ before device/qcom/msm7x27/BoardConfigCommon.mk
-## Bluetooth
-BOARD_HAVE_BLUETOOTH_BLUEZ := true
-BOARD_HAVE_BLUETOOTH_BCM := true
-#BOARD_BLUEDROID_VENDOR_CONF := device/lge/msm7x27-common/bluetooth/libbt_lge.txt
-
 # Use the Qualcomm common folder
 include device/qcom/msm7x27/BoardConfigCommon.mk
+
+## Bluetooth
+BOARD_HAVE_BLUETOOTH_BCM := true
+# Note: BOARD_HAVE_BLUETOOTH_BLUEZ is defined in
+# device/lge/msm7x27-common/device.mk due to inheritance issues.
+ifndef BOARD_HAVE_BLUETOOTH_BLUEZ
+	BOARD_HAVE_BLUETOOTH := true
+	BOARD_BLUEDROID_VENDOR_CONF := device/lge/msm7x27-common/bluetooth/libbt_lge.txt
+endif
+
 
 ## Boot loader & recovery
 TARGET_BOOTANIMATION_PRELOAD := true
@@ -32,7 +36,6 @@ BOARD_CUSTOM_GRAPHICS := ../../../device/lge/msm7x27-common/recovery/graphics.c
 
 ## Kernel
 TARGET_KERNEL_SOURCE := kernel/lge/msm7x27-3.0.x
-## *** Copy LG Kernel Headers here if necessary, DO NOT use Android auto-generated headers ***
 TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include3x
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x12800000
