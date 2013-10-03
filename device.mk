@@ -4,7 +4,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 ## BlueZ support
 ## Note: needs to be defined here in order to satisfy inheritance issues.
 ## If disabled, Bluedroid will be used.
-BOARD_HAVE_BLUETOOTH_BLUEZ := true
+#BOARD_HAVE_BLUETOOTH_BLUEZ := true
 
 ifdef BOARD_HAVE_BLUETOOTH_BLUEZ
 # BlueZ: binaries
@@ -96,7 +96,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     initlogo.rle \
-    init.qcom.bluez.rc \
     init.qcom.rc \
     init.qcom.usb.rc \
     ueventd.qcom.rc
