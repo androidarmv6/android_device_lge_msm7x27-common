@@ -109,3 +109,6 @@ ENABLE_WEBGL := true
 
 ## OTA script extras file (build/tools/releasetools)
 TARGET_OTA_EXTRAS_FILE := device/lge/msm7x27-common/releasetools/extras.txt
+
+## TEMPORARY HACK: skip building external/chromium_org/
+PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
