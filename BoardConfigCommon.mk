@@ -32,7 +32,7 @@ TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
 BOARD_HAS_NO_SELECT_BUTTON := true
-BOARD_CUSTOM_GRAPHICS := ../../../device/lge/msm7x27-common/recovery/graphics.c
+TARGET_RECOVERY_LCD_BACKLIGHT_PATH := /sys/class/leds/button-backlight/brightness
 
 ## Kernel
 TARGET_KERNEL_SOURCE := kernel/lge/msm7x27-3.0.x
