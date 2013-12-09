@@ -133,6 +133,13 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
+# Use set_perm (no selinux version) instead of set_metadata (selinux version)
+USE_SET_METADATA := false
+
+# KitKat uses selinux enforcing mode by default
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.selinux=permissive
+
 # Offmode charging
 #PRODUCT_PACKAGES += \
 #    charger \
