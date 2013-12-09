@@ -133,6 +133,9 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.selinux=permissive
+
 # Offmode charging
 #PRODUCT_PACKAGES += \
 #    charger \
