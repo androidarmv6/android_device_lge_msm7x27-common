@@ -78,6 +78,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wifi.ap.interface=wl0.1
 
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.selinux=permissive
+
+PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.camera=msm7x27 \
     ro.com.google.locationfeatures=1 \
     ro.com.google.networklocation=1 \
