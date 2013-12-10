@@ -134,7 +134,7 @@ PRODUCT_PACKAGES += \
     setup_fs
 
 # Use set_perm (no selinux version) instead of set_metadata (selinux version)
-USE_SET_METADATA := false
+#USE_SET_METADATA := false
 
 # KitKat uses selinux enforcing mode by default
 PRODUCT_PROPERTY_OVERRIDES += \
