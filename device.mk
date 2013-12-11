@@ -88,8 +88,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hdmi_out=false \
     debug.sf.hw=1 \
-    debug.composition.type=mdp \
+    debug.composition.type=dyn \
     debug.gr.numframebuffers=3 \
+    persist.sys.ui.hw=true \
     persist.sys.purgeable_assets=1 \
     persist.service.adb.enable=1
     
@@ -107,6 +108,7 @@ PRODUCT_PACKAGES += \
 
 # Graphics & Media
 PRODUCT_PACKAGES += \
+    hwcomposer.msm7x27 \
     libdivxdrmdecrypt
 
 # Misc
