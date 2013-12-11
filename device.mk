@@ -87,8 +87,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hdmi_out=false \
-    debug.sf.hw=1 \
-    debug.composition.type=mdp \
     debug.gr.numframebuffers=3 \
     persist.sys.purgeable_assets=1 \
     persist.service.adb.enable=1
