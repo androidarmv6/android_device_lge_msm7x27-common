@@ -151,6 +151,14 @@ $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
 # Install/Uninstall google apps
 $(call inherit-product, vendor/google/gapps_armv6_tiny.mk)
 
+# Dalvik
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.checkjni=false \
+    dalvik.vm.dexopt-data-only=1 \
+    dalvik.vm.dexopt-flags=v=a,o=v,m=y,u=y
+
+$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
+
 # Common assets
 PRODUCT_AAPT_CONFIG := normal mdpi hdpi
 
