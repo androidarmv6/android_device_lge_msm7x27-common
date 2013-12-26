@@ -44,9 +44,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     hwaddrs
 
-
+# USBMS for recovery
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
+    device/lge/msm7x27-common/recovery/init.recovery.msm7x27.rc:root/init.recovery.$(CM_BUILD).rc
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/CHANGELOG-CM.txt:system/etc/CHANGELOG-CM.txt \
