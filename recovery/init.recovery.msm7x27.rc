@@ -1,0 +1,21 @@
+on init
+    write /sys/class/android_usb/android0/functions mass_storage,adb
+    write /sys/class/android_usb/android0/idVendor 1004
+    write /sys/class/android_usb/android0/idProduct 61A6
+
+# RECOVERY: Start adb shell as root
+# Fix USB mass_storage mounting (mass_storage,adb)
+on property:ro.debuggable=1
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/functions mass_storage,adb
+    write /sys/class/android_usb/android0/idVendor 1004
+    write /sys/class/android_usb/android0/idProduct 61A6
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop service.adb.root 1
+
+# Restart adb on adb root
+on property:service.adb.root=1
+    write /sys/class/android_usb/android0/enable 0
+    restart adbd
+    write /sys/class/android_usb/android0/enable 1

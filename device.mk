@@ -47,9 +47,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     hwaddrs
 
-
+# USBMS for recovery
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
+    device/lge/msm7x27-common/recovery/init.recovery.msm7x27.rc:root/init.recovery.$(CM_BUILD).rc
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/CHANGELOG-CM.txt:system/etc/CHANGELOG-CM.txt \
@@ -63,8 +63,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/configs/nvram.txt:system/etc/wl/nvram.txt \
-    $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-    $(LOCAL_PATH)/configs/default.prop:root/default.prop
+    $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
@@ -145,6 +144,16 @@ BOARD_SEPOLICY_UNION += \
 #PRODUCT_PACKAGES += \
 #    charger \
 #    charger_res_images
+
+# Development settings
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.debuggable=1 \
+    ro.secure=0 \
+    ro.allow.mock.location=0
+
+# set default USB configuration
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mass_storage
 
 # Inherit qcom/msm7x27
 $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
