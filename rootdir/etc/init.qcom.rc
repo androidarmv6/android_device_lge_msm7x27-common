@@ -308,20 +308,6 @@ service setapversion /system/bin/lgapversion
 on property:gsm.version.baseband=V07u-000-000-MAR-23-2009
    start setapversion
 
-service qcom-sh /system/bin/sh /init.qcom.sh
-    class core
-    user root
-    oneshot
-
-service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
-    class main
-    user root
-    disabled
-    oneshot
-
-on property:init.svc.bootanim=stopped
-    start qcom-post-boot
-
 service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
     class late_start
     disabled
