@@ -150,7 +150,7 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
 
 # set default USB configuration
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mass_storage
+    persist.sys.usb.config=mtp
 
 # Inherit qcom/msm7x27
 $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
