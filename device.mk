@@ -115,14 +115,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     gps.default \
     librpc
-    
+
 # Build sim toolkit
 PRODUCT_PACKAGES += \
     Stk
-    
+
 # Camera
 PRODUCT_PACKAGES += \
-    camera.msm7x27 \
+    libcamera \
+    camera.msm7x27
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \

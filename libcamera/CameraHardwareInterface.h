@@ -239,4 +239,3 @@ extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId);
 };  // namespace android
 
 #endif
-
