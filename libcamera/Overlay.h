@@ -122,4 +122,3 @@ private:
 }; // namespace android
 
 #endif // ANDROID_OVERLAY_H
-
