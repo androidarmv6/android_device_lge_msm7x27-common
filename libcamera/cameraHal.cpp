@@ -387,69 +387,80 @@ CameraHAL_GetCam_Info(int camera_id, struct camera_info *info)
 void
 CameraHAL_FixupParams(android::CameraParameters &settings)
 {
-   const char *preview_sizes =
-      "640x480,576x432,480x320,384x288,352x288,320x240,240x160,176x144";
+ const char *preview_sizes =
+      "1280x720,800x480,768x432,720x480,640x480,576x432,480x320,384x288,352x288,320x240,240x160,176x144";
    const char *video_sizes =
-      "640x480,352x288,320x240,176x144";
+      "1280x720,800x480,720x480,640x480,352x288,320x240,176x144";
+#if defined(SENSOR_SIZE_5MP)
+   const char *preferred_size       = "640x480";
+#elif defined(SENSOR_SIZE_3MP)
    const char *preferred_size       = "480x320";
-   const char *preview_frame_rates  = "10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25";
+#else /* SENSOR_SIZE_2MP */
+   const char *preferred_size       = "320x240";
+#endif
+   const char *preview_frame_rates  = "30,27,24,15";
    const char *preferred_frame_rate = "15";
-   const char *frame_rate_range     = "(10,25)";
-   const char *preferred_horizontal_viewing_angle = "51.2";
-   const char *preferred_vertical_viewing_angle = "39.4";
+   const char *frame_rate_range     = "(15,30)";
 
-   settings.set(android::CameraParameters::KEY_VIDEO_FRAME_FORMAT,
-                android::CameraParameters::PIXEL_FORMAT_YUV420SP);
+   settings.set(CameraParameters::KEY_VIDEO_FRAME_FORMAT,
+                CameraParameters::PIXEL_FORMAT_YUV420SP);
 
-
-   if (!settings.get(android::CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES)) {
-      settings.set(android::CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
+   if (!settings.get(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES)) {
+      settings.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
                    preview_sizes);
    }
 
-#if 0
-   if (!settings.get(android::CameraParameters::KEY_SUPPORTED_VIDEO_SIZES)) {
-      settings.set(android::CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
+   if (!settings.get(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES)) {
+      settings.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
                    video_sizes);
    }
-#endif
 
-   if (!settings.get(android::CameraParameters::KEY_VIDEO_SIZE)) {
-      settings.set("record-size", preferred_size);
-      settings.set(android::CameraParameters::KEY_VIDEO_SIZE, preferred_size);
-   } else {
-      settings.set("record-size", settings.get(android::CameraParameters::KEY_VIDEO_SIZE));
+   if (!settings.get(CameraParameters::KEY_VIDEO_SIZE)) {
+      settings.set(CameraParameters::KEY_VIDEO_SIZE, preferred_size);
    }
 
-   if (!settings.get(android::CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO)) {
-      settings.set(android::CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO,
+   if (!settings.get(CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO)) {
+      settings.set(CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO,
                    preferred_size);
    }
 
-   if (!settings.get(android::CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES)) {
-      settings.set(android::CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES,
+   if (!settings.get(CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES)) {
+      settings.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES,
                    preview_frame_rates);
    }
 
-   if (!settings.get(android::CameraParameters::KEY_PREVIEW_FRAME_RATE)) {
-      settings.set(android::CameraParameters::KEY_PREVIEW_FRAME_RATE,
+   if (!settings.get(CameraParameters::KEY_PREVIEW_FRAME_RATE)) {
+      settings.set(CameraParameters::KEY_PREVIEW_FRAME_RATE,
                    preferred_frame_rate);
    }
 
-   if (!settings.get(android::CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE)) {
-      ALOGD("Setting KEY_PREVIEW_FPS_RANGE: %s\n", frame_rate_range);
-      settings.set(android::CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
+   if (!settings.get(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE)) {
+      settings.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
                    frame_rate_range);
    }
 
-   if (!settings.get(android::CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE)) {
-      settings.set(android::CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE,
-                   preferred_horizontal_viewing_angle);
+   if (settings.get(android::CameraParameters::KEY_MAX_CONTRAST)) {
+      settings.set("max-contrast",
+                  settings.get(android::CameraParameters::KEY_MAX_CONTRAST));
+   } else {
+      settings.set("max-contrast",
+                  -1);
    }
 
-   if (!settings.get(android::CameraParameters::KEY_VERTICAL_VIEW_ANGLE)) {
-      settings.set(android::CameraParameters::KEY_VERTICAL_VIEW_ANGLE,
-                   preferred_vertical_viewing_angle);
+   if (settings.get(android::CameraParameters::KEY_MAX_SATURATION)) {
+      settings.set("max-saturation",
+                  settings.get(android::CameraParameters::KEY_MAX_SATURATION));
+   } else {
+      settings.set("max-saturation",
+                  -1);
+   }
+
+   if (settings.get(android::CameraParameters::KEY_MAX_SHARPNESS)) {
+      settings.set("max-sharpness",
+                  settings.get(android::CameraParameters::KEY_MAX_SHARPNESS));
+   } else {
+      settings.set("max-sharpness",
+                  -1);
    }
 }
 
