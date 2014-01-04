@@ -127,6 +127,7 @@ PRODUCT_PACKAGES += \
     
 # Camera
 PRODUCT_PACKAGES += \
+    libcamera \
     camera.msm7x27 \
 
 # Filesystem management tools
