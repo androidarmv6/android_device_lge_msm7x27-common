@@ -88,7 +88,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.gr.numframebuffers=3 \
     persist.sys.purgeable_assets=1 \
     persist.service.adb.enable=1
-    
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     initlogo.rle \
@@ -110,7 +110,7 @@ PRODUCT_PACKAGES += \
     com.android.future.usb.accessory \
     lights.msm7x27 \
     lgapversion
-    
+
 # GPS
 PRODUCT_PACKAGES += \
     gps.default \
@@ -122,7 +122,6 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    libcamera \
     camera.msm7x27
 
 # Filesystem management tools
