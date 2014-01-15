@@ -352,11 +352,11 @@ void internal_fixup_settings(CameraParameters &settings)
       "1280x720,800x480,768x432,720x480,640x480,576x432,480x320,384x288,352x288,320x240,240x160,176x144";
    const char *video_sizes =
       "1280x720,800x480,768x432,720x480,640x480,576x432,480x320,384x288,352x288,320x240,240x160,176x144";
-#if defined(SENSOR_SIZE_5MP)
+#if (SENSOR_SIZE > 3)
    const char *preferred_size       = "640x480";
-#elif defined(SENSOR_SIZE_3MP)
+#elif (SENSOR_SIZE > 2)
    const char *preferred_size       = "480x320";
-#else /* SENSOR_SIZE_2MP */
+#else /* SENSOR_SIZE=2 */
    const char *preferred_size       = "320x240";
 #endif
    const char *preview_frame_rates  = "25,24,15";

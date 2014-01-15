@@ -207,10 +207,18 @@ board_property boardProperties[] = {
  */
 //sorted on column basis
 static const camera_size_type picture_sizes[] = {
-//    { 2592, 1944 }, // 5MP
+// 5MP
+#if (SENSOR_SIZE > 3)
+    { 2592, 1944 }, // 5MP
 //    { 2560, 1920 }, // 5MP (slightly reduced)
+#endif
+// 3MP
+#if (SENSOR_SIZE > 2)
     { 2048, 1536 }, // 3MP QXGA
 //    { 1920, 1080 }, //HD1080
+#endif
+// 2MP
+#if (SENSOR_SIZE > 1)
     { 1600, 1200 }, // 2MP UXGA
 //    { 1280, 768 }, //WXGA
 //    { 1280, 720 }, //HD720
@@ -221,6 +229,7 @@ static const camera_size_type picture_sizes[] = {
 //    { 352, 288 }, //CIF
 //    { 320, 240 }, // QVGA
 //    { 176, 144 } // QCIF
+#endif
 };
 static int PICTURE_SIZE_COUNT = sizeof(picture_sizes)/sizeof(camera_size_type);
 static const camera_size_type * picture_sizes_ptr;
@@ -4023,11 +4032,6 @@ status_t QualcommCameraHardware::setExposureCompensation(const CameraParameters&
         int expcomp = params.getInt("exposure-compensation");
 
 	mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, expcomp);
-
-	if(!strcmp(sensorType->name, "3mp"))
-	  expcomp+=4;
-	else
-	  expcomp+=2;
 
         bool ret = native_set_parm(CAMERA_SET_PARM_EXPOSURE_COMPENSATION, sizeof(expcomp),
                                        (void *)&expcomp);
