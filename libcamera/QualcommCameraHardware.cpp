@@ -4032,7 +4032,7 @@ status_t QualcommCameraHardware::setExposureCompensation(const CameraParameters&
         int expcomp = params.getInt("exposure-compensation");
 
 	mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, expcomp);
-
+	expcomp += 2;
         bool ret = native_set_parm(CAMERA_SET_PARM_EXPOSURE_COMPENSATION, sizeof(expcomp),
                                        (void *)&expcomp);
 
