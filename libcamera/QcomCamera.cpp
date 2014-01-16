@@ -109,8 +109,11 @@ camera_device_ops_t camera_ops = {
   start_preview:              android::start_preview,
   stop_preview:               android::stop_preview,
   preview_enabled:            android::preview_enabled,
+#if 0
   store_meta_data_in_buffers: android::store_meta_data_in_buffers,
-
+#else
+  store_meta_data_in_buffers: NULL,
+#endif
   start_recording:            android::start_recording,
   stop_recording:             android::stop_recording,
   recording_enabled:          android::recording_enabled,
@@ -740,13 +743,13 @@ int preview_enabled(struct camera_device * device)
    ALOGV("preview_enabled:");
    return qCamera->previewEnabled() ? 1 : 0;
 }
-
+#if 0
 int store_meta_data_in_buffers(struct camera_device * device, int enable)
 {
    ALOGV("store_meta_data_in_buffers:");
    return NO_ERROR;
 }
-
+#endif
 int start_recording(struct camera_device * device)
 {
    ALOGV("start_recording");
