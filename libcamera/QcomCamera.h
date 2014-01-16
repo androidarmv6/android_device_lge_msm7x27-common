@@ -53,8 +53,9 @@ namespace android {
   void stop_preview(struct camera_device *);
 
   int preview_enabled(struct camera_device *);
+#if 0
   int store_meta_data_in_buffers(struct camera_device *, int enable);
-
+#endif
   int start_recording(struct camera_device *);
 
   void stop_recording(struct camera_device *);
