@@ -239,20 +239,6 @@ service qmuxd /system/bin/qmuxd
     user radio
     group radio audio inet bluetooth gps qcom_diag
 
-# configure BT on boot for BlueZ support
-service config_bluetooth /system/bin/sh /system/bin/init.qcom.bt.sh "onboot"
-    class main
-    user root
-    oneshot
-
-# HCI attach service
-service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
-    class main
-#   user bluetooth
-    group bluetooth net_bt_admin net_bt_stack
-    disabled
-    oneshot
-
 on property:service.brcm.bt.mac=*
     exec /system/bin/hwaddrs
 
@@ -275,26 +261,6 @@ on property:init.svc.wpa_supplicant=stopped
 
 service iprenew_wlan0 /system/bin/dhcpcd -n
     class main
-    disabled
-    oneshot
-
-service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep1 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep2 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep3 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
