@@ -28,7 +28,7 @@
     </string-array>
     
     <string-array translatable="false" name="config_tether_bluetooth_regexs">
-        <item>"bt-pan\\d"</item>
+        <item>"bt-pan"</item>
     </string-array>
     
     <string-array translatable="false" name="networkAttributes">
