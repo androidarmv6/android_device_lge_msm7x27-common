@@ -11,7 +11,7 @@ include $(CLEAR_VARS)
 # The audio policy is implemented on top of legacy policy code
 # -------------------------------------------------------------
 
-ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+ifeq ($(BOARD_HAVE_BLUETOOTH),true)
     LOCAL_CFLAGS += -DWITH_A2DP
 endif
 ifeq ($(BOARD_COMBO_DEVICE_SUPPORTED),true)
@@ -37,7 +37,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+ifeq ($(BOARD_HAVE_BLUETOOTH),true)
     LOCAL_CFLAGS += -DWITH_A2DP
 endif
 ifeq ($(BOARD_COMBO_DEVICE_SUPPORTED),true)
