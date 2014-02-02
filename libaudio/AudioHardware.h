@@ -39,11 +39,6 @@ using namespace android;
 namespace android_audio_legacy {
 
 
-#ifdef P500_SPEAKER_IN_CALL_FIX
-#define AudioSystem_SPEAKER_IN_CALL AudioSystem::DEVICE_OUT_PROXY
-#define OutputDevices_SPEAKER_IN_CALL 0x8000
-#endif
-
 // ----------------------------------------------------------------------------
 // Kernel driver interface
 //
