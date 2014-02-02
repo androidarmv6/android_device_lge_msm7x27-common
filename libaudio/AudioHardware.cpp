@@ -1460,17 +1460,10 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
 #endif
             {
                 ALOGI("Routing audio to Speakerphone\n");
-                new_snd_device = SND_DEVICE_SPEAKER;
+                new_snd_device = (isInCall() && SND_DEVICE_SPEAKER_IN_CALL >= 0) ? SND_DEVICE_SPEAKER_IN_CALL : SND_DEVICE_SPEAKER;
                 new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
             }
         }
-#ifdef P500_SPEAKER_IN_CALL_FIX
-        else if (outputDevices &  OutputDevices_SPEAKER_IN_CALL) {
-            ALOGI("Routing audio to Speaker in call\n");
-            new_snd_device = SND_DEVICE_SPEAKER_IN_CALL;
-            new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
-        }
-#endif
         else {
             ALOGI("Routing audio to Handset\n");
             new_snd_device = SND_DEVICE_HANDSET;
