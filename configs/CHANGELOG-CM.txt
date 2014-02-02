@@ -1,16 +1,16 @@
-CyanogenMod 10.1 for ARMv6 devices
+CyanogenMod 10.2 for ARMv6 devices
 ==================================
 
 Visit http://github.com/androidarmv6 for full CyanogenMod changelogs and git access.
 
-Visit http://changelog.bbqdroid.org/#/cm10.1/ for CyanogenMod changelogs
+Visit http://changelog.bbqdroid.org/#/cm10.2/ for CyanogenMod changelogs
 
 Visit http://review.androidarmv6.org for the Gerrit instance.
 
 
 ### FEATURES
 
-* Supports all android 4.2.2 features
+* Supports all android 4.3 features
 * Fully functional camera (preview, taking photo, recording video, panorama)
 * Full H/W acceleration with new adreno drivers, 3D modelling (yamato)
 * Hardware decoding of videos, Youtube HQ videos
@@ -24,9 +24,9 @@ Visit http://review.androidarmv6.org for the Gerrit instance.
 * Browser, GMail, GPlay
 * Youtube LQ/MQ/HQ
 * Offmode charging
-* FM Radio
 
 ### KNOWN ISSUES
 
 * Wi-Fi wakelock because of the old bcm4325 wireless driver
 * Swipe in stock keyboard because of missing armv6 libs
+* FM Radio (bcm4325 FM chip is depends on bluez-hcitool)
