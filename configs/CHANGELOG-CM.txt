@@ -1,16 +1,16 @@
-CyanogenMod 10.2 for ARMv6 devices
+CyanogenMod 11.0 for ARMv6 devices
 ==================================
 
 Visit http://github.com/androidarmv6 for full CyanogenMod changelogs and git access.
 
-Visit http://changelog.bbqdroid.org/#/cm10.2/ for CyanogenMod changelogs
+Visit http://changelog.bbqdroid.org/#/cm11.0/ for CyanogenMod changelogs
 
 Visit http://review.androidarmv6.org for the Gerrit instance.
 
 
 ### FEATURES
 
-* Supports all android 4.3 features
+* Supports all android 4.4 (KitKat) features
 * Fully functional camera (preview, taking photo, recording video, panorama)
 * Full H/W acceleration with new adreno drivers, 3D modelling (yamato)
 * Hardware decoding of videos, Youtube HQ videos
