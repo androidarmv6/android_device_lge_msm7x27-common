@@ -71,7 +71,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory \
     lights.msm7x27 \
-    lgapversion
+    lgapversion \
+    libnetcmdiface
 
 # GPS
 PRODUCT_PACKAGES += \
