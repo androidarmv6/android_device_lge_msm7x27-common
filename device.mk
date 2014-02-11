@@ -43,12 +43,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.call_ring.multiple=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    com.qc.hdmi_out=false \
-    debug.sf.hw=1 \
-    debug.composition.type=mdp \
-    debug.gr.numframebuffers=3 \
-    persist.sys.purgeable_assets=1 \
-    persist.service.adb.enable=1
+    debug.gr.numframebuffers=3
 
 # Ramdisk
 PRODUCT_PACKAGES += \
@@ -64,7 +59,6 @@ PRODUCT_PACKAGES += \
 
 # Graphics & Media
 PRODUCT_PACKAGES += \
-    hwcomposer.msm7x27 \
     libdivxdrmdecrypt
 
 # Misc
@@ -110,7 +104,8 @@ BOARD_SEPOLICY_UNION += \
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.debuggable=1 \
     ro.secure=0 \
-    ro.allow.mock.location=0
+    ro.allow.mock.location=0 \
+    persist.service.adb.enable=1
 
 # set default USB configuration
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
