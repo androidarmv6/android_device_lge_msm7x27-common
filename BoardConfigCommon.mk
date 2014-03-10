@@ -17,21 +17,17 @@
 # Use the Qualcomm common folder
 include device/qcom/msm7x27/BoardConfigCommon.mk
 
+# Recovery config for CMW & TWRP
+include device/lge/msm7x27-common/BoardConfigRecovery.mk
+
+## Boot loader
+TARGET_BOOTANIMATION_PRELOAD := true
+TARGET_BOOTANIMATION_TEXTURE_CACHE := true
+
 ## Bluetooth
 BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_BLUEDROID_VENDOR_CONF := device/lge/msm7x27-common/bluetooth/libbt_lge.txt
-
-## Boot loader & recovery
-TARGET_BOOTANIMATION_PRELOAD := true
-TARGET_BOOTANIMATION_TEXTURE_CACHE := true
-TARGET_NO_INITLOGO := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
-BOARD_HAS_NO_SELECT_BUTTON := true
-TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
-TW_BRIGHTNESS_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
-TW_EXCLUDE_SUPERSU := true
-TW_EXCLUDE_ENCRYPTED_BACKUPS := true
 
 ## Kernel
 TARGET_KERNEL_SOURCE := kernel/lge/msm7x27-3.0.x
