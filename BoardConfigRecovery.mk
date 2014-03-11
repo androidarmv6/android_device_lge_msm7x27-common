@@ -5,7 +5,7 @@ TARGET_NO_INITLOGO := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
 TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
 
-TW_BRIGHTNESS_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_EXCLUDE_SUPERSU := true
 TW_EXCLUDE_ENCRYPTED_BACKUPS := true
 TW_MAX_BRIGHTNESS := 255
