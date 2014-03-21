@@ -23,6 +23,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/nvram.txt:system/etc/wl/nvram.txt \
     $(LOCAL_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
+## swapart binary
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/swapart:system/bin/swapart
+
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
@@ -47,7 +51,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    initlogo.rle \
+    init.swapart.rc \
     init.qcom.rc \
     init.qcom.usb.rc \
     ueventd.qcom.rc
