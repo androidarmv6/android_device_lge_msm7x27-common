@@ -68,11 +68,6 @@ app/NoiseField.apk
 app/PhaseBeam.apk
 app/VisualizationWallpapers.apk
 
-# Some extra apps (3MB)
-app/Apollo.apk
-app/Exchange2.apk
-app/LockClock.apk
-
 # Pico TTS Language Files (5MB)
 tts/lang_pico/en-GB_kh0_sg.bin
 tts/lang_pico/en-GB_ta.bin
