@@ -8,7 +8,7 @@ PRODUCT_PACKAGES += \
 # USBMS for recovery
 PRODUCT_COPY_FILES += \
     device/lge/msm7x27-common/recovery/twrp.fstab:recovery/root/etc/twrp.fstab \
-    device/lge/msm7x27-common/recovery/init.recovery.msm7x27.rc:root/init.recovery.$(CUSTOM_BUILD).rc
+    device/lge/msm7x27-common/recovery/init.recovery.msm7x27.rc:root/init.recovery.$(CM_BUILD).rc
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/CHANGELOG-CM.txt:system/etc/CHANGELOG-CM.txt \
