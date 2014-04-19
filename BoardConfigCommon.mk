@@ -107,6 +107,7 @@ BOARD_USE_LEGACY_TOUCHSCREEN := true
 
 ## Minimal fonts
 SMALLER_FONT_FOOTPRINT := true
+MINIMAL_FONT_FOOTPRINT := true
 
 ## Browser & WebKit
 ENABLE_WEBGL := true
