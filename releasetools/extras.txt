@@ -94,6 +94,21 @@ bin/recovery
 # Fonts
 fonts/LBhashitaComplexSans-Regular.ttf
 fonts/LBhashitaComplexSans-Bold.ttf
+fonts/AndroidEmoji.ttf
+fonts/DroidNaskh-Regular.ttf
+fonts/DroidNaskhUI-Regular.ttf
+fonts/DroidSansArmenian.ttf
+fonts/DroidSansGeorgian.ttf
+fonts/DroidSansHebrew-Bold.ttf
+fonts/DroidSansHebrew-Regular.ttf
+fonts/RobotoCondensed-Bold.ttf
+fonts/RobotoCondensed-BoldItalic.ttf
+fonts/RobotoCondensed-Italic.ttf
+fonts/RobotoCondensed-Regular.ttf
+fonts/Roboto-Light.ttf
+fonts/Roboto-LightItalic.ttf
+fonts/Roboto-Thin.ttf
+fonts/Roboto-ThinItalic.ttf
 
 # Ringtones (5.85MB)
 media/audio/ringtones/Acheron.ogg
