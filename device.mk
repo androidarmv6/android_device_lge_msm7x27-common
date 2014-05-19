@@ -123,10 +123,10 @@ $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
 $(call inherit-product, vendor/google/gapps_armv6_tiny.mk)
 
 # Dalvik
+PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.checkjni=false \
-    dalvik.vm.dexopt-data-only=1 \
-    dalvik.vm.dexopt-flags=v=a,o=v,m=y,u=y
+    dalvik.vm.dexopt-data-only=1
 
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
