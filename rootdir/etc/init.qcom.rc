@@ -23,8 +23,7 @@ on init
     symlink /storage/sdcard0 /sdcard
     export EXTERNAL_STORAGE /storage/sdcard0
     export SD_EXT_DIRECTORY /sd-ext
-    export DOWNLOAD_CACHE /data/download
-    #export DOWNLOAD_CACHE /cache/download
+    export DOWNLOAD_CACHE /cache/download
 
     # Add permissions for camera access
     chmod 0666 /dev/msm_camera/config0
@@ -69,9 +68,8 @@ on post-fs
     chown system system /data/nv
     chmod 0711 /data/nv
 
-    mkdir /cache/download 0771 system cache
-    mkdir /data/download 0771 system cache
     mkdir /data/local/download 0771 system cache
+    mkdir /cache/download 0771 system cache
 
     # wifi
     chmod 0777 /data/misc/wifi/config_mac
