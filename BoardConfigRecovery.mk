@@ -6,7 +6,6 @@ TARGET_NO_INITLOGO := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
 TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
 
-BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/lge/msm7x27-common/recovery/recovery_keys.c
 
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_EXCLUDE_SUPERSU := true
