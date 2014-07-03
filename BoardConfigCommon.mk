@@ -35,8 +35,6 @@ TARGET_SPECIFIC_HEADER_PATH := device/lge/msm7x27-common/include3x
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x12800000
 BOARD_KERNEL_PAGESIZE := 2048
-MINIGZIP := $(shell which lzma)
-
 
 ## Partition Sizes: Fix this up by examining /proc/mtd on a running device
 BOARD_BOOTIMAGE_PARTITION_SIZE := 4456448
