@@ -20,6 +20,9 @@ include device/qcom/msm7x27/BoardConfigCommon.mk
 # Recovery config for CMW & TWRP
 include device/lge/msm7x27-common/BoardConfigRecovery.mk
 
+## TLS register
+ARCH_ARM_HAVE_TLS_REGISTER   := true
+
 ## Boot loader
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
