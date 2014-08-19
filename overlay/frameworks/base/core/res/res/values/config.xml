@@ -119,5 +119,10 @@
     <!-- Size of the region along the edge of the screen that will accept
          swipes to scroll the widget area. -->
     <dimen name="kg_edge_swipe_region_size">32dp</dimen>
+
+    <!-- Enable the option to check proximity sensor when deciding whether to turn the screen on
+         NOTE ! - Enable for devices that have a fast response proximity sensor -->
+    <bool name="config_proximityCheckOnWake">true</bool>
+    <integer name="config_proximityCheckTimeout">400</integer>
 </resources>
 
