@@ -148,6 +148,9 @@ on early-boot
 #############
 on boot
 
+    ##fix "add_tid_to_cgroup failed to write" errors
+    chmod 0660 /dev/cpuctl
+
     # allow reading kernel command line
     chmod 0644 /proc/cmdline
 
