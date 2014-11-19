@@ -22,7 +22,6 @@ lib/hw/sensors.goldfish.so
 lib/hw/audio_policy.default.so
 lib/hw/audio.primary.default.so
 lib/hw/gralloc.default.so
-lib/hw/power.default.so
 
 # Junk (build artifacts)
 extras/ext4_utils/make_ext4fs_main.o
