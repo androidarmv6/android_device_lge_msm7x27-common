@@ -1,5 +1,6 @@
 # Focal
 app/Focal.apk
+app/Focal.odex
 bin/autopano
 bin/celeste
 bin/enblend
@@ -22,6 +23,7 @@ lib/hw/sensors.goldfish.so
 lib/hw/audio_policy.default.so
 lib/hw/audio.primary.default.so
 lib/hw/gralloc.default.so
+lib/hw/power.default.so
 
 # Junk (build artifacts)
 extras/ext4_utils/make_ext4fs_main.o
@@ -35,11 +37,17 @@ lib/libOpenVG.so
 
 # Extra apps
 app/Exchange2.apk
+app/Exchange2.odex
 app/Email.apk
+app/Email.odex
 app/Email2.apk
+app/Email2.odex
 app/DSPManager.apk
+app/DSPManager.odex
 app/PrintSpooler.apk
+app/PrintSpooler.odex
 app/WhisperPush.apk
+app/WhisperPush.odex
 
 # OpenWnn (6.4MB)
 app/OpenWnn.apk
@@ -48,6 +56,7 @@ lib/libWnnJpnDic.so
 
 # Video editor (5MB)
 app/VideoEditor.apk
+app/VideoEditor.odex
 lib/libvideoeditor_core.so
 lib/libvideoeditor_osal.so
 lib/libvideoeditor_jni.so
@@ -56,17 +65,25 @@ lib/libvideoeditorplayer.so
 
 # RomManager (2.5MB)
 app/RomManager.apk
+app/RomManager.odex
 
 # CM Wallpapers (7MB)
 app/CMWallpapers.apk
+app/CMWallpapers.odex
 
 # Live Wallpapers (3MB)
 app/Galaxy4.apk
+app/Galaxy4.odex
 app/HoloSpiralWallpaper.apk
+app/HoloSpiralWallpaper.odex
 app/MagicSmokeWallpapers.apk
+app/MagicSmokeWallpapers.odex
 app/NoiseField.apk
+app/NoiseField.odex
 app/PhaseBeam.apk
+app/PhaseBeam.odex
 app/VisualizationWallpapers.apk
+app/VisualizationWallpapers.odex
 
 # Pico TTS Language Files (5MB)
 tts/lang_pico/en-GB_kh0_sg.bin
@@ -82,6 +99,7 @@ tts/lang_pico/it-IT_ta.bin
 
 # webaudiores (non-functional?)
 app/webaudiores.apk
+app/webaudiores.odex
 
 # ART runtime (1.2MB)
 framework/core-libart.jar
