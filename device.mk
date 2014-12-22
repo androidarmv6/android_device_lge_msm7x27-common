@@ -132,6 +132,7 @@ $(call inherit-product, device/qcom/msm7x27/msm7x27.mk)
 $(call inherit-product, vendor/google/gapps_armv6_tiny.mk)
 
 # Dalvik
+#PRODUCT_RUNTIMES := runtime_libdvm_default
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.checkjni=false \

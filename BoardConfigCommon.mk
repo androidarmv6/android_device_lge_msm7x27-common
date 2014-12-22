@@ -121,3 +121,6 @@ TARGET_OTA_EXTRAS_FILE := device/lge/msm7x27-common/releasetools/extras.txt
 
 ## TEMPORARY HACK: skip building external/chromium_org/
 PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
+
+# BIONIC: use legacy mmap
+BOARD_USES_LEGACY_MMAP := true
