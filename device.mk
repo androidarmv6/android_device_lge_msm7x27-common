@@ -89,7 +89,12 @@ PRODUCT_PACKAGES += \
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
+    e2fsck \
+    fibmap.f2fs \
+    fsck.f2fs \
     make_ext4fs \
+    mkfs.f2fs \
+    resize2fs \
     setup_fs
 
 # SELinux - we're not ready for enforcing mode yet
