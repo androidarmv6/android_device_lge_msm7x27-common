@@ -17,13 +17,15 @@ on early-init
 #############
 on init
     # See storage config details at http://source.android.com/tech/storage/
-    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
-    mkdir /storage/sdcard0 0700 root root
-    symlink /storage/sdcard0 /mnt/sdcard
-    symlink /storage/sdcard0 /sdcard
-    export EXTERNAL_STORAGE /storage/sdcard0
-    export SD_EXT_DIRECTORY /sd-ext
-    export DOWNLOAD_CACHE /cache/download
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
     # Add permissions for camera access
     chmod 0666 /dev/msm_camera/config0
@@ -52,11 +54,7 @@ on fs
     # framebuffer permission for copybit
     chmod 0666 /dev/graphics/fb0
 
-    # Mount /system rw first to give the filesystem a chance to save a checkpoint
-#    mount yaffs2 mtd@system /system
-#    mount yaffs2 mtd@system /system ro remount
-#    mount yaffs2 mtd@userdata /data nosuid nodev
-    mount yaffs2 mtd@cache /cache nosuid nodev
+    #mount yaffs2 mtd@cache /cache nosuid nodev
 
 ################
 ## 6: POST-FS ##
@@ -84,6 +82,9 @@ on post-fs
 ## 7: POST-FS-DATA ##
 #####################
 on post-fs-data
+    mkdir /data/media 0770 media_rw media_rw
+
+
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
@@ -264,11 +265,18 @@ service setapversion /system/bin/lgapversion
 on property:gsm.version.baseband=V07u-000-000-MAR-23-2009
    start setapversion
 
-service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
+# FUSE sdcard daemon for rich permissions (runs as media_rw)
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
-    disabled
 
-service bugreport /system/bin/dumpstate -d -v -o /storage/sdcard0/bugreports/bugreport
+# create filesystems if necessary
+service setup_fs /system/bin/setup_fs /dev/block/mmcblk0p4
+    class core
+    user root
+    group root
+    oneshot
+
+service bugreport /system/bin/dumpstate -d -v -o /mnt/shell/emulated/bugreports/bugreport
 #   Triggered by the KEY_VOLUME_DOWN+KEY_MENU keycodes
     keycodes 114 139
     class late_start
