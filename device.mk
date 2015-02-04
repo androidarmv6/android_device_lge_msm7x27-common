@@ -109,9 +109,17 @@ BOARD_SEPOLICY_UNION += \
 # Development settings
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.debuggable=1 \
-    ro.secure=0 \
-    ro.allow.mock.location=0 \
-    persist.service.adb.enable=1
+    ro.allow.mock.location=0
+
+ifneq (CM_EXPERIMENTAL,$(RELEASE_TYPE))
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.adb.secure=1 \
+    ro.secure=1
+else
+ADDITIONAL_DEFAULT_PROPERTIES += \
+   ro.adb.secure=0 \
+   ro.secure=0
+endif
 
 # set default USB configuration
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \

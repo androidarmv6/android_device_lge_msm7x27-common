@@ -1,3 +1,7 @@
 <resources>
     <bool name="def_wifi_on">true</bool>
+    <bool name="def_sound_effects_enabled">false</bool>
+    <fraction name="def_window_animation_scale">50%</fraction>
+    <fraction name="def_window_transition_scale">50%</fraction>
+    <integer name="def_people_lookup">0</integer>
 </resources>
